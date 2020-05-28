@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-<title>关于 - MZZZ</title>
+<title>Vim 基础使用 - MZZZ</title>
 <meta name="description" content="温故而知新">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -130,33 +130,246 @@
                     <div class="col-12 col-lg-10">
                       <div class="layout-post-main m-right m-md-right">
                         <div class="layout-post-header">
-                          <h1 class="layout-post-title">关于</h1>
+                          <h1 class="layout-post-title">Vim 基础使用</h1>
                           <div class="layout-post-meta">
                             <div class="item">
                               
                             </div>
                             <div class="item">
-                              <span>2019-01-25</span>
+                              <span>2017-06-14</span>
                             </div>
                           </div>
                         </div>
                         <div class="layout-post-content">
                           <div class="layout-post-item">
                             
-                            <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+                            <h1 id="一般模式">一般模式</h1>
+<table>
+<thead>
+<tr>
+<th>h</th>
+<th>j</th>
+<th>k</th>
+<th>l</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>←</td>
+<td>↓</td>
+<td>↑</td>
+<td>→</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>w</td>
+<td>下一个单词</td>
+</tr>
+<tr>
+<td>b</td>
+<td>上一个单词</td>
+</tr>
+<tr>
+<td>0</td>
+<td>行首</td>
+</tr>
+<tr>
+<td>$</td>
+<td>行末</td>
+</tr>
+<tr>
+<td>G</td>
+<td>最后一行</td>
+</tr>
+<tr>
+<td>gg,1G</td>
+<td>最上一行</td>
+</tr>
+<tr>
+<td>ctrl+f</td>
+<td>向下翻页</td>
+</tr>
+<tr>
+<td>ctrl+b</td>
+<td>向上翻页</td>
+</tr>
+<tr>
+<td>n<space></td>
+<td>后移n个字符</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/word</td>
+<td>向下查找</td>
+</tr>
+<tr>
+<td>?word</td>
+<td>向上查找</td>
+</tr>
+<tr>
+<td>dd</td>
+<td>删除一行</td>
+</tr>
+<tr>
+<td>yy</td>
+<td>复制一行</td>
+</tr>
+<tr>
+<td>p,P</td>
+<td>粘贴</td>
+</tr>
+<tr>
+<td>u</td>
+<td>还原</td>
+</tr>
+<tr>
+<td>j</td>
+<td>合并下一行</td>
+</tr>
+</tbody>
+</table>
+<h2 id="块选择">块选择</h2>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v</td>
+<td>字符选择</td>
+</tr>
+<tr>
+<td>V</td>
+<td>列选择</td>
+</tr>
+<tr>
+<td>ctrl+v</td>
+<td>快选择</td>
+</tr>
+</tbody>
+</table>
+<h1 id="编辑模式">编辑模式</h1>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i</td>
+<td>在当前光标插入</td>
+</tr>
+<tr>
+<td>I</td>
+<td>在行首插入</td>
+</tr>
+<tr>
+<td>A</td>
+<td>在行末加入</td>
+</tr>
+<tr>
+<td>a</td>
+<td>在光标后插入</td>
+</tr>
+<tr>
+<td>o</td>
+<td>添加至下一行</td>
+</tr>
+<tr>
+<td>O</td>
+<td>添加至上一行</td>
+</tr>
+</tbody>
+</table>
+<h1 id="命令模式">命令模式</h1>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>wq</td>
+<td>保存退出</td>
+</tr>
+<tr>
+<td>r[filename]</td>
+<td>添加文件内容</td>
+</tr>
+<tr>
+<td>w[filename]</td>
+<td>另存为</td>
+</tr>
+<tr>
+<td>!command</td>
+<td>命令行</td>
+</tr>
+<tr>
+<td>s/word1/word2/g</td>
+<td>替换内容</td>
+</tr>
+</tbody>
+</table>
+<h2 id="多文件编辑">多文件编辑</h2>
+<h2 id="多窗口模式">多窗口模式</h2>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>:sp filename</td>
+<td>在新窗口打开文件</td>
+</tr>
+<tr>
+<td>crtl+w+j</td>
+<td>向下编辑窗口文件</td>
+</tr>
+<tr>
+<td>crtl+w+k</td>
+<td>向上编辑窗口文件</td>
+</tr>
+<tr>
+<td>crtl+w+k</td>
+<td>结束窗口文件</td>
+</tr>
+</tbody>
+</table>
 
                           </div>
                         </div>
                         <div class="layout-post-social">
                           <div class="item reader">
-                            <div id="/post/about/" class="leancloud-visitors view"
-                              data-flag-title="关于">
+                            <div id="/post/vim-ji-chu-shi-yong/" class="leancloud-visitors view"
+                              data-flag-title="Vim 基础使用">
                               <span class="post-meta-item-text">阅读 </span>
                               <span class="leancloud-visitors-count"></span>
                             </div>
@@ -165,6 +378,53 @@
 
                         <div class="layout-post-navigation">
                           <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/markdown-ji-chu-shi-yong/" class="title">
+                                      <h4>Markdown 基础使用</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>上一篇</span></div>
+                                  <div class="item">2017-06-16</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/shi-yong-linux-yuan-cheng-lian-jie-windows/" class="title">
+                                      <h4>使用 Linux 远程连接 Windows</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2017-06-14</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
                             
                           </div>
                         </div>
@@ -178,12 +438,16 @@
                       <div class="layout-post-sidebar">
                         <div class="layout-sidebar-item">
                           <ul class="markdownIt-TOC">
-<li>
+<li><a href="#%E4%B8%80%E8%88%AC%E6%A8%A1%E5%BC%8F">一般模式</a>
 <ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E5%85%B4%E8%B6%A3%E7%88%B1%E5%A5%BD">⛹ 兴趣爱好</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
+<li><a href="#%E5%9D%97%E9%80%89%E6%8B%A9">块选择</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BC%96%E8%BE%91%E6%A8%A1%E5%BC%8F">编辑模式</a></li>
+<li><a href="#%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F">命令模式</a>
+<ul>
+<li><a href="#%E5%A4%9A%E6%96%87%E4%BB%B6%E7%BC%96%E8%BE%91">多文件编辑</a></li>
+<li><a href="#%E5%A4%9A%E7%AA%97%E5%8F%A3%E6%A8%A1%E5%BC%8F">多窗口模式</a></li>
 </ul>
 </li>
 </ul>

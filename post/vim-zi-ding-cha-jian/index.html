@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+<title>Vim 自定插件 - MZZZ</title>
+<meta name="description" content="温故而知新">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type='text/css' rel='stylesheet' href='https://mzqk.github.io/styles/main.css' media='screen' />
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css">
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript" src='https://mzqk.github.io/media/scripts/jquery.js'></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+  <div class="layout theme-dark">
+    <div class="layout-header">
+
+	<div class="layout-header-main">
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+
+					<div class="navbar">
+
+						<div class="logo">
+							<a href="https://mzqk.github.io">
+								<img class="logo"
+									src="https://mzqk.github.io/media/images/site_avatar.png?v=1590654649050"
+									alt="">
+							</a>
+						</div>
+
+						<div class="menu d-md-inline-block d-none">
+							<ul class="layout-navigation-list">
+								
+								<li class="layout-navigation-item"><a title="首页"
+										href="/">首页</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="归档"
+										href="/archives">归档</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="标签"
+										href="/tags">标签</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="关于"
+										href="/post/about">关于</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="item d-md-inline-block d-none">
+							<div class="search-icon">
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</div>
+						</div>
+
+
+
+						<div class="d-md-inline-block d-none">
+							<div class="search-lightbox">
+								<div class="search-body">
+
+									<form id="gridea-search-form" data-update="1590654649050" action="/search/" class="search-form">
+										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
+										<button type="submit" class="submit" aria-label="Submit">
+											<i class="fa fa-search" aria-hidden="true"></i>
+										</button>
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="nav d-md-none d-inline-block">
+							<div class="trigger">
+								<i class="fa fa-bars layout-btn-toggle" aria-hidden="true"></i>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+
+
+
+		</div>
+	</div>
+
+</div>
+    <div class="layout-collapse d-md-none">
+	<div class="layout-collapse-main">
+		<ul class="layout-collapse-list">
+			
+			<li class="layout-collapse-item"><a title="首页" href="/">首页</a></li>
+			
+			<li class="layout-collapse-item"><a title="归档" href="/archives">归档</a></li>
+			
+			<li class="layout-collapse-item"><a title="标签" href="/tags">标签</a></li>
+			
+			<li class="layout-collapse-item"><a title="关于" href="/post/about">关于</a></li>
+			
+
+		</ul>
+	</div>
+</div>
+
+    <div class="layout-content">
+      <div class="layout-content-main">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-12 col-lg-9">
+              <div class="layout-post">
+                <div class="layout-post-body">
+                  <div class="row">
+
+                    <div class="col-12 col-lg-10">
+                      <div class="layout-post-main m-right m-md-right">
+                        <div class="layout-post-header">
+                          <h1 class="layout-post-title">Vim 自定插件</h1>
+                          <div class="layout-post-meta">
+                            <div class="item">
+                              
+                            </div>
+                            <div class="item">
+                              <span>2017-06-17</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="layout-post-content">
+                          <div class="layout-post-item">
+                            
+                            <h1 id="插件">插件</h1>
+<h2 id="vundle-插件管理">Vundle 插件管理</h2>
+<pre><code class="language-shell">git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/nerdtree
+</code></pre>
+<h3 id="添加至vimrc">添加至vimrc</h3>
+<pre><code>&quot;Vundle插件管理
+set nocompatible              &quot; 去除VI一致性,必须要添加
+filetype off                  &quot; 必须要添加
+
+&quot; 设置包括vundle和初始化相关的runtime path
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+&quot; 让vundle管理插件版本
+Plugin 'VundleVim/Vundle.vim'
+&quot;
+&quot;
+&quot;
+&quot;
+&quot;
+&quot;
+&quot;
+&quot;所有插件需要在下面这行上面
+&quot;安装插件的方式可以使用本地、git及网络安装
+&quot;示例
+&quot;Plugin 'git://git.wincent.com/command-t.git'
+&quot;Plugin 'file:///home/gmarik/path/to/plugin'
+&quot;Plugin 'tpope/vim-fugitive'
+&quot;重名插件
+&quot;Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+
+call vundle#end()            &quot; required
+
+filetype plugin indent on    &quot; required
+&quot; 忽视插件改变缩进,可以使用以下替代:
+&quot;filetype plugin on
+
+&quot; 常用的命令
+&quot; :PluginList       - 列出所有已配置的插件
+&quot; :PluginInstall    - 安装插件,追加 `!` 用以更新或使用 :PluginUpdate 
+&quot; :PluginSearch foo - 搜索 foo ; 追加 `!` 清除本地缓存
+&quot; :PluginClean      - 除未使用插件,需要确认; 追加 `!` 自动批准移除未使用插件
+
+&quot; :h vundle 查看帮助
+&quot; 将你自己对非插件片段放在这行之后
+</code></pre>
+<h2 id="nerdtree-目录树">NerdTree 目录树</h2>
+<pre><code>&quot; 设置NerdTree
+&quot;Plugin 'scrooloose/nerdtree' 
+let NERDTreeWinPos='left'
+let NERDTreeWinSize=30
+map &lt;F3&gt; :NERDTreeToggle&lt;CR&gt;
+&quot;默认开启NERDTree
+&quot;autocmd VimEnter * NERDTree
+&quot;当打开 NERDTree 窗口时，自动显示 Bookmarks
+let NERDTreeShowBookmarks=1
+&quot; 是否显示隐藏文件
+let NERDTreeShowHidden=1
+</code></pre>
+<h3 id="使用说明">使用说明</h3>
+<pre><code>?: 快速帮助文档
+o: 打开一个目录或者打开文件，创建的是buffer，也可以用来打开书签
+go: 打开一个文件，但是光标仍然留在NERDTree，创建的是buffer
+t: 打开一个文件，创建的是Tab，对书签同样生效
+T: 打开一个文件，但是光标仍然留在NERDTree，创建的是Tab，对书签同样生效
+i: 水平分割创建文件的窗口，创建的是buffer
+gi: 水平分割创建文件的窗口，但是光标仍然留在NERDTree
+s: 垂直分割创建文件的窗口，创建的是buffer
+gs: 和gi，go类似
+x: 收起当前打开的目录
+X: 收起所有打开的目录
+e: 以文件管理的方式打开选中的目录
+D: 删除书签
+P: 大写，跳转到当前根路径
+p: 小写，跳转到光标所在的上一级路径
+K: 跳转到第一个子路径
+J: 跳转到最后一个子路径
+&lt;C-j&gt;和&lt;C-k&gt;: 在同级目录和文件间移动，忽略子目录和子文件
+C: 将根路径设置为光标所在的目录
+u: 设置上级目录为根路径
+U: 设置上级目录为跟路径，但是维持原来目录打开的状态
+r: 刷新光标所在的目录
+R: 刷新当前根路径
+I: 显示或者不显示隐藏文件
+f: 打开和关闭文件过滤器
+q: 关闭NERDTree
+A: 全屏显示NERDTree，或者关闭全屏
+</code></pre>
+<h1 id="vimrc">.vimrc</h1>
+<pre><code>set fileencodings=utf-8,gbk
+set termencoding=utf-8
+set encoding=utf-8
+
+syntax on           &quot;语法高亮
+set nocompatible    &quot;关闭vi兼容模式
+set nu              &quot;显示行号
+set ruler           &quot;打开状态栏标尺
+set softtabstop=4   &quot;退格键删除4个空格
+set tabstop=4       &quot;设置tab长度为 4
+set nobackup        &quot;覆盖文件不备份
+set autochdir       &quot;自动切换当前目录
+set hlsearch        &quot;搜索高亮
+set magic           &quot;设置魔术
+set smartindent     &quot;自动缩行
+set backspace=indent,eol,start
+set laststatus=2    &quot;显示状态栏
+set bg=dark &quot;暗色背景
+
+&quot;history存储容量
+set history=2000
+
+&quot;检测文件类型，采用不同的缩进格式
+filetype on
+filetype indent on
+set autoindent
+
+&quot;备份设置
+&quot;set backup
+&quot;set backupext=.bak
+&quot;set backupdir=~/.bak/
+
+&quot;突出显示
+set cursorcolumn
+set cursorline
+
+&quot;设置退出显示的内容
+set t_ti= t_te=
+
+&quot;显示状态栏内容
+set ruler
+set showcmd
+set showmode
+
+&quot;搜索显示
+set showmatch
+set hlsearch
+set ignorecase
+
+&quot;取消方向键
+&quot;map &lt;Left&gt; &lt;Nop&gt;
+&quot;map &lt;Right&gt; &lt;Nop&gt;
+&quot;map &lt;Up&gt; &lt;Nop&gt;
+&quot;map &lt;Down&gt; &lt;Nop&gt;
+
+&quot;python文件设置
+autocmd FileType python set tabstop=4 shiftwidth=4 expandtab ai
+func! DeleteTrailingWS()
+        exe &quot;normal mz&quot;
+        %s/\s\+$//ge
+        exe &quot;normal `z&quot;
+endfunc
+autocmd BufWrite *.py :call DeleteTrailingWS()
+
+&quot;脚本文件加入文件头
+autocmd BufNewFile *.sh,*.py `exec` &quot;:call SetTitle()&quot;
+func SetTitle()
+    if &amp;filetype == 'python'
+        call setline(1, &quot;\#!/usr/bin/env python&quot;) 
+        call setline(2, &quot;\# -*- encoding:utf-8 -*-&quot;) 
+    endif
+    if &amp;filetype == 'sh'
+        call setline(1, &quot;\#!/usr/bin/sh&quot;) 
+    endif
+endfunc
+
+&quot;&lt;F2&gt;开关行号
+function! HideNumber()
+        if(&amp;relativenumber == &amp;number)
+                set relativenumber! number!
+        elseif(&amp;number)
+                set number!
+        else
+                set relativenumber!
+        endif
+                set number?
+endfunc
+nnoremap &lt;F2&gt; :call HideNumber()&lt;CR&gt;
+
+&quot;===========================================================&quot;
+&quot; 设置pydiction
+&quot;===========================================================&quot;
+let g:pydiction_location='~/.vim/bundle/pydiction/complete-dict' 
+&quot;菜单高度
+let g:pydiction_menu_height = 3
+
+&quot;===========================================================&quot;
+&quot; 设置NerdTree
+&quot;===========================================================&quot;
+&quot;设置目录树位置
+let NERDTreeWinPos='left'
+let NERDTreeWinSize=30
+&quot;&lt;F3&gt;开关目录树
+map &lt;F3&gt; :NERDTreeToggle&lt;CR&gt;
+&quot;默认开启NERDTree
+&quot;autocmd VimEnter * NERDTree
+&quot;当打开 NERDTree 窗口时，自动显示 Bookmarks
+let NERDTreeShowBookmarks=1
+&quot; 是否显示隐藏文件
+let NERDTreeShowHidden=1
+
+&quot;设置&lt;F4&gt;保存文件
+map &lt;F4&gt; :&lt;ESC&gt;:w&lt;CR&gt;
+
+
+&quot;===========================================================&quot;
+&quot;Vundle插件管理
+&quot;===========================================================&quot;
+set nocompatible              &quot; 去除VI一致性,必须要添加
+filetype off                  &quot; 必须要添加
+
+&quot; 设置包括vundle和初始化相关的runtime path
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+&quot; 让vundle管理插件版本
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'rkulla/pydiction'
+&quot;
+&quot;
+&quot;
+&quot;
+&quot;
+&quot;
+&quot;
+&quot;所有插件需要在下面这行上面
+&quot;安装插件的方式可以使用本地、git及网络安装
+&quot;示例
+&quot;Plugin 'git://git.wincent.com/command-t.git'
+&quot;Plugin 'file:///home/gmarik/path/to/plugin'
+&quot;Plugin 'tpope/vim-fugitive'
+&quot;重名插件
+&quot;Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+
+call vundle#end()            &quot; required
+
+filetype plugin indent on    &quot; required
+&quot; 忽视插件改变缩进,可以使用以下替代:
+&quot;filetype plugin on
+</code></pre>
+
+                          </div>
+                        </div>
+                        <div class="layout-post-social">
+                          <div class="item reader">
+                            <div id="/post/vim-zi-ding-cha-jian/" class="leancloud-visitors view"
+                              data-flag-title="Vim 自定插件">
+                              <span class="post-meta-item-text">阅读 </span>
+                              <span class="leancloud-visitors-count"></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="layout-post-navigation">
+                          <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/linux-chang-yong-shell-ming-ling/" class="title">
+                                      <h4>Linux 常用 shell 命令</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>上一篇</span></div>
+                                  <div class="item">2017-06-25</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/shell-jiao-cheng-ji-chu-jiao-cheng/" class="title">
+                                      <h4>Shell 教程基础教程</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2017-06-17</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            
+                          </div>
+                        </div>
+
+                        <div class="layout-comments"></div>
+                        
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2 d-none d-lg-block">
+                      <div class="layout-post-sidebar">
+                        <div class="layout-sidebar-item">
+                          <ul class="markdownIt-TOC">
+<li><a href="#%E6%8F%92%E4%BB%B6">插件</a>
+<ul>
+<li><a href="#vundle-%E6%8F%92%E4%BB%B6%E7%AE%A1%E7%90%86">Vundle 插件管理</a>
+<ul>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E8%87%B3vimrc">添加至vimrc</a></li>
+</ul>
+</li>
+<li><a href="#nerdtree-%E7%9B%AE%E5%BD%95%E6%A0%91">NerdTree 目录树</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E">使用说明</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#vimrc">.vimrc</a></li>
+</ul>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-totop d-none"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+
+    	<div class="layout-footer">
+
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+					<div class="footer">
+						<div class="row">
+							<div class="col-12 col-md-9">
+								<div class="footer-copy">
+									
+									Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+									<div class="footer-icp d-none d-sm-inline-block">
+										<span class="px-2">⋅</span>
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 d-none d-md-block">
+								<div class="footer-links">
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript" src='https://mzqk.github.io/media/scripts/main.js'></script>
+	
+
+  </div>
+</body>
+
+</html>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mzqk.github.io</id>
     <title>MZZZ</title>
-    <updated>2020-05-26T05:14:13.859Z</updated>
+    <updated>2020-05-28T08:30:59.788Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mzqk.github.io"/>
     <link rel="self" href="https://mzqk.github.io/atom.xml"/>
@@ -11,46 +11,916 @@
     <icon>https://mzqk.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, MZZZ</rights>
     <entry>
-        <title type="html"><![CDATA[test]]></title>
-        <id>https://mzqk.github.io/post/test/</id>
-        <link href="https://mzqk.github.io/post/test/">
+        <title type="html"><![CDATA[如何阅读一本书]]></title>
+        <id>https://mzqk.github.io/post/ru-he-yue-du-yi-ben-shu/</id>
+        <link href="https://mzqk.github.io/post/ru-he-yue-du-yi-ben-shu/">
         </link>
-        <updated>2020-04-26T08:17:04.000Z</updated>
-        <content type="html"><![CDATA[<p>this test gridea</p>
-<h2 id="二级标题">二级标题</h2>
-<h3 id="三级标题">三级标题</h3>
+        <updated>2018-12-20T07:39:52.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="如何阅读一本书">如何阅读一本书</h1>
+<p><em>挑出阅读的层次说明</em></p>
+<h2 id="基础阅读层次">基础阅读层次</h2>
+<h4 id="准备阅读阶段">准备阅读阶段</h4>
+<h4 id="认字阶段">认字阶段</h4>
+<h4 id="读写阶段">读写阶段</h4>
+<h4 id="基础阅读阶段">基础阅读阶段</h4>
+<h2 id="检视阅读层次">检视阅读层次</h2>
+<h3 id="第一阶段略读">第一阶段：略读</h3>
+<ol>
+<li>先看书名页，然后如果有序就先看序。</li>
+<li>研究目录页，对这本书的基本架构做概括性的理解。</li>
+<li>如果书中附有索引，也要检阅一下。</li>
+<li>如果那是本包着书衣的新书，不妨读一下出版者的介绍。</li>
+<li>从你对一本书的目录很概略，甚至有点模糊的印象当中，开始挑几个看来跟主题息息相关的篇章来看。</li>
+<li>最后一步，把书打开来，东翻翻西翻翻，念个一两段．有时候连续读几页，但不要太多。</li>
+</ol>
+<h3 id="第二阶段粗浅阅读">第二阶段：粗浅阅读</h3>
+<ol>
+<li>
+<p>头一次面对一本难读的书的时候，从头到尾先读完一遍，碰到不懂的地方不要停下来查询或思索。</p>
+</li>
+<li>
+<p>提升阅读的速度： 将大拇指与食指、中指合并在一起，用这个“指针”顺着一行一行的字移动下去，速度要比你眼睛感觉的还要快一点。强迫自己的眼睛跟着手部的动作移动 。一旦你的眼睛能跟着手移动时，你就能读到那些字句了。</p>
+</li>
+</ol>
+<h3 id="第三阶段主动的基础阅读">第三阶段：主动的基础阅读</h3>
+<p><em>一个阅读者要提出的四个基本问题</em></p>
+<ol>
+<li>整体来说，这本书到底在谈些什么？</li>
+<li>作者细部说了什么，怎么说的？</li>
+<li>这本书说得有道理吗？</li>
+<li>这本书跟你有什么关系？</li>
+</ol>
+<h3 id="第四阶段做笔记">第四阶段:做笔记</h3>
+<ol>
+<li>画底线—在主要的重点，或重要又有力量的句子下画线。</li>
+<li>在画底线处的栏外再加画一道线—把你已经画线的部分再强调一遍，或是某一段很重要 ，但要画底线太长了，便在这一整段外加上一个记号。</li>
+<li>在空白处做星号或其他符号—要慎用，只用来强调书中十来个最重要的声明或段落即可。你可能想要将做过这样记号的地方每页折一个角，或是夹一张书签，这样你随时从书架上拿起这本书，打开你做记号的地方，就能唤醒你的记忆。</li>
+<li>在空白处 编号—作者的某个论点发展出一连串的重要陈述时，可以做顺序编号。</li>
+<li>在空白处记下其他的页码—强调作者在书中其他部分也有过同样的论点，或相关 的要点，或是与此处观点不同的地方。这样做能让散布全书的想法统一集中起来。许多读者会用Cf这样的记号，表示比较或参照的意思。</li>
+<li>将关键字或句子圈出来—这跟画底线是同样的功能。</li>
+<li>在书页的空白处做笔记—在阅读某一章节时，你可能会有些问题（或答案），在空白处记下来，这样可以帮你回 想起你的问题或答案。你也可以将复杂的论点简化说明在书页的空白处。或是记下全书所有主要论点的发展顺序。书中最后一页可以用来作为个人的索引 页，将作者的主要观点依序记下来。</li>
+</ol>
+<h2 id="分析阅读层次">分析阅读层次</h2>
+<h3 id="第一阶段找出共通的词义">第一阶段：找出共通的词义</h3>
+<h4 id="第一个规则">第一个规则</h4>
+<p>你一定要知道自己在读的是哪一类书，而且要越早知道越好。</p>
+<h4 id="第二个规则">第二个规则</h4>
+<p>使用一个单一的句子，或最多几句话（一小段文字）来叙述整本书的内容。</p>
+<h4 id="第三个规则">第三个规则</h4>
+<p>将书中重要篇章列举出来，说明它们如何按照顺序组成一个整体的架构。</p>
+<p>根据第三个规则，可以有一套运用的公式。这个公式是可以通用的。根据第二个规则，我们可以说出这本书的内容是如此这般。做完这件事之后，我们可 以依照第三个规则，将内容大纲排列如下：(1)作者将全书分成五个部分，第一部分谈的是什么，第二部分谈的是什么，第三部分谈的是别的事，第四部分 则是另外的观点，第五部分又是另一些事。(2)第一个主要的部分又分成三个段落，第一段落为X，第二段落为Y，第三段落为Z。(3)在第一部分的第一阶段 ，作者有四个重点，第一个重点是A，第二个重点是B，第三个重点是C，第四个重点是D等等。</p>
+<h4 id="第四个规则">第四个规则</h4>
+<p>找出作者要问的问题。一本书的作者在开始写作时，都是有一个问题或一连串的问题，而这本书的内容就是一个答案，或许多答 案。</p>
+<h3 id="第二阶段诠释一本书的内容">第二阶段：诠释一本书的内容</h3>
+<h4 id="第一个规则-2">第一个规则</h4>
+<p>诠释作者使用的关键字，与作者达成共识。</p>
+<h4 id="第二个规则-2">第二个规则</h4>
+<p>从最重要的句子中 抓出作者的重要主旨。</p>
+<h4 id="第三个规则-2">第三个规则</h4>
+<p>从最重要的句子中 抓出作者的重要主旨。</p>
+<h4 id="第四个规则-2">第四个规则</h4>
+<p>)确定作者已经解决了哪些问题，还有哪些是未解决的 。在未解决的问题中，确定哪些是作者认为自己无法解决的问题。</p>
+<h2 id="主题阅读层次">主题阅读层次</h2>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://mzqk.github.io/post/hello-gridea/</id>
-        <link href="https://mzqk.github.io/post/hello-gridea/">
+        <title type="html"><![CDATA[时间管理-如何充分利用你的24小时]]></title>
+        <id>https://mzqk.github.io/post/shi-jian-guan-li-ru-he-chong-fen-li-yong-ni-de-24-xiao-shi/</id>
+        <link href="https://mzqk.github.io/post/shi-jian-guan-li-ru-he-chong-fen-li-yong-ni-de-24-xiao-shi/">
         </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+        <updated>2018-10-29T07:36:44.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="时间管理-如何充分利用你的24小时">时间管理-如何充分利用你的24小时</h1>
+<h2 id="你目前如何利用时间">你目前如何利用时间</h2>
+<h3 id="意识">意识</h3>
+<h4 id="了解你是如何使用时间的">了解你是如何使用时间的</h4>
+<p>检查自己的时间花销（时间日志、时间分类统计），意识到哪里的时间用的过多</p>
+<h4 id="确定目标建立行动路线图">确定目标建立行动路线图</h4>
+<p>规划时间，确定目标（短期目标、长期目标）</p>
+<pre><code>把你的任务写在工作清单上，把你的目标写在使命描述中。
+任务：至最近某个时间你必须完成的一件杂务、差事或工作。
+</code></pre>
+<h4 id="正确选择">正确选择</h4>
+<pre><code>在当下的满足与牺牲之间进行选择——你可以规划你的人生。而如果你不做出选择，你就只能任由其他力量主宰你的人生。
+</code></pre>
+<h2 id="使你的时间发挥最大的效用">使你的时间发挥最大的效用</h2>
+<h3 id="认识时间是有限的">认识时间是有限的</h3>
+<h3 id="合理匹配时间和精力">合理匹配时间和精力</h3>
+<h3 id="利用空隙时间">利用空隙时间</h3>
+<h3 id="有效的时间管理减少时间浪费">有效的时间管理减少时间浪费</h3>
+<h4 id="迅速决策">迅速决策</h4>
+<h4 id="快速阅读">快速阅读</h4>
+<h4 id="提高记忆力">提高记忆力</h4>
+<h3 id="克服拖延">克服拖延</h3>
+<pre><code>你不是你的思想。相反，你是在更高层次聆听你的思想。因此，你可以控制头脑中那些消极思想。
+你可以采取的唯一脏鞥女奥的一个步骤是学会不认同自己的思想。有时你可以心中的某些想法一笑了之，把它们当做少不更事的小孩子荒诞不经的恶作剧。——《当下的力量》
+当你把一种思想想象为一个物体时，你就可以控制它。你就可以一把拖延的想法驱逐出你的头脑，就像你将一只行为不端的猫赶出家门一样。——《思考与致富》
+</code></pre>
+<h3 id="化繁为简物品和思想">化繁为简（物品和思想）</h3>
+<pre><code>《尽管去做：无压力工作的艺术》——大卫-艾伦
+</code></pre>
+<h3 id="充分计划">充分计划</h3>
+<p>每一个小时的计划抵得上五个小时的执行</p>
+<h4 id="分批处理">分批处理</h4>
+<p>想办法多件事放在一起去完成，而不是单独去完成每一件事，以此来节约你的时间。</p>
+<h4 id="充分准备">充分准备</h4>
+<p>通过提前进行思考和做好准备，你就可能减少为完成摆在你面前的任何任务所要付出的额努力。</p>
+<h4 id="制作任务清单">制作任务清单</h4>
+<h4 id="确定优先次序四象限">确定优先次序（四象限）</h4>
+<pre><code>《高效能人士的七个习惯》——斯蒂芬-柯维
+吃青蛙的原则是：如果你必须吃掉两只青蛙，那么，你要先吃较丑的那一只。——《吃掉那只青蛙》
+</code></pre>
+<h4 id="高效率">高效率</h4>
+<p>假装忙碌使你没有时间进行自我反思</p>
+<h4 id="二八定律">二八定律</h4>
+<p>一些活动会比另一些活动带来更大的回报；因此，要把大部分精力投入到那些真正能够给你带来“最大效益”的项目上去。</p>
+<h4 id="专注">专注</h4>
+<p>不要同时处理多个任务，那是自欺欺人</p>
+<p>后记<br>
+学会迅速丢弃且不内疚<br>
+立刻对事务做出决策<br>
+分类储存内容<br>
+指定时间回复<br>
+戴数显秒针的手表<br>
+随时记录心中想法<br>
+快速阅读<br>
+避免重复造轮子<br>
+限定时间完成任务<br>
+向前看抛弃过去</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Xpath 基础使用]]></title>
+        <id>https://mzqk.github.io/post/xpath-ji-chu-shi-yong/</id>
+        <link href="https://mzqk.github.io/post/xpath-ji-chu-shi-yong/">
+        </link>
+        <updated>2018-03-20T07:53:24.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="xpath">XPath</h1>
+<h2 id="xpath语法">XPath语法</h2>
+<h3 id="绝对路径">绝对路径</h3>
+<blockquote>
+<p>/html/body/tag</p>
+</blockquote>
+<p>/: 从根节点开始下选取</p>
+<h3 id="相对路径">相对路径</h3>
+<blockquote>
+<p>//tag[@attibute='value']/tag</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>用法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.</td>
+<td>选取当前节点</td>
+</tr>
+<tr>
+<td>..</td>
+<td>选取当前节点的父节点</td>
+</tr>
+<tr>
+<td>@</td>
+<td>选取属性</td>
+</tr>
+<tr>
+<td>[*]</td>
+<td>选取节点下标</td>
+</tr>
+<tr>
+<td>text()</td>
+<td>选取文字</td>
+</tr>
+</tbody>
+</table>
+<h2 id="xpath轴">XPath轴</h2>
+<p>contains关键字</p>
+<p>startwith关键字<br>
+查找父节点<br>
+查找平级节点</p>
+<h2 id="xpath运算符">XPath运算符</h2>
+<p>|<br>
+and<br>
+or</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[搭建 SS 服务器]]></title>
+        <id>https://mzqk.github.io/post/da-jian-ss-fu-wu-qi/</id>
+        <link href="https://mzqk.github.io/post/da-jian-ss-fu-wu-qi/">
+        </link>
+        <updated>2018-02-16T07:52:05.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="搭建ss服务器">搭建ss服务器</h1>
+<h2 id="选择vps">选择VPS</h2>
+<h3 id="vultr">Vultr</h3>
+<p><em>本人目前正在使用</em></p>
+<blockquote>
+<p><a href="https://www.vultr.com/?ref=7333360">Vultr</a>全球最大的游戏主机提供商之一，使用它的原因主要是它是按小时计费的,价格也便宜。目前2.5美元每月的已经售完，5美元的每个月也有1T流量。</p>
+</blockquote>
+<p><a href="https://www.vultr.com/?ref=7333360"><img src="https://www.vultr.com/media/banner_2.png" width="468" height="60"></a></p>
+<h3 id="bandwagonhos">BandwagonHos</h3>
+<blockquote>
+<p><a href="http://bwg.yiqimaila.com/bwg/buy.html">BandwagonHost</a>俗称<em>搬瓦工</em>,性价比很高。这种服务就是只拿来给新手学习Linux，我觉得也是很划得来。</p>
+</blockquote>
+<h3 id="阿里云">阿里云</h3>
+<blockquote>
+<p>阿里云的产品在国内可以说是最好的云主机厂商之一。优点是相比外国的服务肯定要稳定些，但有一点不好就是建的网站无论大小都需要备案。</p>
+</blockquote>
+<h2 id="选择服务器节点">选择服务器节点</h2>
+<blockquote>
+<p>这里需要申明在国外购买的服务分配给的IP有一定可能会被墙掉，特别是我在Vultr上建的几个东京的站点无一能远程上（可能是人品问题）。</p>
+</blockquote>
+<blockquote>
+<p>网络这方面大家可以自己ping通下，一般延时在200ms左右就能流畅使用。</p>
+</blockquote>
+<h2 id="选择操作系统">选择操作系统</h2>
+<blockquote>
+<p>这里没什么好说的，建议选择Centos或Debian。这两个操作系统对今后的学习linux是很有好处的。</p>
+</blockquote>
+<h2 id="搭建shadowsocks">搭建Shadowsocks</h2>
+<p><strong>这处便是本文关键</strong></p>
+<h3 id="连接服务器">连接服务器</h3>
+<p>Windows用户建议下载<a href="https://www.netsarang.com/download/main.html">Xshell</a><br>
+、MAC下可直接ssh连接。</p>
+<h3 id="下载shadowsocks">下载Shadowsocks</h3>
+<pre><code class="language-bash">#安装python2.7及以上版本，
+yum install m2crypto python-setuptools
+easy_install pip
+pip install shadowsocks
+</code></pre>
+<p>配置</p>
+<pre><code class="language-js">/etc/shadowsocks.json   
+    
+{
+  &quot;server&quot;: &quot;192.0.0.1&quot;,
+  &quot;server_port&quot;:8388,
+  &quot;local_address&quot;: &quot;127.0.0.1&quot;,
+  &quot;local_port&quot;:1080,
+  &quot;password&quot;: &quot;12345678&quot;,
+  &quot;timeout&quot;:300,
+  &quot;method&quot;: &quot;aes-256-cfb&quot;
+}
+#也可配置多端口(记住要检查相应端口是否开启)
+</code></pre>
+<p>具体配置</p>
+<pre><code class="language-bash">yum install git 
+git clone https://github.com/shadowsocks/shadowsocks.git
+</code></pre>
+<h3 id="运行服务">运行服务</h3>
+<pre><code class="language-bash">#检查防火墙信息
+firewall-cmd --query-port=443/tcp 
+firewall-cmd --zone=public --add-port=443/tcp --permanent 
+firewall-cmd --reload
+#开启ss服务
+ssserver -c /etc/shadowsocks.json -d start
+</code></pre>
+<h3 id="简易防护">简易防护</h3>
+<blockquote>
+<p>搭建云主机最重要的隐患就是恶意的网络攻击和厂商的抽风，搭建自行搜索保护服务器的方法（如关闭服务器的root远程登录），然后注意的就是利用网站的服务或则其他功能进行备份。</p>
+</blockquote>
+<h2 id="加速">加速</h2>
+<p>两种加速代码均代理在github上，可在项目中查看详细信息。</p>
+<ul>
+<li>锐速<br>
+<a href="https://github.com/91yun/serverspeeder">https://github.com/91yun/serverspeeder</a></li>
+<li>BBR<br>
+<a href="https://github.com/teddysun/across">https://github.com/teddysun/across</a></li>
+</ul>
+<h2 id="下载相应客户端">下载相应客户端</h2>
+<p><a href="https://github.com/shadowsocks">https://github.com/shadowsocks</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[RHCSA 基本考纲]]></title>
+        <id>https://mzqk.github.io/post/rhcsa-ji-ben-kao-gang/</id>
+        <link href="https://mzqk.github.io/post/rhcsa-ji-ben-kao-gang/">
+        </link>
+        <updated>2017-11-14T07:51:25.000Z</updated>
+        <content type="html"><![CDATA[<p>1.修改root密码<br>
+重启进入grub按e编辑<br>
+添加rd.break console=stty0<br>
+或者修改rw init=/sysroot/bin<br>
+进入修复模式<br>
+挂载根系统<br>
+mount -o remount.rw /sysroot<br>
+切换根目录<br>
+chroot /sysroot<br>
+修改root密码passwd<br>
+重建SELinux安全策略<br>
+touch /.autorelabel<br>
+退出重启<br>
+2.修改本机网络信息<br>
+修改主机名<br>
+/etc/sysconfig/network<br>
+HOSTNAME信息<br>
+/etc/sysconfig/network<br>
+localhost信息<br>
+或<br>
+hostnamectl  set-hostname  example.hostname<br>
+修改静态网卡信息<br>
+/etc/sysconfig/network-scripts/ifcfg-eth0<br>
+BOOTPROTO=static<br>
+DNS1=<br>
+IPADDR=<br>
+NETMASK=<br>
+GETWAY=<br>
+或<br>
+nm-connection-editor图形化界面<br>
+nmcli  connection  up  &quot;System eth0&quot;<br>
+3.搭建默认软件仓库<br>
+yum-config-manager --add  http://example.com<br>
+修改 /etc/yum.repos.d/example.repo<br>
+关闭KEY检查gpgcheck=0<br>
+yum clean all<br>
+yum repolist<br>
+4.创建账户<br>
+创建用户组<br>
+groupadd adminuser<br>
+创建用户<br>
+useradd -G admin1  adminuser<br>
+创建用户不赋予shell交互<br>
+useradd -s /sbin/nologin admin2<br>
+设置用户密码<br>
+passwd admin1<br>
+5.配置文件权限<br>
+6.创建定时任务<br>
+开启cron服务</p>
+<p>给admin1用户编辑一个任务<br>
+crontab -e -u admin1<br>
+7.创建共享目录<br>
+创建目录<br>
+mkdir /home/admin<br>
+给予用户组adminuser目录所有权<br>
+chown  :adminuser  /home/admin<br>
+赋予组内用户可读、可写和可执行权限，其他用户无权限<br>
+chmod 770 /home/admin<br>
+8.安装升级内核<br>
+下载内核<br>
+wget http://kernel.com/download/kernel.rpm<br>
+安装rpm包<br>
+rpm -ivh kernel.rpm<br>
+重启后确认内核版本<br>
+uname -r</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[使用修改 hosts 文件方法访问外国网络]]></title>
+        <id>https://mzqk.github.io/post/shi-yong-xiu-gai-hosts-wen-jian-fang-fa-fang-wen-wai-guo-wang-luo/</id>
+        <link href="https://mzqk.github.io/post/shi-yong-xiu-gai-hosts-wen-jian-fang-fa-fang-wen-wai-guo-wang-luo/">
+        </link>
+        <updated>2017-08-06T07:46:09.000Z</updated>
+        <content type="html"><![CDATA[<p><a href="https://github.com/MZqk/hosts">hosts下载地址</a></p>
+<p>首先科普下我们为什么不能访问Google、Twitter、Facebook 之类的网站</p>
+<blockquote>
+<p>这是因为我们国家有GFW（英文名称Great Firewall of China），<br>
+也称中国防火墙或中国国家防火墙的存在。为什么要有这个东西的<br>
+存在呢？对外的说法是保护国内的网络纯净和谐地发展道路,顺带养<br>
+活下国内的BAT</p>
+</blockquote>
+<blockquote>
+<p>╮(￣⊿￣)╭<strong>我想GFW的存在意义是保护的是外国友人不被国内傻逼打扰•̀.̫•́✧</strong></p>
+</blockquote>
+<pre><code>为了方便用户记忆，我们将IP变成一个个的域名来输入到浏览器进行访问。而这使得访问网站时要先将其域名解析成 IP。DNS的作用就是进行IP解析，把域名对应到IP。
+在GFW的五种封锁方法中，有一种简单而效果很好的方法是DNS污染。GFW会对DNS的解析过程进行干扰，这会使对某些被干扰的域名返回一个错误的IP地址给你的主机，使你无法正确连接到你要的服务器上读取正确的信息。Hosts 文件本来是用来提高解析效率。在进行 DNS请求以前，系统会先检查自己的Hosts文件中是否有这个地址映射关系，如果有则调用这个IP地址映射，如果没有再向已知的 DNS 服务器提出域名解析。也就是说 Hosts 的请求级别比 DNS 高。当你的Hosts 文件里面有对应的 IP 时，它就会直接访问那个 IP，而不用通过 DNS。所以，当我们直接将Google、Twitter、Facebook 之类的 IP 放入 Hosts 文件后，就可以跳过 DNS的解析这一步，直接就行IP访问，不受 GFW 的 DNS污染干扰了。
+</code></pre>
+<blockquote>
+<p>通俗易懂的说修改host后就能访问Google、Twitter、Facebook等被墙网站。</p>
+</blockquote>
+<p>下面就来介绍修改hosts文件的方法</p>
+<h2 id="windows">windows</h2>
+<ul>
+<li>修改文件需要管理员权限</li>
+</ul>
+<ol>
+<li>找到文件目录C:\Windows\System32\drivers\etc\hosts</li>
+<li>把下载好的hosts文件全部内容复制到C:\WINDOWS\system32\drivers\etc目录中的hosts文件中</li>
+<li>保存后在重启浏览器输入https://www.google.com.hk看是否能访问</li>
+<li>如果还不可以访问在CMD窗口输入ipconfig /flushdns使其生效。</li>
+</ol>
+<h2 id="linux-and-mac">Linux and Mac</h2>
+<ol>
+<li>Linux与Mac的hosts文件都在相同的目录下 <strong>/etc/hosts</strong></li>
+<li>同样是用下载好的hosts替代原有的文件</li>
+<li>Mac终端输入sudo killall -HUP mDNSResponder使其生效。<br>
+Linux终端输入sudo systemctl restart NetworkManager。</li>
+</ol>
+<p>注意 : 非systemd发行版，终端输入sudo rcnscd restart，如果不清楚请两个都试一次。</p>
+<h2 id="android">Android</h2>
+<ul>
+<li>我们知道Android也是Linux系统中的一种，但其修改办法还是有些许不同</li>
+</ul>
+<ol>
+<li>需要获取root权限</li>
+<li>文件所在路径/system/etc/hosts</li>
+</ol>
+<p>补充一下：</p>
+<blockquote>
+<p>就是为什么 Hosts的IP要时不时更改，为什么 FB、Twitter 会仍旧上不去。是因为 GFW 的第二个大招，IP 封锁。比如访问国外一个 IP 无法访问，Ping 不通，tracert 这个 IP 后发现，全部在边缘路由器 (GFW) 附近被拦截。换言之，GFW 直接拦截带有这个 IP 头的数据包。所以，如果你更改的 IP 被封锁了，就算你过了 DNS 这一关，也仍旧不能翻过GFW。<strong>而有些站，是直接被屏蔽，无论你怎么添加HOSTS都是不行的。</strong></p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[微信使用 Itchat 实现机器人自动回复功能]]></title>
+        <id>https://mzqk.github.io/post/wei-xin-shi-yong-itchat-shi-xian-ji-qi-ren-zi-dong-hui-fu-gong-neng/</id>
+        <link href="https://mzqk.github.io/post/wei-xin-shi-yong-itchat-shi-xian-ji-qi-ren-zi-dong-hui-fu-gong-neng/">
+        </link>
+        <updated>2017-08-03T07:46:31.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="itchat">itchat</h1>
+<p>itchat是一个开源的微信个人号接口，使用python调用微信从未如此简单。</p>
+<p>使用不到三十行的代码，你就可以完成一个能够处理所有信息的微信机器人。</p>
+<p>当然，该api的使用远不止一个机器人，更多的功能等着你来发现</p>
+<p>该接口与公众号接口<a href="https://github.com/littlecodersh/ItChat.git">itchat</a><br>
+共享类似的操作方式，学习一次掌握两个工具。</p>
+<p>如今微信已经成为了个人社交的很大一部分，希望这个项目能够帮助你扩展你的个人的微信号、方便自己的生活。</p>
+<h2 id="安装">安装</h2>
+<p>可以通过本命令安装itchat：</p>
+<pre><code class="language-python">pip install itchat
+</code></pre>
+<h2 id="简单入门实例">简单入门实例</h2>
+<p>有了itchat，如果你想要给文件传输助手发一条信息，只需要这样：</p>
+<pre><code class="language-python">import itchat
+
+itchat.auto_login()
+
+itchat.send('Hello, filehelper', toUserName='filehelper')
+</code></pre>
+<p>如果你想要回复发给自己的文本消息，只需要这样：</p>
+<pre><code class="language-python">import itchat
+
+@itchat.msg_register(itchat.content.TEXT)
+def text_reply(msg):
+    return msg.text
+
+itchat.auto_login()
+itchat.run()
+</code></pre>
+<h2 id="进阶应用">进阶应用</h2>
+<h3 id="特殊的字典使用方式">特殊的字典使用方式</h3>
+<p>通过打印itchat的用户以及注册消息的参数，可以发现这些值都是字典。</p>
+<p>但实际上itchat精心构造了相应的消息、用户、群聊、公众号类。</p>
+<p>其所有的键值都可以通过这一方式访问：</p>
+<pre><code class="language-python">@itchat.msg_register(TEXT)
+def _(msg):
+    # equals to print(msg['FromUserName'])
+    print(msg.fromUserName)
+</code></pre>
+<p>属性名为键值首字母小写后的内容。</p>
+<pre><code class="language-python">author = itchat.search_friends(nickName='LittleCoder')[0]
+author.send('greeting, littlecoder!')
+</code></pre>
+<h3 id="各类型消息的注册">各类型消息的注册</h3>
+<p>通过如下代码，微信已经可以就日常的各种信息进行获取与回复。</p>
+<pre><code class="language-python">import itchat, time
+from itchat.content import *
+
+@itchat.msg_register([TEXT, MAP, CARD, NOTE, SHARING])
+def text_reply(msg):
+    msg.user.send('%s: %s' % (msg.type, msg.text))
+
+@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+def download_files(msg):
+    msg.download(msg.fileName)
+    typeSymbol = {
+        PICTURE: 'img',
+        VIDEO: 'vid', }.get(msg.type, 'fil')
+    return '@%s@%s' % (typeSymbol, msg.fileName)
+
+@itchat.msg_register(FRIENDS)
+def add_friend(msg):
+    msg.user.verify()
+    msg.user.send('Nice to meet you!')
+
+@itchat.msg_register(TEXT, isGroupChat=True)
+def text_reply(msg):
+    if msg.isAt:
+        msg.user.send(u'@%s\u2005I received: %s' % (
+            msg.actualNickName, msg.text))
+
+itchat.auto_login(True)
+itchat.run(True)
+</code></pre>
+<h3 id="命令行二维码">命令行二维码</h3>
+<p>通过以下命令可以在登陆的时候使用命令行显示二维码：</p>
+<pre><code class="language-python">itchat.auto_login(enableCmdQR=True)
+</code></pre>
+<p>部分系统可能字幅宽度有出入，可以通过将enableCmdQR赋值为特定的倍数进行调整：</p>
+<pre><code class="language-python"># 如部分的linux系统，块字符的宽度为一个字符（正常应为两字符），故赋值为2
+itchat.auto_login(enableCmdQR=2)
+</code></pre>
+<p>默认控制台背景色为暗色（黑色），若背景色为浅色（白色），可以将enableCmdQR赋值为负值：</p>
+<pre><code class="language-python">itchat.auto_login(enableCmdQR=-1)
+</code></pre>
+<h3 id="退出程序后暂存登陆状态">退出程序后暂存登陆状态</h3>
+<p>通过如下命令登陆，即使程序关闭，一定时间内重新开启也可以不用重新扫码。</p>
+<pre><code class="language-python">itchat.auto_login(hotReload=True)
+</code></pre>
+<h3 id="用户搜索">用户搜索</h3>
+<p>使用<code>search_friends</code>方法可以搜索用户，有四种搜索方式：</p>
+<ol>
+<li>仅获取自己的用户信息</li>
+<li>获取特定<code>UserName</code>的用户信息</li>
+<li>获取备注、微信号、昵称中的任何一项等于<code>name</code>键值的用户</li>
+<li>获取备注、微信号、昵称分别等于相应键值的用户</li>
+</ol>
+<p>其中三、四项可以一同使用，下面是示例程序：</p>
+<pre><code class="language-python"># 获取自己的用户信息，返回自己的属性字典
+itchat.search_friends()
+# 获取特定UserName的用户信息
+itchat.search_friends(userName='@abcdefg1234567')
+# 获取任何一项等于name键值的用户
+itchat.search_friends(name='littlecodersh')
+# 获取分别对应相应键值的用户
+itchat.search_friends(wechatAccount='littlecodersh')
+# 三、四项功能可以一同使用
+itchat.search_friends(name='LittleCoder机器人', wechatAccount='littlecodersh')
+</code></pre>
+<p>关于公众号、群聊的获取与搜索在文档中有更加详细的介绍。</p>
+<h3 id="附件的下载与发送">附件的下载与发送</h3>
+<p>itchat的附件下载方法存储在msg的Text键中。</p>
+<p>发送的文件的文件名（图片给出的默认文件名）都存储在msg的FileName键中。</p>
+<p>下载方法接受一个可用的位置参数（包括文件名），并将文件相应的存储。</p>
+<pre><code class="language-python">@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+def download_files(msg):
+    msg.download(msg.fileName)
+    itchat.send('@%s@%s' % (
+        'img' if msg['Type'] == 'Picture' else 'fil', msg['FileName']),
+        msg['FromUserName'])
+    return '%s received' % msg['Type']
+</code></pre>
+<p>如果你不需要下载到本地，仅想要读取二进制串进行进一步处理可以不传入参数，方法将会返回图片的二进制串。</p>
+<pre><code class="language-python">@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+def download_files(msg):
+    with open(msg.fileName, 'wb') as f:
+        f.write(msg.download())
+</code></pre>
+<h3 id="用户多开">用户多开</h3>
+<p>使用如下命令可以完成多开的操作：</p>
+<pre><code class="language-python">import itchat
+
+newInstance = itchat.new_instance()
+newInstance.auto_login(hotReload=True, statusStorageDir='newInstance.pkl')
+
+@newInstance.msg_register(itchat.content.TEXT)
+def reply(msg):
+    return msg.text
+
+newInstance.run()
+</code></pre>
+<h3 id="退出及登陆完成后调用特定方法">退出及登陆完成后调用特定方法</h3>
+<p>登陆完成后的方法需要赋值在<code>loginCallback</code>中。</p>
+<p>而退出后的方法需要赋值在<code>exitCallback</code>中。</p>
+<pre><code class="language-python">import time
+
+import itchat
+
+def lc():
+    print('finish login')
+def ec():
+    print('exit')
+
+itchat.auto_login(loginCallback=lc, exitCallback=ec)
+time.sleep(3)
+itchat.logout()
+</code></pre>
+<p>若不设置loginCallback的值，则将会自动删除二维码图片并清空命令行显示。</p>
+<h2 id="常见问题与解答">常见问题与解答</h2>
+<p>Q: 为什么中文的文件没有办法上传？</p>
+<p>A: 这是由于<code>requests</code>的编码问题导致的。若需要支持中文文件传输，将[fields.py]<a href="py3%E7%89%88%E6%9C%AC%E8%A7%81%5B%E8%BF%99%E9%87%8C%5D%5Bfields.py-3%5D">fields.py-2</a>文件放入requests包的packages/urllib3下即可</p>
+<p>Q: 如何通过这个包将自己的微信号变为控制器？</p>
+<p>A: 有两种方式：发送、接受自己UserName的消息；发送接收文件传输助手（filehelper）的消息</p>
+<p>Q: 为什么我发送信息的时候部分信息没有成功发出来？</p>
+<p>A: 有些账号是天生无法给自己的账号发送信息的，建议使用<code>filehelper</code>代替。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[基础正则表达式]]></title>
+        <id>https://mzqk.github.io/post/ji-chu-zheng-ze-biao-da-shi/</id>
+        <link href="https://mzqk.github.io/post/ji-chu-zheng-ze-biao-da-shi/">
+        </link>
+        <updated>2017-07-26T07:51:03.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="基础正则表达式">基础正则表达式</h1>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td>前一个字符匹配任意次数</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配任意一个字符（除换行符）</td>
+</tr>
+<tr>
+<td>^</td>
+<td>匹配行首</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配行尾</td>
+</tr>
+<tr>
+<td>[]</td>
+<td>匹配中括号中任意一个字符</td>
+</tr>
+<tr>
+<td>[^]</td>
+<td>匹配中括号中以外的任意一个字符</td>
+</tr>
+<tr>
+<td>|转义字符</td>
+<td></td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>匹配一个字符n次</td>
+</tr>
+<tr>
+<td>{n，}</td>
+<td>匹配一个字符n次以上</td>
+</tr>
+<tr>
+<td>{n，m}</td>
+<td>匹配一个字符n至m次</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[FHS]]></title>
+        <id>https://mzqk.github.io/post/fhs/</id>
+        <link href="https://mzqk.github.io/post/fhs/">
+        </link>
+        <updated>2017-07-22T07:45:20.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="">/</h1>
+<h2 id="bin">bin</h2>
+<p>一般用户使用到的命令，可作为单用户维护模式启用命令</p>
+<h2 id="boot">boot</h2>
+<p>内核加载文件，开机会加载到</p>
+<h2 id="cache">cache</h2>
+<h2 id="data">data</h2>
+<h2 id="dev">dev</h2>
+<p>设备文件</p>
+<h2 id="etc">etc</h2>
+<p>系统配置文件</p>
+<h2 id="home">home</h2>
+<p>用户目录</p>
+<h3 id="user">user</h3>
+<ul>
+<li>.bashrc</li>
+<li>.profile</li>
+<li>.bash_history</li>
+<li>.bash_logout</li>
+<li>.vimrc</li>
+</ul>
+<h2 id="lib">lib</h2>
+<p>动态库和模块文件</p>
+<h2 id="lib64">lib64</h2>
+<p>支持64位的函数库</p>
+<h2 id="media">media</h2>
+<p>挂载设备</p>
+<h2 id="mnt">mnt</h2>
+<p>临时挂载设备</p>
+<h2 id="opt">opt</h2>
+<p>第三方软件</p>
+<h2 id="proc">proc</h2>
+<p>虚拟文件系统，存放系统核心、行程信息（process）、周边设备等至内存</p>
+<h2 id="root">root</h2>
+<p>管理员目录</p>
+<ul>
+<li>.bashrc</li>
+<li>.bash_history</li>
+<li>.profile</li>
+<li>.viminfo</li>
+</ul>
+<h2 id="run">run</h2>
+<p>开机所产生的各项信息</p>
+<h2 id="sbin">sbin</h2>
+<p>系统命令，root所有权限</p>
+<h2 id="snap">snap</h2>
+<h2 id="srv">srv</h2>
+<p>服务进程所需数据文件</p>
+<h2 id="sys">sys</h2>
+<p>虚拟文件系统，记录核心与系统硬件信息较相关的信息</p>
+<h2 id="tmp">tmp</h2>
+<p>临时目录</p>
+<h2 id="usr">usr</h2>
+<p>官方软件</p>
+<h2 id="var">var</h2>
+<p>变量文件</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Python 基础知识]]></title>
+        <id>https://mzqk.github.io/post/python-ji-chu-zhi-shi/</id>
+        <link href="https://mzqk.github.io/post/python-ji-chu-zhi-shi/">
+        </link>
+        <updated>2017-07-14T07:47:37.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>本文仅为粗略地概括python编程的基本语法，若你有C二级的水平将可以轻易看懂。作为引导很容易了解到python基础，详细的最好能通过<a href="http://python.usyiyi.cn/translate/python_352/contents.html">官方文档</a>学习。</strong></p>
+<h1 id="python">Python</h1>
+<p>源程序编码<br>
+除去第一行需要添加运行环境#!/usr/local/bin/python2还需要说明编码方式以使程序能够识别中文输出</p>
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+</code></pre>
+<h2 id="数据结构">数据结构</h2>
+<p><em>python的数据类型不需要像C一样特别声明</em><br>
+布尔值<br>
+<em>True</em><br>
+<em>False</em></p>
+<blockquote>
+<p>支持and、or和not运算</p>
+</blockquote>
+<h4 id="常量">常量</h4>
+<p>常量常用全部大写指明，python的优雅在于有规定语法但却没有强制约束，你仍可以对常量做改变</p>
+<pre><code>PI = 3.14159265359
+</code></pre>
+<h4 id="列表">列表</h4>
+<p>list是一种有序的集合，可以随时添加和删除其中的元素。</p>
+<pre><code>list = [a,b,c,d]
+</code></pre>
+<h4 id="元组">元组</h4>
+<p>tuple和list非常类似，但是tuple一旦初始化就不能修改</p>
+<pre><code>tupe = ('a','b','c','b')
+</code></pre>
+<h4 id="集合">集合</h4>
+<p>set和dict类似，也是一组key的集合，但不存储value。由于key不能重复，所以，在set中，没有重复的key。</p>
+<pre><code>set = {'a','b','c','d'}
+</code></pre>
+<h4 id="字典">字典</h4>
+<p>dict全称dictionary，在其他语言中也称为map，使用键-值（key-value）存储，具有极快的查找速度。</p>
+<pre><code>dict = {'a':1,'b':2,'c':3,'d':4 }
+</code></pre>
+<h3 id="特性">特性</h3>
+<h4 id="切片">切片</h4>
+<p>取一个list或tuple的部分元素是非常常见的操作</p>
+<pre><code class="language-python">L = list(range(100))
+[L[0], L[1], L[2]]
+L[:10]
+L[-10:]
+L[10:20]
+L[:10:2]
+L[::5]
+</code></pre>
+<blockquote>
+<p>[0,1,2]</p>
+<p>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</p>
+<p>[90, 91, 92, 93, 94, 95, 96, 97, 98, 99]</p>
+<p>[10, 11, 12, 13, 14, 15, 16, 17, 18, 19]</p>
+<p>[0, 2, 4, 6, 8]</p>
+<p>[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95]</p>
+</blockquote>
+<h4 id="迭代">迭代</h4>
+<p>如果给定一个list或tuple，我们可以通过for循环来遍历这个list或tuple，这种遍历我们称为迭代（Iteration）。</p>
+<p>因为dict的存储不是按照list的方式顺序排列，所以，迭代出的结果顺序很可能不一样。默认情况下，dict迭代的是key</p>
+<h4 id="列表生成器">列表生成器</h4>
+<p>列表生成式即ListComprehensions，是Python内置的非常简单却强大的可以用来创建list的生成式。</p>
+<pre><code class="language-python">[x * x for x in range(1, 11)]
+[x * x for x in range(1, 11) if x % 2 == 0]
+[m + n for m in 'ABC' for n in 'XYZ']
+</code></pre>
+<blockquote>
+<p>[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]</p>
+<p>[4, 16, 36, 64, 100]</p>
+<p>['AX', 'AY', 'AZ', 'BX', 'BY', 'BZ', 'CX', 'CY', 'CZ']</p>
+</blockquote>
+<h3 id="生成器">生成器</h3>
+<p>在Python中，列表在循环的过程中不断推算出后续的元素,这种一边循环一边计算的机制，称为生成器：generator。</p>
+<pre><code class="language-python">g = (x * x for x in range(10))
+#通过next()函数可依次调用元素的值
+#同样可以使用循环的方式迭代出
+</code></pre>
+<h3 id="迭代器">迭代器</h3>
+<p>迭代器是一个可以记住遍历的位置的对象。迭代器对象从集合的第一个元素开始访问，直到所有的元素被访问完结束。迭代器只能往前不会后退。</p>
+<h2 id="控制流程">控制流程</h2>
+<h3 id="if">if</h3>
+<pre><code class="language-python">if x &lt; 0:
+    print (小于零)
+elif x == 0:
+    print (等于零)
+elif x == 1:
+    prin(等于1)
+else:
+    print(大于零)
+</code></pre>
+<p>if判断语句可结合elif用来替换‘case’或‘switch’语句</p>
+<h3 id="for">for</h3>
+<p>常用遍历</p>
+<pre><code class="language-python">a=['a','b','c','d']
+for i in range(len(a))
+    print (i,a[i]) 
+</code></pre>
+<h3 id="while">while</h3>
+<pre><code class="language-python">value = raw_input('Please input a number:' )
+while:
+    if value &lt; 100:
+        print 'Right'
+    else:
+        print 'Please input again'
+
+</code></pre>
+<h3 id="break-continue和else">break、continue和else</h3>
+<blockquote>
+<p>从C语言引用过来，用在控制语句中跳出或延续</p>
+</blockquote>
+<h3 id="pass">pass</h3>
+<p>表示什么都不做，可用来构建最小类。（另外也可以用来当作占位符）</p>
+<pre><code class="language-python">class myclass:
+    pass
+</code></pre>
+<h2 id="函数">函数</h2>
+<p><em>函数嘛，基本编程语言都离不开它。函数能提高应用的模块性，和单一功能功能代码的重复利用率。我们在程序中很多语法本就个内建的函数，比如print()。</em></p>
+<h3 id="内建函数">内建函数</h3>
+<p>Python内置了很多有用的函数，我们可以直接调用。</p>
+<h3 id="定义函数">定义函数</h3>
+<pre><code class="language-python">def printNum(number):
+    &quot;&quot;&quot;
+    这是函数
+    使用print.__doc__可以将其打印出
+    &quot;&quot;&quot;
+    num = int(number)
+    print(num)
+</code></pre>
+<h3 id="装饰器">装饰器</h3>
+<h3 id="递归函数">递归函数</h3>
+<p>在函数内部，可以调用其他函数。如果一个函数在内部调用自身本身，这个函数就是递归函数。</p>
+<blockquote>
+<p>通过定义的函数，我们将printNum函数定义为只打整数的print。</p>
+</blockquote>
+<h4 id="闭包">闭包</h4>
+<h3 id="匿名函数">匿名函数</h3>
+<p>所谓匿名，意即不再使用 def 语句这样标准的形式定义一个函数</p>
+<pre><code class="language-python">f = lambda x,y:x*y
+print f(4,5)
+#结果为4*5
+</code></pre>
+<h3 id="装饰器-2">装饰器</h3>
+<h2 id="错误和异常">错误和异常</h2>
+<h3 id="错误">错误</h3>
+<p>我们说的错误指的是语法错误，也可以称作解析错误</p>
+<h3 id="异常">异常</h3>
+<p>指的是在语法正常的情况下，表达式引发的错误。程序并不会因为其而崩溃，而是将这种异常的以报错的方式显示出来。既然我们知道了有异常一说（而且很多时候是无法避免的），那我们就该来处理这些异常。</p>
+<pre><code class="language-python">while Ture:
+    try:
+        x = int(input(&quot;Please enter a number&quot;))
+        break
+    except ValueError:
+        print(&quot;That was no vaild number!Please try again&quot;)    
+</code></pre>
+<p><em>基本语法如上</em></p>
+<blockquote>
+<p>我们需要输入一个整数，但是如果你要输入的不是整数会怎样？这时候就会提示错误（异常），而且提示如上就是ValueError。这里我们自行定义异常的提示结果。</p>
+</blockquote>
+<h3 id="异常处理">异常处理</h3>
+<p><em>由此我们就可以明白异常产生的一个原因，并且可以自行定义异常产生后处理。</em></p>
+<blockquote>
+<p>那如果我们不知道程序会出现怎样的错误的该如何？这时就可以直接使用expect来将其异常归纳起来统一处理。在expect下加入else则表示没有异常就执行else后的程序块。</p>
+</blockquote>
+<h3 id="抛出异常">抛出异常</h3>
+<blockquote>
+<p>为什么我们要抛出异常呢？</p>
+</blockquote>
+<p>因为错误是class，捕获一个错误就是捕获到该class的一个实例。因此，错误并不是凭空产生的，而是有意创建并抛出的。Python的内置函数会抛出很多类型的错误，我们自己编写的函数也可以抛出错误。</p>
+<h3 id="自定义异常">自定义异常</h3>
+<blockquote>
+<p>异常出现我们可以做自定义，通过创建新的异常except Error as e：来命名自己的异常。</p>
+</blockquote>
+<h3 id="异常清理行为">异常清理行为</h3>
+<blockquote>
+<p>最后来说的是异常的清理行为。假如我们在open了文件后出现异常导致没有close上文件，这样会引发一些不必要的问题。那么我们可以用try...finally来保证finally后的程序块必须执行，当然还有一种方法用with来代替try这是预定义的清理行为。</p>
+</blockquote>
+<h2 id="类">类</h2>
+<p>这是一个较麻烦的问题，但对于学过面向对象编程的人来说就较容易理解了。</p>
+<h2 id="附录">附录</h2>
+<h3 id="编码风格">编码风格</h3>
+<blockquote>
+<p>关于缩进符官网介绍的有三种，一个制表符、两个空格或者四个空格。注意这三种风格绝不能混用</p>
+</blockquote>
+<p><strong>当然大多数人建议的尽量使用其中一种风格，并且长期使用它。而我的建议是我们就只把四个空格当作缩进符，因为Tab键存在平台之间的差异，虽然有时使用四个空格很是麻烦（那是因为你没有用到一款好的文本编辑器）。</strong></p>
+<h3 id="命名规则">命名规则</h3>
+<p><em>Python命名规则和大多数编程语言一样包含着数字、字母、下划线。（同样的首字符不能为数字）</em></p>
+<ul>
+<li>这里的命名规则并没有强制要求，你也可以灵活使用。<br>
+（比如整个项目中并没有使用多少全局变量的时候你就可以将其全部大写）</li>
+</ul>
+<blockquote>
+<p>关于变量<br>
+全使用小写字母，碰到多个单词合并成一个变量的时候可以使用_分隔</p>
+</blockquote>
+<blockquote>
+<p>关于函数<br>
+尽量小写，碰到多个单词合并的时候其后接单词使用大写</p>
+</blockquote>
+<blockquote>
+<p>关于类<br>
+首字母大写，多个单词合成时同函数的命名规则</p>
+</blockquote>
 ]]></content>
     </entry>
 </feed>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+<title>微信使用 Itchat 实现机器人自动回复功能 - MZZZ</title>
+<meta name="description" content="温故而知新">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type='text/css' rel='stylesheet' href='https://mzqk.github.io/styles/main.css' media='screen' />
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css">
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript" src='https://mzqk.github.io/media/scripts/jquery.js'></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+  <div class="layout theme-dark">
+    <div class="layout-header">
+
+	<div class="layout-header-main">
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+
+					<div class="navbar">
+
+						<div class="logo">
+							<a href="https://mzqk.github.io">
+								<img class="logo"
+									src="https://mzqk.github.io/media/images/site_avatar.png?v=1590654649050"
+									alt="">
+							</a>
+						</div>
+
+						<div class="menu d-md-inline-block d-none">
+							<ul class="layout-navigation-list">
+								
+								<li class="layout-navigation-item"><a title="首页"
+										href="/">首页</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="归档"
+										href="/archives">归档</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="标签"
+										href="/tags">标签</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="关于"
+										href="/post/about">关于</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="item d-md-inline-block d-none">
+							<div class="search-icon">
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</div>
+						</div>
+
+
+
+						<div class="d-md-inline-block d-none">
+							<div class="search-lightbox">
+								<div class="search-body">
+
+									<form id="gridea-search-form" data-update="1590654649050" action="/search/" class="search-form">
+										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
+										<button type="submit" class="submit" aria-label="Submit">
+											<i class="fa fa-search" aria-hidden="true"></i>
+										</button>
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="nav d-md-none d-inline-block">
+							<div class="trigger">
+								<i class="fa fa-bars layout-btn-toggle" aria-hidden="true"></i>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+
+
+
+		</div>
+	</div>
+
+</div>
+    <div class="layout-collapse d-md-none">
+	<div class="layout-collapse-main">
+		<ul class="layout-collapse-list">
+			
+			<li class="layout-collapse-item"><a title="首页" href="/">首页</a></li>
+			
+			<li class="layout-collapse-item"><a title="归档" href="/archives">归档</a></li>
+			
+			<li class="layout-collapse-item"><a title="标签" href="/tags">标签</a></li>
+			
+			<li class="layout-collapse-item"><a title="关于" href="/post/about">关于</a></li>
+			
+
+		</ul>
+	</div>
+</div>
+
+    <div class="layout-content">
+      <div class="layout-content-main">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-12 col-lg-9">
+              <div class="layout-post">
+                <div class="layout-post-body">
+                  <div class="row">
+
+                    <div class="col-12 col-lg-10">
+                      <div class="layout-post-main m-right m-md-right">
+                        <div class="layout-post-header">
+                          <h1 class="layout-post-title">微信使用 Itchat 实现机器人自动回复功能</h1>
+                          <div class="layout-post-meta">
+                            <div class="item">
+                              
+                            </div>
+                            <div class="item">
+                              <span>2017-08-03</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="layout-post-content">
+                          <div class="layout-post-item">
+                            
+                            <h1 id="itchat">itchat</h1>
+<p>itchat是一个开源的微信个人号接口，使用python调用微信从未如此简单。</p>
+<p>使用不到三十行的代码，你就可以完成一个能够处理所有信息的微信机器人。</p>
+<p>当然，该api的使用远不止一个机器人，更多的功能等着你来发现</p>
+<p>该接口与公众号接口<a href="https://github.com/littlecodersh/ItChat.git">itchat</a><br>
+共享类似的操作方式，学习一次掌握两个工具。</p>
+<p>如今微信已经成为了个人社交的很大一部分，希望这个项目能够帮助你扩展你的个人的微信号、方便自己的生活。</p>
+<h2 id="安装">安装</h2>
+<p>可以通过本命令安装itchat：</p>
+<pre><code class="language-python">pip install itchat
+</code></pre>
+<h2 id="简单入门实例">简单入门实例</h2>
+<p>有了itchat，如果你想要给文件传输助手发一条信息，只需要这样：</p>
+<pre><code class="language-python">import itchat
+
+itchat.auto_login()
+
+itchat.send('Hello, filehelper', toUserName='filehelper')
+</code></pre>
+<p>如果你想要回复发给自己的文本消息，只需要这样：</p>
+<pre><code class="language-python">import itchat
+
+@itchat.msg_register(itchat.content.TEXT)
+def text_reply(msg):
+    return msg.text
+
+itchat.auto_login()
+itchat.run()
+</code></pre>
+<h2 id="进阶应用">进阶应用</h2>
+<h3 id="特殊的字典使用方式">特殊的字典使用方式</h3>
+<p>通过打印itchat的用户以及注册消息的参数，可以发现这些值都是字典。</p>
+<p>但实际上itchat精心构造了相应的消息、用户、群聊、公众号类。</p>
+<p>其所有的键值都可以通过这一方式访问：</p>
+<pre><code class="language-python">@itchat.msg_register(TEXT)
+def _(msg):
+    # equals to print(msg['FromUserName'])
+    print(msg.fromUserName)
+</code></pre>
+<p>属性名为键值首字母小写后的内容。</p>
+<pre><code class="language-python">author = itchat.search_friends(nickName='LittleCoder')[0]
+author.send('greeting, littlecoder!')
+</code></pre>
+<h3 id="各类型消息的注册">各类型消息的注册</h3>
+<p>通过如下代码，微信已经可以就日常的各种信息进行获取与回复。</p>
+<pre><code class="language-python">import itchat, time
+from itchat.content import *
+
+@itchat.msg_register([TEXT, MAP, CARD, NOTE, SHARING])
+def text_reply(msg):
+    msg.user.send('%s: %s' % (msg.type, msg.text))
+
+@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+def download_files(msg):
+    msg.download(msg.fileName)
+    typeSymbol = {
+        PICTURE: 'img',
+        VIDEO: 'vid', }.get(msg.type, 'fil')
+    return '@%s@%s' % (typeSymbol, msg.fileName)
+
+@itchat.msg_register(FRIENDS)
+def add_friend(msg):
+    msg.user.verify()
+    msg.user.send('Nice to meet you!')
+
+@itchat.msg_register(TEXT, isGroupChat=True)
+def text_reply(msg):
+    if msg.isAt:
+        msg.user.send(u'@%s\u2005I received: %s' % (
+            msg.actualNickName, msg.text))
+
+itchat.auto_login(True)
+itchat.run(True)
+</code></pre>
+<h3 id="命令行二维码">命令行二维码</h3>
+<p>通过以下命令可以在登陆的时候使用命令行显示二维码：</p>
+<pre><code class="language-python">itchat.auto_login(enableCmdQR=True)
+</code></pre>
+<p>部分系统可能字幅宽度有出入，可以通过将enableCmdQR赋值为特定的倍数进行调整：</p>
+<pre><code class="language-python"># 如部分的linux系统，块字符的宽度为一个字符（正常应为两字符），故赋值为2
+itchat.auto_login(enableCmdQR=2)
+</code></pre>
+<p>默认控制台背景色为暗色（黑色），若背景色为浅色（白色），可以将enableCmdQR赋值为负值：</p>
+<pre><code class="language-python">itchat.auto_login(enableCmdQR=-1)
+</code></pre>
+<h3 id="退出程序后暂存登陆状态">退出程序后暂存登陆状态</h3>
+<p>通过如下命令登陆，即使程序关闭，一定时间内重新开启也可以不用重新扫码。</p>
+<pre><code class="language-python">itchat.auto_login(hotReload=True)
+</code></pre>
+<h3 id="用户搜索">用户搜索</h3>
+<p>使用<code>search_friends</code>方法可以搜索用户，有四种搜索方式：</p>
+<ol>
+<li>仅获取自己的用户信息</li>
+<li>获取特定<code>UserName</code>的用户信息</li>
+<li>获取备注、微信号、昵称中的任何一项等于<code>name</code>键值的用户</li>
+<li>获取备注、微信号、昵称分别等于相应键值的用户</li>
+</ol>
+<p>其中三、四项可以一同使用，下面是示例程序：</p>
+<pre><code class="language-python"># 获取自己的用户信息，返回自己的属性字典
+itchat.search_friends()
+# 获取特定UserName的用户信息
+itchat.search_friends(userName='@abcdefg1234567')
+# 获取任何一项等于name键值的用户
+itchat.search_friends(name='littlecodersh')
+# 获取分别对应相应键值的用户
+itchat.search_friends(wechatAccount='littlecodersh')
+# 三、四项功能可以一同使用
+itchat.search_friends(name='LittleCoder机器人', wechatAccount='littlecodersh')
+</code></pre>
+<p>关于公众号、群聊的获取与搜索在文档中有更加详细的介绍。</p>
+<h3 id="附件的下载与发送">附件的下载与发送</h3>
+<p>itchat的附件下载方法存储在msg的Text键中。</p>
+<p>发送的文件的文件名（图片给出的默认文件名）都存储在msg的FileName键中。</p>
+<p>下载方法接受一个可用的位置参数（包括文件名），并将文件相应的存储。</p>
+<pre><code class="language-python">@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+def download_files(msg):
+    msg.download(msg.fileName)
+    itchat.send('@%s@%s' % (
+        'img' if msg['Type'] == 'Picture' else 'fil', msg['FileName']),
+        msg['FromUserName'])
+    return '%s received' % msg['Type']
+</code></pre>
+<p>如果你不需要下载到本地，仅想要读取二进制串进行进一步处理可以不传入参数，方法将会返回图片的二进制串。</p>
+<pre><code class="language-python">@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+def download_files(msg):
+    with open(msg.fileName, 'wb') as f:
+        f.write(msg.download())
+</code></pre>
+<h3 id="用户多开">用户多开</h3>
+<p>使用如下命令可以完成多开的操作：</p>
+<pre><code class="language-python">import itchat
+
+newInstance = itchat.new_instance()
+newInstance.auto_login(hotReload=True, statusStorageDir='newInstance.pkl')
+
+@newInstance.msg_register(itchat.content.TEXT)
+def reply(msg):
+    return msg.text
+
+newInstance.run()
+</code></pre>
+<h3 id="退出及登陆完成后调用特定方法">退出及登陆完成后调用特定方法</h3>
+<p>登陆完成后的方法需要赋值在<code>loginCallback</code>中。</p>
+<p>而退出后的方法需要赋值在<code>exitCallback</code>中。</p>
+<pre><code class="language-python">import time
+
+import itchat
+
+def lc():
+    print('finish login')
+def ec():
+    print('exit')
+
+itchat.auto_login(loginCallback=lc, exitCallback=ec)
+time.sleep(3)
+itchat.logout()
+</code></pre>
+<p>若不设置loginCallback的值，则将会自动删除二维码图片并清空命令行显示。</p>
+<h2 id="常见问题与解答">常见问题与解答</h2>
+<p>Q: 为什么中文的文件没有办法上传？</p>
+<p>A: 这是由于<code>requests</code>的编码问题导致的。若需要支持中文文件传输，将[fields.py]<a href="py3%E7%89%88%E6%9C%AC%E8%A7%81%5B%E8%BF%99%E9%87%8C%5D%5Bfields.py-3%5D">fields.py-2</a>文件放入requests包的packages/urllib3下即可</p>
+<p>Q: 如何通过这个包将自己的微信号变为控制器？</p>
+<p>A: 有两种方式：发送、接受自己UserName的消息；发送接收文件传输助手（filehelper）的消息</p>
+<p>Q: 为什么我发送信息的时候部分信息没有成功发出来？</p>
+<p>A: 有些账号是天生无法给自己的账号发送信息的，建议使用<code>filehelper</code>代替。</p>
+
+                          </div>
+                        </div>
+                        <div class="layout-post-social">
+                          <div class="item reader">
+                            <div id="/post/wei-xin-shi-yong-itchat-shi-xian-ji-qi-ren-zi-dong-hui-fu-gong-neng/" class="leancloud-visitors view"
+                              data-flag-title="微信使用 Itchat 实现机器人自动回复功能">
+                              <span class="post-meta-item-text">阅读 </span>
+                              <span class="leancloud-visitors-count"></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="layout-post-navigation">
+                          <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/shi-yong-xiu-gai-hosts-wen-jian-fang-fa-fang-wen-wai-guo-wang-luo/" class="title">
+                                      <h4>使用修改 hosts 文件方法访问外国网络</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>上一篇</span></div>
+                                  <div class="item">2017-08-06</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/ji-chu-zheng-ze-biao-da-shi/" class="title">
+                                      <h4>基础正则表达式</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2017-07-26</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            
+                          </div>
+                        </div>
+
+                        <div class="layout-comments"></div>
+                        
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2 d-none d-lg-block">
+                      <div class="layout-post-sidebar">
+                        <div class="layout-sidebar-item">
+                          <ul class="markdownIt-TOC">
+<li><a href="#itchat">itchat</a>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85">安装</a></li>
+<li><a href="#%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8%E5%AE%9E%E4%BE%8B">简单入门实例</a></li>
+<li><a href="#%E8%BF%9B%E9%98%B6%E5%BA%94%E7%94%A8">进阶应用</a>
+<ul>
+<li><a href="#%E7%89%B9%E6%AE%8A%E7%9A%84%E5%AD%97%E5%85%B8%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F">特殊的字典使用方式</a></li>
+<li><a href="#%E5%90%84%E7%B1%BB%E5%9E%8B%E6%B6%88%E6%81%AF%E7%9A%84%E6%B3%A8%E5%86%8C">各类型消息的注册</a></li>
+<li><a href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%BA%8C%E7%BB%B4%E7%A0%81">命令行二维码</a></li>
+<li><a href="#%E9%80%80%E5%87%BA%E7%A8%8B%E5%BA%8F%E5%90%8E%E6%9A%82%E5%AD%98%E7%99%BB%E9%99%86%E7%8A%B6%E6%80%81">退出程序后暂存登陆状态</a></li>
+<li><a href="#%E7%94%A8%E6%88%B7%E6%90%9C%E7%B4%A2">用户搜索</a></li>
+<li><a href="#%E9%99%84%E4%BB%B6%E7%9A%84%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%8F%91%E9%80%81">附件的下载与发送</a></li>
+<li><a href="#%E7%94%A8%E6%88%B7%E5%A4%9A%E5%BC%80">用户多开</a></li>
+<li><a href="#%E9%80%80%E5%87%BA%E5%8F%8A%E7%99%BB%E9%99%86%E5%AE%8C%E6%88%90%E5%90%8E%E8%B0%83%E7%94%A8%E7%89%B9%E5%AE%9A%E6%96%B9%E6%B3%95">退出及登陆完成后调用特定方法</a></li>
+</ul>
+</li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E7%AD%94">常见问题与解答</a></li>
+</ul>
+</li>
+</ul>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-totop d-none"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+
+    	<div class="layout-footer">
+
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+					<div class="footer">
+						<div class="row">
+							<div class="col-12 col-md-9">
+								<div class="footer-copy">
+									
+									Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+									<div class="footer-icp d-none d-sm-inline-block">
+										<span class="px-2">⋅</span>
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 d-none d-md-block">
+								<div class="footer-links">
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript" src='https://mzqk.github.io/media/scripts/main.js'></script>
+	
+
+  </div>
+</body>
+
+</html>

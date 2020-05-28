@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+<title>Linux 常用命令 - MZZZ</title>
+<meta name="description" content="温故而知新">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type='text/css' rel='stylesheet' href='https://mzqk.github.io/styles/main.css' media='screen' />
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css">
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript" src='https://mzqk.github.io/media/scripts/jquery.js'></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+  <div class="layout theme-dark">
+    <div class="layout-header">
+
+	<div class="layout-header-main">
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+
+					<div class="navbar">
+
+						<div class="logo">
+							<a href="https://mzqk.github.io">
+								<img class="logo"
+									src="https://mzqk.github.io/media/images/site_avatar.png?v=1590654649050"
+									alt="">
+							</a>
+						</div>
+
+						<div class="menu d-md-inline-block d-none">
+							<ul class="layout-navigation-list">
+								
+								<li class="layout-navigation-item"><a title="首页"
+										href="/">首页</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="归档"
+										href="/archives">归档</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="标签"
+										href="/tags">标签</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="关于"
+										href="/post/about">关于</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="item d-md-inline-block d-none">
+							<div class="search-icon">
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</div>
+						</div>
+
+
+
+						<div class="d-md-inline-block d-none">
+							<div class="search-lightbox">
+								<div class="search-body">
+
+									<form id="gridea-search-form" data-update="1590654649050" action="/search/" class="search-form">
+										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
+										<button type="submit" class="submit" aria-label="Submit">
+											<i class="fa fa-search" aria-hidden="true"></i>
+										</button>
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="nav d-md-none d-inline-block">
+							<div class="trigger">
+								<i class="fa fa-bars layout-btn-toggle" aria-hidden="true"></i>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+
+
+
+		</div>
+	</div>
+
+</div>
+    <div class="layout-collapse d-md-none">
+	<div class="layout-collapse-main">
+		<ul class="layout-collapse-list">
+			
+			<li class="layout-collapse-item"><a title="首页" href="/">首页</a></li>
+			
+			<li class="layout-collapse-item"><a title="归档" href="/archives">归档</a></li>
+			
+			<li class="layout-collapse-item"><a title="标签" href="/tags">标签</a></li>
+			
+			<li class="layout-collapse-item"><a title="关于" href="/post/about">关于</a></li>
+			
+
+		</ul>
+	</div>
+</div>
+
+    <div class="layout-content">
+      <div class="layout-content-main">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-12 col-lg-9">
+              <div class="layout-post">
+                <div class="layout-post-body">
+                  <div class="row">
+
+                    <div class="col-12 col-lg-10">
+                      <div class="layout-post-main m-right m-md-right">
+                        <div class="layout-post-header">
+                          <h1 class="layout-post-title">Linux 常用命令</h1>
+                          <div class="layout-post-meta">
+                            <div class="item">
+                              
+                            </div>
+                            <div class="item">
+                              <span>2017-06-17</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="layout-post-content">
+                          <div class="layout-post-item">
+                            
+                            <h1 id="awk">awk</h1>
+<h2 id="awk语法">awk语法</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-F</td>
+<td>以指定字符作为分割字段</td>
+</tr>
+</tbody>
+</table>
+<h2 id="awk用法">awk用法</h2>
+<p>打印/etc/passwd内容</p>
+<pre><code>awk '{print}' /etc/passwd
+</code></pre>
+<blockquote>
+<p>root❌0:0:root:/root:/bin/bash<br>
+daemon❌1:1:daemon:/usr/sbin:/usr/sbin/nologin<br>
+bin❌2:2:bin:/bin:/usr/sbin/nologin<br>
+sys❌3:3:sys:/dev:/usr/sbin/nologin<br>
+sync❌4:65534:sync:/bin:/bin/sync<br>
+games❌5:60:games:/usr/games:/usr/sbin/nologin<br>
+man❌6:12👨/var/cache/man:/usr/sbin/nologin<br>
+lp❌7:7:lp:/var/spool/lpd:/usr/sbin/nologin<br>
+mail❌8:8:mail:/var/mail:/usr/sbin/nologin<br>
+news❌9:9:news:/var/spool/news:/usr/sbin/nologin<br>
+uucp❌10:10:uucp:/var/spool/uucp:/usr/sbin/nologin<br>
+proxy❌13:13:proxy:/bin:/usr/sbin/nologin<br>
+www-data❌33:33:www-data:/var/www:/usr/sbin/nologin<br>
+backup❌34:34:backup:/var/backups:/usr/sbin/nologin</p>
+</blockquote>
+<p>以冒号为分隔符取1、3、6位内容</p>
+<pre><code>awk -F &quot;:&quot; '{print $1 $3 $6}' /etc/passwd
+</code></pre>
+<blockquote>
+<p>bin2/bin<br>
+sys3/dev<br>
+sync4/bin<br>
+games5/usr/games<br>
+man6/var/cache/man<br>
+lp7/var/spool/lpd<br>
+mail8/var/mail<br>
+news9/var/spool/news<br>
+uucp10/var/spool/uucp<br>
+proxy13/bin<br>
+www-data33/var/www<br>
+backup34/var/backups</p>
+</blockquote>
+<p>取出内容以Tab建作为分隔符</p>
+<pre><code>awk -F &quot;:&quot; '{print $1 &quot;\t&quot; $3 &quot;\t&quot; $6}' /etc/passwd
+</code></pre>
+<blockquote>
+<p>root    0       /root<br>
+daemon  1       /usr/sbin<br>
+bin     2       /bin<br>
+sys     3       /dev<br>
+sync    4       /bin<br>
+games   5       /usr/games<br>
+man     6       /var/cache/man<br>
+lp      7       /var/spool/lpd<br>
+mail    8       /var/mail<br>
+news    9       /var/spool/news<br>
+uucp    10      /var/spool/uucp<br>
+proxy   13      /bin<br>
+www-data        33      /var/www<br>
+backup  34      /var/backups</p>
+</blockquote>
+<p>内容加以排版</p>
+<pre><code>awk -F &quot;:&quot; '{print &quot;ID=&quot;$1 &quot;\t 家目录=&quot;$6}' /etc/passwd
+</code></pre>
+<blockquote>
+<p>ID=root    家目录=/root<br>
+ID=daemon        家目录=/usr/sbin<br>
+ID=bin   家目录=/bin<br>
+ID=sys   家目录=/dev<br>
+ID=sync  家目录=/bin<br>
+ID=games         家目录=/usr/games<br>
+ID=man   家目录=/var/cache/man<br>
+ID=lp    家目录=/var/spool/lpd<br>
+ID=mail  家目录=/var/mail<br>
+ID=news  家目录=/var/spool/news<br>
+ID=uucp  家目录=/var/spool/uucp<br>
+ID=proxy         家目录=/bin<br>
+ID=www-data      家目录=/var/www<br>
+ID=backup        家目录=/var/backups</p>
+</blockquote>
+<h1 id="crontab">crontab</h1>
+<h2 id="crontab语法">crontab语法</h2>
+<blockquote>
+<p>-l  列出定时任务列表<br>
+-e  编辑定时任务内容<br>
+-u  设定指定用户</p>
+</blockquote>
+<h2 id="crontab用法">crontab用法</h2>
+<figure data-type="image" tabindex="1"><img src="http://note.youdao.com/yws/public/resource/2142162fc5a9548c53c40de42a6d3551/xmlnote/6750B9C6F7CA497D94D48E94183B9C28/3566" alt="crontab" loading="lazy"></figure>
+<blockquote>
+<p>星号（*）：代表所有可能的值，例如month字段如果是星号，则表示在满足其它字段的制约条件后每月都执行该命令操作。</p>
+</blockquote>
+<blockquote>
+<p>逗号（,）：可以用逗号隔开的值指定一个列表范围，例如，“1,2,5,7,8,9”</p>
+</blockquote>
+<blockquote>
+<p>中杠（-）：可以用整数之间的中杠表示一个整数范围，例如“2-6”表示“2,3,4,5,6”</p>
+</blockquote>
+<blockquote>
+<p>正斜线（/）：可以用正斜线指定时间的间隔频率，例如“0-23/2”表示每两小时执行一次。同时正斜线可以和星号一起使用，例如*/10，如果用在minute字段，表示每十分钟执行一次。</p>
+</blockquote>
+<h1 id="cat">cat</h1>
+<h1 id="chattr">chattr</h1>
+<h1 id="date">date</h1>
+<h1 id="find">find</h1>
+<h1 id="expr">expr</h1>
+<h1 id="git">git</h1>
+<h2 id="git-配置">Git 配置</h2>
+<p>添加git信息</p>
+<pre><code class="language-bash">git config --global user.name &quot;Scott Chacon&quot;   
+git config --global user.email &quot;schacon@gmail.com&quot;
+# --global 为全局选项
+</code></pre>
+<p>git信息配置文件</p>
+<blockquote>
+<p>~/.gitconfig</p>
+</blockquote>
+<h2 id="git仓库">Git仓库</h2>
+<p>克隆一个项目</p>
+<pre><code class="language-bash">git clone https://github.com/MZqk/boco
+</code></pre>
+<p>初始化一个仓库</p>
+<pre><code class="language-bash">cd ./
+git init
+</code></pre>
+<h2 id="git流程">Git流程</h2>
+<pre><code class="language-bash">git add
+#添加新创建或修改的文件到本地的缓存区（Index）
+git rm
+#删除后会自动将已删除文件的信息添加到缓存区
+git commit
+#命令提交到本地代码库
+git status
+#查看当前git仓库的状态
+git diff --cached
+#如果没有--cached参数，git diff 会显示当前你所有已做的但没有加入到索引里的修改
+git push origin master
+#将本地仓库同步到远端服务器
+</code></pre>
+<h2 id="分支与合并">分支与合并</h2>
+<pre><code>git branch 
+#查看当前的分支列表
+git branch experimental
+#创建一个新的叫 experimental的分支
+git checkout experimental
+#切换到experimental分支
+git merge  -m 'merge experimental branch' experimental
+#将experimental分支合并到当前分支
+git branch -d experimental
+#只能删除那些已经被当前分支的合并的分支. 如果你要强制删除某个分支的话就用git branch –D
+git reset --hard HEAD^
+#回到合并之前的状态
+</code></pre>
+<h2 id="git日志">Git日志</h2>
+<pre><code>git log
+#显示所有的提交
+git log v2.5.. Makefile fs/
+#找出所有从&quot;v2.5“开始在fs目录下的所有Makefile的修改
+git log --stat
+打印详细的提交记录
+git log --pretty=oneline
+格式化日志输出,可用medium,full,fuller,email 或raw
+git log --graph --pretty=oneline
+可视化提交图
+git log --pretty=format:'%h : %s' --topo-order --graph
+提交按拓扑顺序来显示
+</code></pre>
+<h1 id="grep">grep</h1>
+<h1 id="sed">sed</h1>
+<h2 id="sed语法">sed语法</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-n</td>
+<td>显示处理后的过程，自动换行</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sed用法">sed用法</h2>
+<p>文件内容</p>
+<blockquote>
+<p>line 1 This is a book<br>
+line 2 That is a pen<br>
+line 3 Happy Holiday<br>
+line 4 Niscenter is a good place<br>
+line 5 End</p>
+</blockquote>
+<p>删除第2到4行内容</p>
+<pre><code>sed '2,4d' file
+</code></pre>
+<blockquote>
+<p>line 1 This is a book<br>
+line 5 End</p>
+</blockquote>
+<p>替换每行第一个is为error</p>
+<pre><code>sed 's/is/error/' file
+</code></pre>
+<blockquote>
+<p>line 1 Therror is a book<br>
+line 2 That error a pen<br>
+line 3 Happy Holiday<br>
+line 4 Nerrorcenter is a good place<br>
+line 5 End</p>
+</blockquote>
+<p>替换全部的is为error</p>
+<pre><code>sed 's/is/error/g' file
+</code></pre>
+<blockquote>
+<p>line 1 Therror error a book<br>
+line 2 That error a pen<br>
+line 3 Happy Holiday<br>
+line 4 Nerrorcenter error a good place<br>
+line 5 End</p>
+</blockquote>
+<p>在有center内容的一行替换is为xx</p>
+<pre><code>sed '/center/s/is/xx/g' file
+</code></pre>
+<blockquote>
+<p>line 1 This is a book<br>
+line 2 That is a pen<br>
+line 3 Happy Holiday<br>
+line 4 Nxxcenter xx a good place<br>
+line 5 End</p>
+</blockquote>
+<h1 id="tar">tar</h1>
+<h2 id="tar语法">tar语法</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-c  --crate</td>
+<td>创建新的归档,即打包</td>
+</tr>
+<tr>
+<td>-r  --append</td>
+<td>向压缩文件追加内容</td>
+</tr>
+<tr>
+<td>-t  --list</td>
+<td>查看压缩全部的内容</td>
+</tr>
+<tr>
+<td>-u  --update</td>
+<td>更新压缩文件</td>
+</tr>
+<tr>
+<td>-x  --extract</td>
+<td>释放归档文件，即解压</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示操作过程</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>解压tar.gz、tgz文件选项</td>
+</tr>
+<tr>
+<td>-j</td>
+<td>解压tar.bz2文件</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>制定压缩文件名</td>
+</tr>
+<tr>
+<td>-C</td>
+<td>切换至指定目录</td>
+</tr>
+<tr>
+<td>--exclude file</td>
+<td>压缩过程中排除指定文件</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tar用法">tar用法</h2>
+<ul>
+<li>tar</li>
+</ul>
+<blockquote>
+<p>tar -xvf filename.tar</p>
+</blockquote>
+<blockquote>
+<p>tar -cvf filename.tar dirname</p>
+</blockquote>
+<ul>
+<li>tar.gz</li>
+</ul>
+<blockquote>
+<p>tar -zxvf filename.tar.gz</p>
+</blockquote>
+<blockquote>
+<p>tar -zxcf filename.tar.gz dirname</p>
+</blockquote>
+<ul>
+<li>tar.bz2</li>
+</ul>
+<blockquote>
+<p>tar -jxvf filename.tar.bz2</p>
+</blockquote>
+<blockquote>
+<p>tar -jxcf filename.tar.bz2 dirname</p>
+</blockquote>
+<h1 id="test">test</h1>
+<h2 id="test语法">test语法</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-d</td>
+<td>如果文件为一个目录，则为真</td>
+</tr>
+<tr>
+<td>-e</td>
+<td>如果文件存在，则为真</td>
+</tr>
+<tr>
+<td>-G</td>
+<td>如果文件存在且归该组所有，则为真</td>
+</tr>
+<tr>
+<td>-O</td>
+<td>如果文件存在并且归该用户所有，则为真</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>如果文件的长度不为零，则为真</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>如果文件可读，则为真</td>
+</tr>
+<tr>
+<td>-w</td>
+<td>如果文件可写，则为真</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>如果文件可执行，则为真</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>-eq</td>
+<td>数值等于,则为真</td>
+</tr>
+<tr>
+<td>-ne</td>
+<td>数值不等于,则为真</td>
+</tr>
+<tr>
+<td>-gt</td>
+<td>数值大于,则为真</td>
+</tr>
+<tr>
+<td>-ge</td>
+<td>数值小于等于,则为真</td>
+</tr>
+<tr>
+<td>-lt</td>
+<td>数值小于,则为真</td>
+</tr>
+<tr>
+<td>-le</td>
+<td>数值小于等于,则为真</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>=</td>
+<td>字符相等，则为真</td>
+</tr>
+<tr>
+<td>!=</td>
+<td>字符不相等，则为真</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>字符串长度为零，则为真</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>字符串长度不为零，则为真</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Shell还提供了与( -a )、或( -o )、非( ! )三个逻辑操作符用于将测试条件连接起来，其优先级为：&quot;!&quot;最高，&quot;-a&quot;次之，&quot;-o&quot;最低。</strong></p>
+<h2 id="test用法">test用法</h2>
+<h3 id="文件测试">文件测试</h3>
+<pre><code>cd /bin
+if test -e ./bash 
+then
+    echo '文件已存在!'  
+else
+    echo '文件不存在!' 
+fi
+</code></pre>
+<p>输出结果</p>
+<blockquote>
+<p>文件已存在!</p>
+</blockquote>
+<h3 id="数值测试">数值测试</h3>
+<pre><code>num1=100 
+num2=100
+if test $[num1] -eq $[num2]
+then    
+    echo '两个数相等！'   
+else
+    echo '两个数不相等！' 
+fi
+</code></pre>
+<p>输出结果</p>
+<blockquote>
+<p>两个数相等！</p>
+</blockquote>
+<h3 id="字符串测试">字符串测试</h3>
+<pre><code>num1=&quot;ru1noob&quot;
+num2=&quot;runoob&quot;
+if test $num1 = $num2
+then
+    echo '两个字符串相等!'
+else
+    echo '两个字符串不相等!'
+fi
+</code></pre>
+<p>输出结果</p>
+<blockquote>
+<p>两个字符串不相等!</p>
+</blockquote>
+<h1 id="xarge">xarge</h1>
+
+                          </div>
+                        </div>
+                        <div class="layout-post-social">
+                          <div class="item reader">
+                            <div id="/post/linux-chang-yong-ming-ling/" class="leancloud-visitors view"
+                              data-flag-title="Linux 常用命令">
+                              <span class="post-meta-item-text">阅读 </span>
+                              <span class="leancloud-visitors-count"></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="layout-post-navigation">
+                          <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/shell-jiao-cheng-ji-chu-jiao-cheng/" class="title">
+                                      <h4>Shell 教程基础教程</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>上一篇</span></div>
+                                  <div class="item">2017-06-17</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/oracle-sysdate-shi-jian-han-shu/" class="title">
+                                      <h4>Oracle Sysdate 时间函数</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2017-06-16</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            
+                          </div>
+                        </div>
+
+                        <div class="layout-comments"></div>
+                        
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2 d-none d-lg-block">
+                      <div class="layout-post-sidebar">
+                        <div class="layout-sidebar-item">
+                          <ul class="markdownIt-TOC">
+<li><a href="#awk">awk</a>
+<ul>
+<li><a href="#awk%E8%AF%AD%E6%B3%95">awk语法</a></li>
+<li><a href="#awk%E7%94%A8%E6%B3%95">awk用法</a></li>
+</ul>
+</li>
+<li><a href="#crontab">crontab</a>
+<ul>
+<li><a href="#crontab%E8%AF%AD%E6%B3%95">crontab语法</a></li>
+<li><a href="#crontab%E7%94%A8%E6%B3%95">crontab用法</a></li>
+</ul>
+</li>
+<li><a href="#cat">cat</a></li>
+<li><a href="#chattr">chattr</a></li>
+<li><a href="#date">date</a></li>
+<li><a href="#find">find</a></li>
+<li><a href="#expr">expr</a></li>
+<li><a href="#git">git</a>
+<ul>
+<li><a href="#git-%E9%85%8D%E7%BD%AE">Git 配置</a></li>
+<li><a href="#git%E4%BB%93%E5%BA%93">Git仓库</a></li>
+<li><a href="#git%E6%B5%81%E7%A8%8B">Git流程</a></li>
+<li><a href="#%E5%88%86%E6%94%AF%E4%B8%8E%E5%90%88%E5%B9%B6">分支与合并</a></li>
+<li><a href="#git%E6%97%A5%E5%BF%97">Git日志</a></li>
+</ul>
+</li>
+<li><a href="#grep">grep</a></li>
+<li><a href="#sed">sed</a>
+<ul>
+<li><a href="#sed%E8%AF%AD%E6%B3%95">sed语法</a></li>
+<li><a href="#sed%E7%94%A8%E6%B3%95">sed用法</a></li>
+</ul>
+</li>
+<li><a href="#tar">tar</a>
+<ul>
+<li><a href="#tar%E8%AF%AD%E6%B3%95">tar语法</a></li>
+<li><a href="#tar%E7%94%A8%E6%B3%95">tar用法</a></li>
+</ul>
+</li>
+<li><a href="#test">test</a>
+<ul>
+<li><a href="#test%E8%AF%AD%E6%B3%95">test语法</a></li>
+<li><a href="#test%E7%94%A8%E6%B3%95">test用法</a>
+<ul>
+<li><a href="#%E6%96%87%E4%BB%B6%E6%B5%8B%E8%AF%95">文件测试</a></li>
+<li><a href="#%E6%95%B0%E5%80%BC%E6%B5%8B%E8%AF%95">数值测试</a></li>
+<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B5%8B%E8%AF%95">字符串测试</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#xarge">xarge</a></li>
+</ul>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-totop d-none"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+
+    	<div class="layout-footer">
+
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+					<div class="footer">
+						<div class="row">
+							<div class="col-12 col-md-9">
+								<div class="footer-copy">
+									
+									Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+									<div class="footer-icp d-none d-sm-inline-block">
+										<span class="px-2">⋅</span>
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 d-none d-md-block">
+								<div class="footer-links">
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript" src='https://mzqk.github.io/media/scripts/main.js'></script>
+	
+
+  </div>
+</body>
+
+</html>

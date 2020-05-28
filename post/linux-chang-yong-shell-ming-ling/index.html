@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+<title>Linux 常用 shell 命令 - MZZZ</title>
+<meta name="description" content="温故而知新">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type='text/css' rel='stylesheet' href='https://mzqk.github.io/styles/main.css' media='screen' />
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css">
+<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript" src='https://mzqk.github.io/media/scripts/jquery.js'></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+
+<body>
+  <div class="layout theme-dark">
+    <div class="layout-header">
+
+	<div class="layout-header-main">
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+
+					<div class="navbar">
+
+						<div class="logo">
+							<a href="https://mzqk.github.io">
+								<img class="logo"
+									src="https://mzqk.github.io/media/images/site_avatar.png?v=1590654649050"
+									alt="">
+							</a>
+						</div>
+
+						<div class="menu d-md-inline-block d-none">
+							<ul class="layout-navigation-list">
+								
+								<li class="layout-navigation-item"><a title="首页"
+										href="/">首页</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="归档"
+										href="/archives">归档</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="标签"
+										href="/tags">标签</a>
+								</li>
+								
+								<li class="layout-navigation-item"><a title="关于"
+										href="/post/about">关于</a>
+								</li>
+								
+							</ul>
+						</div>
+
+						<div class="item d-md-inline-block d-none">
+							<div class="search-icon">
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</div>
+						</div>
+
+
+
+						<div class="d-md-inline-block d-none">
+							<div class="search-lightbox">
+								<div class="search-body">
+
+									<form id="gridea-search-form" data-update="1590654649050" action="/search/" class="search-form">
+										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
+										<button type="submit" class="submit" aria-label="Submit">
+											<i class="fa fa-search" aria-hidden="true"></i>
+										</button>
+									</form>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="nav d-md-none d-inline-block">
+							<div class="trigger">
+								<i class="fa fa-bars layout-btn-toggle" aria-hidden="true"></i>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+
+
+
+		</div>
+	</div>
+
+</div>
+    <div class="layout-collapse d-md-none">
+	<div class="layout-collapse-main">
+		<ul class="layout-collapse-list">
+			
+			<li class="layout-collapse-item"><a title="首页" href="/">首页</a></li>
+			
+			<li class="layout-collapse-item"><a title="归档" href="/archives">归档</a></li>
+			
+			<li class="layout-collapse-item"><a title="标签" href="/tags">标签</a></li>
+			
+			<li class="layout-collapse-item"><a title="关于" href="/post/about">关于</a></li>
+			
+
+		</ul>
+	</div>
+</div>
+
+    <div class="layout-content">
+      <div class="layout-content-main">
+        <div class="container">
+          <div class="row justify-content-lg-center">
+            <div class="col-12 col-lg-9">
+              <div class="layout-post">
+                <div class="layout-post-body">
+                  <div class="row">
+
+                    <div class="col-12 col-lg-10">
+                      <div class="layout-post-main m-right m-md-right">
+                        <div class="layout-post-header">
+                          <h1 class="layout-post-title">Linux 常用 shell 命令</h1>
+                          <div class="layout-post-meta">
+                            <div class="item">
+                              
+                            </div>
+                            <div class="item">
+                              <span>2017-06-25</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="layout-post-content">
+                          <div class="layout-post-item">
+                            
+                            <blockquote>
+<p>ls -d $(echo ${PATH//😕 }) &gt; /dev/null 显示PATH中失效的目录 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>awk -F ',' '{ x = x + $4 } END { print x }' test.csv 从CSV中计算列的总数</p>
+</blockquote>
+<blockquote>
+<p>diff &lt;(wget -q -O - URL1) &lt;(wget -q -O - URL2) 比较两个远程的网页 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>:r! echo % 在vim中插入当前文件名</p>
+</blockquote>
+<blockquote>
+<p>cat file | tee &gt;&gt; file 把文件内容贴到他自己的尾巴上(直接cat 不可以)</p>
+</blockquote>
+<blockquote>
+<p>for ARG in * ; do sudo -u USER 7z x -o&quot;$(echo <span class='katex-error' title='ParseError: KaTeX parse error: Can&#039;t use function &#039;\(&#039; in math mode at position 12: ARG|sed &#039;s/\̲(̲.*\)\..*/\1/&#039;)&quot;…'>ARG|sed &#039;s/\(.*\)\..*/\1/&#039;)&quot; 
+&quot;</span>ARG&quot; ; done 解压当前目录下的所有的压缩文件，各个压缩文件都解压在自己的目录中</p>
+</blockquote>
+<blockquote>
+<p>ssh user@remote-host &quot;DISPLAY=:0.0 import -window root -format png -&quot;|display<br>
+-format png - 远程截屏</p>
+</blockquote>
+<blockquote>
+<p>date --date=yesterday +%Y%m%d 格式化另一个日期 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>history &gt; ~/history-save-$(date +%d-%m-%y-%T) 备份命令历史</p>
+</blockquote>
+<blockquote>
+<p>for i in &quot;*.txt&quot;; do tar -c -v -z -f <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi mathvariant="normal">.</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi mathvariant="normal">.</mi><mi>g</mi><mi>z</mi><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">i.tar.gz &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">i</span><span class="mord">.</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mord">&quot;</span></span></span></span>i&quot; &amp;&amp; rm -v &quot;$i&quot;; done 压缩所有的txt</p>
+</blockquote>
+<blockquote>
+<p>cat file.txt | sendmail -F myname -f admin@mysite.com guest@guest.com 命令行发邮件</p>
+</blockquote>
+<blockquote>
+<p>rm $( ls | egrep -v 'abc|\s' ) 删除除了叫abc的文件 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>find /path/ -type f -exec grep -l '<string of text>' {} ; | xargs sed -i -e 's%<string of text>%<new text string>%g' 查找并替换 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>sleep 3s &amp;&amp; espeak &quot;wake up, you bastard&quot; 2&gt;/dev/null 计时器的实现</p>
+</blockquote>
+<blockquote>
+<p>tar tfz filename.tgz |xargs rm -Rf 撤销解压tar的方法 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>awk 'BEGIN{IGNORECASE=1;FS=&quot;<title>|</title>&quot;;RS=EOF} {print $2}' file.html 获取html文件中title名字 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>truncate -s 1M file 创建特定大小的文件 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>ls -I &quot;*.gz&quot; 反向ls (ls 除了 *.gz) ​​​​</p>
+</blockquote>
+<blockquote>
+<p>setenforce 0 关闭 SE Linux ​​​​</p>
+</blockquote>
+<blockquote>
+<p>cat video.avi.001 video.avi.002 video.avi.003 &gt;&gt; video.avi 合并小电影 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>find -printf '%u %g\n' | sort | uniq 获取当前目录的文件权限列表 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>cat .ssh/id_dsa.pub | ssh elsewhere &quot;[ -d .ssh ] || mkdir .ssh ; cat &gt;&gt; .ssh/authorized_keys&quot; 妈妈再也不用担心我忘了ssh密码 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>git svn --authors-file=some-authors-file clone svn://address/of/svn/repo new-git-dir 导入/克隆一个svn仓库到git仓库 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>find ~/Desktop/ ( -regex '.<em>/..</em>' ) -print -exec rm -Rf {} ; 查找删除隐藏文件 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>cat ~/.viminfo  | sed -n '/^:[0-9]+,([0-9]+|$)s/p' 看看今天vim中使用了多少regex ​​​​</p>
+</blockquote>
+<blockquote>
+<p>echo -n &quot;string&quot; | md5sum - 生成md5 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>free -m | awk '/Swap/ {print $4}' 释放swap</p>
+</blockquote>
+<blockquote>
+<p>cp -p <code>ls -l | awk '/Apr 14/ {print $NF}'</code> /usr/users/backup_dir 查找特定时间戳的文件 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>convert *.jpg File_Output.pdf 合并jpg为pdf</p>
+</blockquote>
+<blockquote>
+<p>zmv '(<em>.</em>)(.*)' '${1//./_}$2' 将文件名中的 . 替换成 _</p>
+</blockquote>
+<blockquote>
+<p>ls -1 /lib/modules 列出安装的 kernels ​​​​</p>
+</blockquote>
+<blockquote>
+<p>find . -type f -name filename.exe -exec sed -i &quot;s/oldstring/oldstring/g&quot; {} +; 在任何跟'filename.exe'同名的文件中查找并替换目标字符串。</p>
+</blockquote>
+<blockquote>
+<p>rm !(<em>.foo|</em>.bar|*.baz) Delete all files in a folder that don't match a<br>
+certain file extension<br>
+删除一个目录下所有不匹配特定扩展名的文件 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>ssh user@remote &quot;tar cfp - /path/to/log/* | gzip&quot; &gt; local.tar.gz 远程压缩后写到本地 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>find . -mmin -60 -not -path &quot;<em>svn</em>&quot; -print|more 忽略SVN文件和文件夹，递归查找最近一小时内修改过的文件 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>apt-cache show pkgname | grep -i &quot;version:&quot; 查看包版本 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>du -s * | sort -nr | head 寻找大文件 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>lsof | grep pcm 列出正在播放声音的进程 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>grep 'model|MHz' /proc/cpuinfo  |tail -n 2 查看cpu型号 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>export var1=<code>ps -A | grep '[u]nique' | cut -d '?' -f 1</code>; echo${var1/ /}; kill -9 $var1 在无法使用pidof和pgrep的情况下，杀死PID未知的进程</p>
+</blockquote>
+<blockquote>
+<p>nocomments () { cat <span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;#&#039; at position 28: … &#039;^[[:space:]]*#̲|^[[:space:]]*'>1 | egrep -v &#039;^[[:space:]]*#|^[[:space:]]*</span>|<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>*;' | sed '/<!--.*-->/d' | sed '/<!--/,/-->/d'; } 去掉注释 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>while true ; do  sleep 1 ; clear ;  (netstat -tn | grep -P ':36089\s+\d') ;  done 监控端口连接 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>find . -maxdepth 1 -empty -delete 清理大小为0的文件 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>while [ /bin/true ]; do OLD=$NEW; NEW=<code>cat /proc/net/dev | grep eth0 | tr -s ' ' | cut -d' ' -f &quot;3 11&quot;</code>; echo $NEW $OLD | awk '{printf(&quot;\rin 监控 RT/TX ​​​​</p>
+</blockquote>
+<blockquote>
+<p>for i in *.xml; do sed -i 's/foo/bar/g' &quot;$i&quot;; done 批量替换xml中关键字</p>
+</blockquote>
+<blockquote>
+<p>sed -n '/^.{255}/!p' 清除多余255个字符的行</p>
+</blockquote>
+<blockquote>
+<p>rar a -m0 &quot;${PWD##*/}.rar&quot; * 自动命名创建rar的包 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>read -sn 1 -p &quot;Press any key to continue...&quot; Shell版 Press Any Key to Continue</p>
+</blockquote>
+<blockquote>
+<p>for count in <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>s</mi><mi>e</mi><mi>q</mi><mn>21001</mn><mo>)</mo><mo separator="true">;</mo><mi>d</mi><mi>o</mi><mi>s</mi><mi>a</mi><mi>y</mi><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">(seq 2 1001); do say &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mord">2</span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mord">1</span><span class="mclose">)</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault">o</span><span class="mord mathdefault">s</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mord">&quot;</span></span></span></span>count sheeps&quot;;sleep 2;done 催眠</p>
+</blockquote>
+<blockquote>
+<p>lftp -u&lt;<credentials>&gt; &lt;<server>&gt; -e &quot;du -a;exit&quot; &gt; server-listing.txt 获取ftp的目录结构 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>for i in $(find . -mtime +30); do mv $i old/; done 移动30天前的文件到old文件夹</p>
+</blockquote>
+<blockquote>
+<p>( ( sleep 2h; your-command your-args ) &amp; ) 在后台2个小时后运行一个命令</p>
+</blockquote>
+<blockquote>
+<p>grep <sup>[</sup>#] /etc/file.conf 清理文件中的注释</p>
+</blockquote>
+<blockquote>
+<p>cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 长密码</p>
+</blockquote>
+<blockquote>
+<p>while <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi><mo separator="true">;</mo><mi>d</mi><mi>o</mi><mi>f</mi><mi>o</mi><mi>r</mi><mi>i</mi><mi>i</mi><mi>n</mi><mi mathvariant="normal">‘</mi><mi>s</mi><mi>e</mi><mi>q</mi><mn>130</mn><mi mathvariant="normal">‘</mi><mo separator="true">;</mo><mi>d</mi><mi>o</mi><mi>r</mi><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">t; do for i in `seq 1 30`;do r=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">t</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">i</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord">‘</span><span class="mord mathdefault">s</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="mord">1</span><span class="mord">3</span><span class="mord">0</span><span class="mord">‘</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>[(<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>R</mi><mi>A</mi><mi>N</mi><mi>D</mi><mi>O</mi><mi>M</mi></mrow><annotation encoding="application/x-tex">RANDOM % 2)]&quot;;h=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mord mathdefault" style="margin-right:0.10903em;">M</span></span></span></span>[($RANDOM % 4)]&quot;;if [ $h -eq 1 ]; then v=&quot;\e[1m $r&quot;;else v=&quot;\e[2m <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mi mathvariant="normal">&quot;</mi><mo separator="true">;</mo><mi>f</mi><mi>i</mi><mo separator="true">;</mo><mi>v</mi><mn>2</mn><mo>=</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">r&quot;;fi;v2=&quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord">&quot;</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">i</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>v2 $v&quot;;done;echo -e $v2;v2=&quot;&quot;;done; 黑客帝国 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>echo $(( <span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …gin/|grep -e &quot;.'>RANDOM % 10 + 1 )) 生成 1 到 10 的随机数 ​​​​
+​​​​
+function gbl() { git for-each-ref --sort=-committerdate --format=&#039;%(committerdate) %(authorname) %(refname)&#039; refs/remotes/origin/|grep -e &quot;.</span>@&quot;|head -n 10; } 按作者列出git远程分支</p>
+</blockquote>
+<blockquote>
+<p>ruby -e &quot;i=0;loop{puts ' '<em>(29</em>(Math.sin(i)/2+1))+'|'<em>(29</em>(Math.cos(i)/2+1)); i+=0.1}&quot; 显示一个波形图案 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>awk -F&quot;:&quot; '{ print <span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;}&#039; at position 3: 1 }̲&#039; /etc/passwd |…'>1 }&#039; /etc/passwd | while read UU ; do STATUS=</span>(passwd -S ${UU} | grep locked 2&gt;/dev/null) ; if [[ ! -z ${STATUS} ]] ; then echo &quot;Account ${UU} is locked.&quot; ; fi ; done 查找某些特定帐户是否被锁住 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>man -t ls &gt; ls.ps &amp;&amp; pdf2ps ls.ps &amp;&amp; rm ls.ps 将man文档输出为pdf格式 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>ls * | sed -e 'p;s/foo/bar/' | xargs -n2 mv 用sed批量重命名文件 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>echo $(shuf -i 1-35 | head -n7 | sort -n) 帮你卖双色球(35选7) ​​​​</p>
+</blockquote>
+<blockquote>
+<p>find . -type d | sed -e &quot;s/[<sup>-][</sup>/]*//  |/g&quot; -e &quot;s/|([^ ])/|-\1/&quot; 目录树 ​​​​<br>
+​​​​<br>
+echo -e &quot;\e[3$(( $RANDOM * 6 / 32767 + 1 ))mHello World!&quot; 随机颜色的字</p>
+</blockquote>
+<blockquote>
+<p>nc -zw2 www.example.com 80 &amp;&amp; echo open 查看tcp端口是不是打开了 ​​​​</p>
+</blockquote>
+<blockquote>
+<p>myrm(){ D=/tmp/$(date +%Y%m%d%H%M%S); mkdir -p <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>D</mi><mo separator="true">;</mo><mi>m</mi><mi>v</mi><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">D; mv &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord">&quot;</span></span></span></span>@&quot; $D &amp;&amp; echo &quot;moved to $D ok&quot;; }  建立删除回收机制</p>
+</blockquote>
+<blockquote>
+<p>UNIX2dos [-kn] oldfile newfile  转换为Linux格式</p>
+</blockquote>
+<blockquote>
+<p>perl -e &quot;use POSIX qw(strftime); print strftime '%Y%m%d' , localtime( time()-3600<em>24</em>30) &quot;  perl获取时间</p>
+</blockquote>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>[:space:] <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+                          </div>
+                        </div>
+                        <div class="layout-post-social">
+                          <div class="item reader">
+                            <div id="/post/linux-chang-yong-shell-ming-ling/" class="leancloud-visitors view"
+                              data-flag-title="Linux 常用 shell 命令">
+                              <span class="post-meta-item-text">阅读 </span>
+                              <span class="leancloud-visitors-count"></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="layout-post-navigation">
+                          <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/aix-an-zhuang-svn/" class="title">
+                                      <h4>AIX 安装 SVN</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>上一篇</span></div>
+                                  <div class="item">2017-06-28</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/vim-zi-ding-cha-jian/" class="title">
+                                      <h4>Vim 自定插件</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2017-06-17</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            
+                          </div>
+                        </div>
+
+                        <div class="layout-comments"></div>
+                        
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-lg-2 d-none d-lg-block">
+                      <div class="layout-post-sidebar">
+                        <div class="layout-sidebar-item">
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-totop d-none"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+
+    	<div class="layout-footer">
+
+		<div class="container">
+			<div class="row justify-content-lg-center">
+				<div class="col-12 col-lg-9">
+					<div class="footer">
+						<div class="row">
+							<div class="col-12 col-md-9">
+								<div class="footer-copy">
+									
+									Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+									<div class="footer-icp d-none d-sm-inline-block">
+										<span class="px-2">⋅</span>
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3 d-none d-md-block">
+								<div class="footer-links">
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript" src='https://mzqk.github.io/media/scripts/main.js'></script>
+	
+
+  </div>
+</body>
+
+</html>

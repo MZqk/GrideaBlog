@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-<title>关于 - MZZZ</title>
+<title>安装 Hadoop - MZZZ</title>
 <meta name="description" content="温故而知新">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -130,33 +130,72 @@
                     <div class="col-12 col-lg-10">
                       <div class="layout-post-main m-right m-md-right">
                         <div class="layout-post-header">
-                          <h1 class="layout-post-title">关于</h1>
+                          <h1 class="layout-post-title">安装 Hadoop</h1>
                           <div class="layout-post-meta">
                             <div class="item">
                               
                             </div>
                             <div class="item">
-                              <span>2019-01-25</span>
+                              <span>2017-06-16</span>
                             </div>
                           </div>
                         </div>
                         <div class="layout-post-content">
                           <div class="layout-post-item">
                             
-                            <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
+                            <h2 id="安装java环境">安装java环境</h2>
+<p>安装jdk<br>
+设置java环境变量</p>
+<blockquote>
+<p>vim /etc/profile</p>
 </blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+<pre><code>export  JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/
+eport   JRE_HOME=$JAVA_HOME/jre
+eport   CLASSPATH=$JAVA_HOME/lib:$JRE_HOME:lib:$CLASPATH
+export  PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
+</code></pre>
+<h2 id="下载hadoop源码包">下载hadoop源码包</h2>
+<p>配置文件在hadoop目录下conf</p>
+<blockquote>
+<p>hadoop-env.sh<br>
+mapred-site.xml<br>
+core-site.xml<br>
+hadfs-site.xml</p>
+</blockquote>
+<p>设置hadoop环境变量</p>
+<h2 id="格式化操作">格式化操作</h2>
+<blockquote>
+<p>hadoop namenode - fromat</p>
+</blockquote>
+<p>jps查看hadoop运行进程</p>
+<p>hadoop基础命令</p>
+<pre><code class="language-java">hadoop fs -ls / 
+hadoop fs -mkdir filename   
+hadoop fs -put file filename/   
+hadoop fs -cat filename/file    
+hadoop fs -get filename/file newfile    
+hadoop dfsadmin -report #查看hadoop文件信息 
+</code></pre>
+<h2 id="hive安装">hive安装</h2>
+<p>下载hive安装包<br>
+hive目录lib导入mysql.jar包<br>
+配置文件在hive目录下conf<br>
+hive-env.sh<br>
+hive-site.xml</p>
+<ol>
+<li>mysql连接url地址</li>
+<li>mysql驱动名字</li>
+<li>用户名</li>
+<li>密码</li>
+</ol>
+<p>hive CLI模式</p>
 
                           </div>
                         </div>
                         <div class="layout-post-social">
                           <div class="item reader">
-                            <div id="/post/about/" class="leancloud-visitors view"
-                              data-flag-title="关于">
+                            <div id="/post/an-zhuang-hadoop/" class="leancloud-visitors view"
+                              data-flag-title="安装 Hadoop">
                               <span class="post-meta-item-text">阅读 </span>
                               <span class="leancloud-visitors-count"></span>
                             </div>
@@ -165,6 +204,53 @@
 
                         <div class="layout-post-navigation">
                           <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/oracle-sysdate-shi-jian-han-shu/" class="title">
+                                      <h4>Oracle Sysdate 时间函数</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>上一篇</span></div>
+                                  <div class="item">2017-06-16</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/markdown-ji-chu-shi-yong/" class="title">
+                                      <h4>Markdown 基础使用</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2017-06-16</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
                             
                           </div>
                         </div>
@@ -180,10 +266,10 @@
                           <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E5%85%B4%E8%B6%A3%E7%88%B1%E5%A5%BD">⛹ 兴趣爱好</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85java%E7%8E%AF%E5%A2%83">安装java环境</a></li>
+<li><a href="#%E4%B8%8B%E8%BD%BDhadoop%E6%BA%90%E7%A0%81%E5%8C%85">下载hadoop源码包</a></li>
+<li><a href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%93%8D%E4%BD%9C">格式化操作</a></li>
+<li><a href="#hive%E5%AE%89%E8%A3%85">hive安装</a></li>
 </ul>
 </li>
 </ul>

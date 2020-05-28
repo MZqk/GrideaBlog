@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-<title>关于 - MZZZ</title>
+<title>使用修改 hosts 文件方法访问外国网络 - MZZZ</title>
 <meta name="description" content="温故而知新">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -130,33 +130,74 @@
                     <div class="col-12 col-lg-10">
                       <div class="layout-post-main m-right m-md-right">
                         <div class="layout-post-header">
-                          <h1 class="layout-post-title">关于</h1>
+                          <h1 class="layout-post-title">使用修改 hosts 文件方法访问外国网络</h1>
                           <div class="layout-post-meta">
                             <div class="item">
                               
                             </div>
                             <div class="item">
-                              <span>2019-01-25</span>
+                              <span>2017-08-06</span>
                             </div>
                           </div>
                         </div>
                         <div class="layout-post-content">
                           <div class="layout-post-item">
                             
-                            <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
+                            <p><a href="https://github.com/MZqk/hosts">hosts下载地址</a></p>
+<p>首先科普下我们为什么不能访问Google、Twitter、Facebook 之类的网站</p>
+<blockquote>
+<p>这是因为我们国家有GFW（英文名称Great Firewall of China），<br>
+也称中国防火墙或中国国家防火墙的存在。为什么要有这个东西的<br>
+存在呢？对外的说法是保护国内的网络纯净和谐地发展道路,顺带养<br>
+活下国内的BAT</p>
 </blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+<blockquote>
+<p>╮(￣⊿￣)╭<strong>我想GFW的存在意义是保护的是外国友人不被国内傻逼打扰•̀.̫•́✧</strong></p>
+</blockquote>
+<pre><code>为了方便用户记忆，我们将IP变成一个个的域名来输入到浏览器进行访问。而这使得访问网站时要先将其域名解析成 IP。DNS的作用就是进行IP解析，把域名对应到IP。
+在GFW的五种封锁方法中，有一种简单而效果很好的方法是DNS污染。GFW会对DNS的解析过程进行干扰，这会使对某些被干扰的域名返回一个错误的IP地址给你的主机，使你无法正确连接到你要的服务器上读取正确的信息。Hosts 文件本来是用来提高解析效率。在进行 DNS请求以前，系统会先检查自己的Hosts文件中是否有这个地址映射关系，如果有则调用这个IP地址映射，如果没有再向已知的 DNS 服务器提出域名解析。也就是说 Hosts 的请求级别比 DNS 高。当你的Hosts 文件里面有对应的 IP 时，它就会直接访问那个 IP，而不用通过 DNS。所以，当我们直接将Google、Twitter、Facebook 之类的 IP 放入 Hosts 文件后，就可以跳过 DNS的解析这一步，直接就行IP访问，不受 GFW 的 DNS污染干扰了。
+</code></pre>
+<blockquote>
+<p>通俗易懂的说修改host后就能访问Google、Twitter、Facebook等被墙网站。</p>
+</blockquote>
+<p>下面就来介绍修改hosts文件的方法</p>
+<h2 id="windows">windows</h2>
+<ul>
+<li>修改文件需要管理员权限</li>
+</ul>
+<ol>
+<li>找到文件目录C:\Windows\System32\drivers\etc\hosts</li>
+<li>把下载好的hosts文件全部内容复制到C:\WINDOWS\system32\drivers\etc目录中的hosts文件中</li>
+<li>保存后在重启浏览器输入https://www.google.com.hk看是否能访问</li>
+<li>如果还不可以访问在CMD窗口输入ipconfig /flushdns使其生效。</li>
+</ol>
+<h2 id="linux-and-mac">Linux and Mac</h2>
+<ol>
+<li>Linux与Mac的hosts文件都在相同的目录下 <strong>/etc/hosts</strong></li>
+<li>同样是用下载好的hosts替代原有的文件</li>
+<li>Mac终端输入sudo killall -HUP mDNSResponder使其生效。<br>
+Linux终端输入sudo systemctl restart NetworkManager。</li>
+</ol>
+<p>注意 : 非systemd发行版，终端输入sudo rcnscd restart，如果不清楚请两个都试一次。</p>
+<h2 id="android">Android</h2>
+<ul>
+<li>我们知道Android也是Linux系统中的一种，但其修改办法还是有些许不同</li>
+</ul>
+<ol>
+<li>需要获取root权限</li>
+<li>文件所在路径/system/etc/hosts</li>
+</ol>
+<p>补充一下：</p>
+<blockquote>
+<p>就是为什么 Hosts的IP要时不时更改，为什么 FB、Twitter 会仍旧上不去。是因为 GFW 的第二个大招，IP 封锁。比如访问国外一个 IP 无法访问，Ping 不通，tracert 这个 IP 后发现，全部在边缘路由器 (GFW) 附近被拦截。换言之，GFW 直接拦截带有这个 IP 头的数据包。所以，如果你更改的 IP 被封锁了，就算你过了 DNS 这一关，也仍旧不能翻过GFW。<strong>而有些站，是直接被屏蔽，无论你怎么添加HOSTS都是不行的。</strong></p>
+</blockquote>
 
                           </div>
                         </div>
                         <div class="layout-post-social">
                           <div class="item reader">
-                            <div id="/post/about/" class="leancloud-visitors view"
-                              data-flag-title="关于">
+                            <div id="/post/shi-yong-xiu-gai-hosts-wen-jian-fang-fa-fang-wen-wai-guo-wang-luo/" class="leancloud-visitors view"
+                              data-flag-title="使用修改 hosts 文件方法访问外国网络">
                               <span class="post-meta-item-text">阅读 </span>
                               <span class="leancloud-visitors-count"></span>
                             </div>
@@ -165,6 +206,53 @@
 
                         <div class="layout-post-navigation">
                           <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/rhcsa-ji-ben-kao-gang/" class="title">
+                                      <h4>RHCSA 基本考纲</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>上一篇</span></div>
+                                  <div class="item">2017-11-14</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/wei-xin-shi-yong-itchat-shi-xian-ji-qi-ren-zi-dong-hui-fu-gong-neng/" class="title">
+                                      <h4>微信使用 Itchat 实现机器人自动回复功能</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2017-08-03</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
                             
                           </div>
                         </div>
@@ -180,10 +268,9 @@
                           <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E5%85%B4%E8%B6%A3%E7%88%B1%E5%A5%BD">⛹ 兴趣爱好</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
+<li><a href="#windows">windows</a></li>
+<li><a href="#linux-and-mac">Linux and Mac</a></li>
+<li><a href="#android">Android</a></li>
 </ul>
 </li>
 </ul>

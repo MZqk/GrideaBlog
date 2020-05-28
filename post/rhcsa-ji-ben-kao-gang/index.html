@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-<title>关于 - MZZZ</title>
+<title>RHCSA 基本考纲 - MZZZ</title>
 <meta name="description" content="温故而知新">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -130,33 +130,91 @@
                     <div class="col-12 col-lg-10">
                       <div class="layout-post-main m-right m-md-right">
                         <div class="layout-post-header">
-                          <h1 class="layout-post-title">关于</h1>
+                          <h1 class="layout-post-title">RHCSA 基本考纲</h1>
                           <div class="layout-post-meta">
                             <div class="item">
                               
                             </div>
                             <div class="item">
-                              <span>2019-01-25</span>
+                              <span>2017-11-14</span>
                             </div>
                           </div>
                         </div>
                         <div class="layout-post-content">
                           <div class="layout-post-item">
                             
-                            <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+                            <p>1.修改root密码<br>
+重启进入grub按e编辑<br>
+添加rd.break console=stty0<br>
+或者修改rw init=/sysroot/bin<br>
+进入修复模式<br>
+挂载根系统<br>
+mount -o remount.rw /sysroot<br>
+切换根目录<br>
+chroot /sysroot<br>
+修改root密码passwd<br>
+重建SELinux安全策略<br>
+touch /.autorelabel<br>
+退出重启<br>
+2.修改本机网络信息<br>
+修改主机名<br>
+/etc/sysconfig/network<br>
+HOSTNAME信息<br>
+/etc/sysconfig/network<br>
+localhost信息<br>
+或<br>
+hostnamectl  set-hostname  example.hostname<br>
+修改静态网卡信息<br>
+/etc/sysconfig/network-scripts/ifcfg-eth0<br>
+BOOTPROTO=static<br>
+DNS1=<br>
+IPADDR=<br>
+NETMASK=<br>
+GETWAY=<br>
+或<br>
+nm-connection-editor图形化界面<br>
+nmcli  connection  up  &quot;System eth0&quot;<br>
+3.搭建默认软件仓库<br>
+yum-config-manager --add  http://example.com<br>
+修改 /etc/yum.repos.d/example.repo<br>
+关闭KEY检查gpgcheck=0<br>
+yum clean all<br>
+yum repolist<br>
+4.创建账户<br>
+创建用户组<br>
+groupadd adminuser<br>
+创建用户<br>
+useradd -G admin1  adminuser<br>
+创建用户不赋予shell交互<br>
+useradd -s /sbin/nologin admin2<br>
+设置用户密码<br>
+passwd admin1<br>
+5.配置文件权限<br>
+6.创建定时任务<br>
+开启cron服务</p>
+<p>给admin1用户编辑一个任务<br>
+crontab -e -u admin1<br>
+7.创建共享目录<br>
+创建目录<br>
+mkdir /home/admin<br>
+给予用户组adminuser目录所有权<br>
+chown  :adminuser  /home/admin<br>
+赋予组内用户可读、可写和可执行权限，其他用户无权限<br>
+chmod 770 /home/admin<br>
+8.安装升级内核<br>
+下载内核<br>
+wget http://kernel.com/download/kernel.rpm<br>
+安装rpm包<br>
+rpm -ivh kernel.rpm<br>
+重启后确认内核版本<br>
+uname -r</p>
 
                           </div>
                         </div>
                         <div class="layout-post-social">
                           <div class="item reader">
-                            <div id="/post/about/" class="leancloud-visitors view"
-                              data-flag-title="关于">
+                            <div id="/post/rhcsa-ji-ben-kao-gang/" class="leancloud-visitors view"
+                              data-flag-title="RHCSA 基本考纲">
                               <span class="post-meta-item-text">阅读 </span>
                               <span class="leancloud-visitors-count"></span>
                             </div>
@@ -165,6 +223,53 @@
 
                         <div class="layout-post-navigation">
                           <div class="navigation-list">
+                            
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/da-jian-ss-fu-wu-qi/" class="title">
+                                      <h4>搭建 SS 服务器</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>上一篇</span></div>
+                                  <div class="item">2018-02-16</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
+                            <div class="post-card row">
+                              
+                              <div class="card-content col-12">
+                                <div class="card-body">
+                                  <div class="header">
+                                    <a href="https://mzqk.github.io/post/shi-yong-xiu-gai-hosts-wen-jian-fang-fa-fang-wen-wai-guo-wang-luo/" class="title">
+                                      <h4>使用修改 hosts 文件方法访问外国网络</h4>
+                                    </a>
+                                  </div>
+                                  <div class="inner">
+                                    <div class="abstract">
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="card-footer">
+                                  <div class="item"><span>下一篇</span></div>
+                                  <div class="item">2017-08-06</div>
+                                </div>
+                              </div>
+                              
+                            </div>
+
                             
                           </div>
                         </div>
@@ -177,17 +282,7 @@
                     <div class="col-12 col-lg-2 d-none d-lg-block">
                       <div class="layout-post-sidebar">
                         <div class="layout-sidebar-item">
-                          <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E5%85%B4%E8%B6%A3%E7%88%B1%E5%A5%BD">⛹ 兴趣爱好</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
-</ul>
-</li>
-</ul>
-
+                          
                         </div>
                       </div>
                     </div>
