@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-<title>基础正则表达式 - MZZZ</title>
+<title>Oracle 常用操作 - MZZZ</title>
 <meta name="description" content="温故而知新">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -130,77 +130,137 @@
                     <div class="col-12 col-lg-10">
                       <div class="layout-post-main m-right m-md-right">
                         <div class="layout-post-header">
-                          <h1 class="layout-post-title">基础正则表达式</h1>
+                          <h1 class="layout-post-title">Oracle 常用操作</h1>
                           <div class="layout-post-meta">
                             <div class="item">
                               
                             </div>
                             <div class="item">
-                              <span>2017-07-26</span>
+                              <span>2017-07-11</span>
                             </div>
                           </div>
                         </div>
                         <div class="layout-post-content">
                           <div class="layout-post-item">
                             
-                            <h1 id="基础正则表达式">基础正则表达式</h1>
-<table>
-<thead>
-<tr>
-<th>符号</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>*</td>
-<td>前一个字符匹配任意次数</td>
-</tr>
-<tr>
-<td>.</td>
-<td>匹配任意一个字符（除换行符）</td>
-</tr>
-<tr>
-<td>^</td>
-<td>匹配行首</td>
-</tr>
-<tr>
-<td>$</td>
-<td>匹配行尾</td>
-</tr>
-<tr>
-<td>[]</td>
-<td>匹配中括号中任意一个字符</td>
-</tr>
-<tr>
-<td>[^]</td>
-<td>匹配中括号中以外的任意一个字符</td>
-</tr>
-<tr>
-<td>|转义字符</td>
-<td></td>
-</tr>
-<tr>
-<td>{n}</td>
-<td>匹配一个字符n次</td>
-</tr>
-<tr>
-<td>{n，}</td>
-<td>匹配一个字符n次以上</td>
-</tr>
-<tr>
-<td>{n，m}</td>
-<td>匹配一个字符n至m次</td>
-</tr>
-</tbody>
-</table>
+                            <h2 id="oracle-删除重复数据只留一条">Oracle 删除重复数据只留一条</h2>
+<ol>
+<li>查找表中多余的重复记录，重复记录是根据单个字段（Id）来判断</li>
+</ol>
+<pre><code class="language-sql">select * from 表 where Id in (select Id from 表 group byId having count(Id) &gt;1
+</code></pre>
+<ol start="2">
+<li>删除表中多余的重复记录，重复记录是根据单个字段（Id）来判断，只留有rowid最小的记录</li>
+</ol>
+<pre><code class="language-sql">DELETE from 表 WHERE (id) IN ( SELECT id FROM 表 GROUP BY id HAVING COUNT(id) &gt; 1) AND ROWID NOT IN (SELECT MIN(ROWID) FROM 表 GROUP BY id HAVING COUNT(*) &gt; 1);
+</code></pre>
+<ol start="3">
+<li>查找表中多余的重复记录（多个字段）</li>
+</ol>
+<pre><code class="language-sql">select * from 表 a where (a.Id,a.seq) in(select Id,seq from 表 group by Id,seq having count(*) &gt; 1)
+</code></pre>
+<ol start="4">
+<li>删除表中多余的重复记录（多个字段），只留有rowid最小的记录</li>
+</ol>
+<pre><code class="language-sql">delete from 表 a where (a.Id,a.seq) in (select Id,seq from 表 group by Id,seq having count(*) &gt; 1) and rowid not in (select min(rowid) from 表 group by Id,seq having count(*)&gt;1)
+</code></pre>
+<ol start="5">
+<li>查找表中多余的重复记录（多个字段），不包含rowid最小的记录</li>
+</ol>
+<pre><code class="language-sql">select * from 表 a where (a.Id,a.seq) in (select Id,seq from 表 group by Id,seq having count(*) &gt; 1) and rowid not in (select min(rowid) from 表 group by Id,seq having count(*)&gt;1)
+</code></pre>
+<p>例子</p>
+<pre><code class="language-sql">delete 
+--select *
+from cell  where   cgi in (select cgi  from cell group by cgi      having count(cgi) &gt; 1)
+and   time_stamp not in (select min(time_stamp) from cell group by cgi     having count(cgi)&gt;1) 
+</code></pre>
+<h2 id="查看undo空间的快照">查看UNDO空间的快照</h2>
+<pre><code class="language-sql">select s.username, u.name from v$transaction t,v$rollstat r, v$rollname u,v$session s
+       where s.taddr=t.addr and t.xidusn=r.usn and r.usn=u.usn order by s.username;
+</code></pre>
+<h2 id="查看正在进行的会话">查看正在进行的会话</h2>
+<pre><code>           SELECT b.sid oracleID,  b.username 登录Oracle用户名,  b.serial#,  spid 操作系统ID,  paddr,  sql_text 正在执行的SQL,  b.machine 计算机名 
+       FROM v$process a, v$session b, v$sqlarea c  WHERE a.addr = b.paddr  AND b.sql_hash_value = c.hash_value  
+</code></pre>
+<h2 id="锁表和删除会话">锁表和删除会话</h2>
+<pre><code class="language-sql">select p.spid, a.serial#, c.object_name, b.session_id, b.oracle_username, b.os_user_name  from v$process p, v$session a, v$locked_object b, all_objects c  where p.addr = a.paddr and a.process = b.process  and c.object_id = b.object_id ;
+      select l.session_id,o.owner,o.object_name from v$locked_object l,dba_objects o where l.object_id=o.object_id;
+      select t2.username,t2.sid,t2.serial#,t2.logon_time from v$locked_object t1,v$session t
+      where t1.session_id=t2.sid order by t2.logon_time;
+       alter   system     kill   session   '89,22763';session_id,serial#
+</code></pre>
+<h2 id="索引失效">索引失效</h2>
+<pre><code class="language-sql">select index_name ,status  from user_indexes where Status = 'UNUSABLE'
+select 'alter index ' || index_name || ' rebuild;' from user_indexes where Status = 'UNUSABLE'
+select  owner, index_name,table_name from dba_indexes where status = 'UNUSABLE'
+select index_owner,index_Name,partition_name  from dba_ind_partitions  where status = 'UNUSABLE'; 
+</code></pre>
+<h2 id="新建用户">新建用户</h2>
+<pre><code class="language-sql">  select * from dba_users
+  create user fast_nokia identified by fast_nokia
+  grant select any dictionary to fast_nokia
+  grant connect,select any table to fast_nokia
+</code></pre>
+<h2 id="oracle表空间增加数据文件">Oracle表空间增加数据文件</h2>
+<ol>
+<li>查看每个表空间当前数据文件剩余块</li>
+</ol>
+<pre><code class="language-sql">select * from dba_data_files where tablespace_name='TPADBS06'
+select * from dba_temp_files
+</code></pre>
+<ol start="2">
+<li>给表空间增加数据文件</li>
+</ol>
+<pre><code class="language-sql">ALTER TABLESPACE USERS ADD DATAFILe '+DGSTATIC/jxwydb/datafile/users21.dbf' SIZE 50M  AUTOEXTEND ON NEXT 100M MAXSIZE 31G;
+ALTER TABLESPACE TPADBS05 ADD DATAFILe '+DGWARE/jxwydb/datafile/tpadbs05_24.dbf'  SIZE 50M  AUTOEXTEND ON NEXT 100M MAXSIZE 31G;
+</code></pre>
+<h2 id="oracle自动摘除分片维护">Oracle自动摘除分片维护</h2>
+<ul>
+<li>分片维护表</li>
+</ul>
+<pre><code class="language-sql">select * from tab_partition_drop 
+</code></pre>
+<ul>
+<li>作业调度时间（目前是5点运行）</li>
+</ul>
+<pre><code class="language-sql">select job,what,last_date,next_date,failures,broken from dba_jobs Where schema_user='CAIKE';
+select * from user_jobs where what='PROC_DROP_PATITION_SCRIPT;
+</code></pre>
+<h2 id="表空间查询">表空间查询</h2>
+<ul>
+<li>查看单个表空间使用情况</li>
+</ul>
+<pre><code class="language-sql">SELECT TABLESPACE_NAME,SEGMENT_NAME,TO_CHAR(SUM(BYTES)/(1024*1024),'999G999D999')   CNT_MB  
+FROM DBA_EXTENTS  
+WHERE OWNER='NIOSDB'  
+AND SEGMENT_TYPE   LIKE   'TABLE%'  
+and TABLESPACE_NAME='NIOSDBS'
+GROUP BY TABLESPACE_NAME,SEGMENT_NAME;
+</code></pre>
+<p>*查看所有表空间使用情况</p>
+<pre><code class="language-sql">SELECT TABLESPACE_NAME,MAX_M,COUNT_BLOCKS FREE_BLK_CNT,SUM_FREE_M,TO_CHAR(100 * SUM_FREE_M/SUM_M, '99.99')||'%' AS PCT_FREE
+FROM (SELECT TABLESPACE_NAME,SUM(BYTES)/1024/1024 AS SUM_M
+FROM DBA_DATA_FILES
+GROUP BY TABLESPACE_NAME),
+(SELECT TABLESPACE_NAME AS FS_TS_NAME,MAX(BYTES)/1024/1024 AS MAX_M,COUNT(BLOCKS) AS COUNT_BLOCKS,SUM(BYTES/1024/1024) AS SUM_FREE_M
+FROM DBA_FREE_SPACE
+GROUP BY TABLESPACE_NAME)
+WHERE TABLESPACE_NAME = FS_TS_NAME
+ORDER BY PCT_FREE
+</code></pre>
+<h1 id="恢复表数据修改内容">恢复表数据修改内容</h1>
+<pre><code class="language-sql"> create table backup_table  as 
+select * from source_table as of timestamp sysdate - 1/48 where title like '%测试%'; 
+</code></pre>
+<p>sysdate - 1/48  半个小时以内操作的     sysdate - 1/24  一个小时内操作的</p>
 
                           </div>
                         </div>
                         <div class="layout-post-social">
                           <div class="item reader">
-                            <div id="/post/ji-chu-zheng-ze-biao-da-shi/" class="leancloud-visitors view"
-                              data-flag-title="基础正则表达式">
+                            <div id="/post/oracle-chang-yong-cao-zuo/" class="leancloud-visitors view"
+                              data-flag-title="Oracle 常用操作">
                               <span class="post-meta-item-text">阅读 </span>
                               <span class="leancloud-visitors-count"></span>
                             </div>
@@ -215,8 +275,8 @@
                               <div class="card-content col-12">
                                 <div class="card-body">
                                   <div class="header">
-                                    <a href="https://mzqk.github.io/post/wei-xin-shi-yong-itchat-shi-xian-ji-qi-ren-zi-dong-hui-fu-gong-neng/" class="title">
-                                      <h4>微信使用 Itchat 实现机器人自动回复功能</h4>
+                                    <a href="https://mzqk.github.io/post/python-ji-chu-zhi-shi/" class="title">
+                                      <h4>Python 基础知识</h4>
                                     </a>
                                   </div>
                                   <div class="inner">
@@ -227,7 +287,7 @@
                                 </div>
                                 <div class="card-footer">
                                   <div class="item"><span>上一篇</span></div>
-                                  <div class="item">2017-08-03</div>
+                                  <div class="item">2017-07-14</div>
                                 </div>
                               </div>
                               
@@ -238,8 +298,8 @@
                               <div class="card-content col-12">
                                 <div class="card-body">
                                   <div class="header">
-                                    <a href="https://mzqk.github.io/post/fhs/" class="title">
-                                      <h4>FHS</h4>
+                                    <a href="https://mzqk.github.io/post/dao-chu-oracle-bao-biao/" class="title">
+                                      <h4>导出 Oracle 报表</h4>
                                     </a>
                                   </div>
                                   <div class="inner">
@@ -250,7 +310,7 @@
                                 </div>
                                 <div class="card-footer">
                                   <div class="item"><span>下一篇</span></div>
-                                  <div class="item">2017-07-22</div>
+                                  <div class="item">2017-06-30</div>
                                 </div>
                               </div>
                               
@@ -269,7 +329,20 @@
                       <div class="layout-post-sidebar">
                         <div class="layout-sidebar-item">
                           <ul class="markdownIt-TOC">
-<li><a href="#%E5%9F%BA%E7%A1%80%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F">基础正则表达式</a></li>
+<li>
+<ul>
+<li><a href="#oracle-%E5%88%A0%E9%99%A4%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E5%8F%AA%E7%95%99%E4%B8%80%E6%9D%A1">Oracle 删除重复数据只留一条</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8Bundo%E7%A9%BA%E9%97%B4%E7%9A%84%E5%BF%AB%E7%85%A7">查看UNDO空间的快照</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E6%AD%A3%E5%9C%A8%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%BC%9A%E8%AF%9D">查看正在进行的会话</a></li>
+<li><a href="#%E9%94%81%E8%A1%A8%E5%92%8C%E5%88%A0%E9%99%A4%E4%BC%9A%E8%AF%9D">锁表和删除会话</a></li>
+<li><a href="#%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88">索引失效</a></li>
+<li><a href="#%E6%96%B0%E5%BB%BA%E7%94%A8%E6%88%B7">新建用户</a></li>
+<li><a href="#oracle%E8%A1%A8%E7%A9%BA%E9%97%B4%E5%A2%9E%E5%8A%A0%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6">Oracle表空间增加数据文件</a></li>
+<li><a href="#oracle%E8%87%AA%E5%8A%A8%E6%91%98%E9%99%A4%E5%88%86%E7%89%87%E7%BB%B4%E6%8A%A4">Oracle自动摘除分片维护</a></li>
+<li><a href="#%E8%A1%A8%E7%A9%BA%E9%97%B4%E6%9F%A5%E8%AF%A2">表空间查询</a></li>
+</ul>
+</li>
+<li><a href="#%E6%81%A2%E5%A4%8D%E8%A1%A8%E6%95%B0%E6%8D%AE%E4%BF%AE%E6%94%B9%E5%86%85%E5%AE%B9">恢复表数据修改内容</a></li>
 </ul>
 
                         </div>
