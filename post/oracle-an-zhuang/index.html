@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-<title>使用修改 hosts 文件方法访问外国网络 - MZZZ</title>
+<title>Oracle 安装 - MZZZ</title>
 <meta name="description" content="温故而知新">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -130,7 +130,7 @@
                     <div class="col-12 col-lg-10">
                       <div class="layout-post-main m-right m-md-right">
                         <div class="layout-post-header">
-                          <h1 class="layout-post-title">使用修改 hosts 文件方法访问外国网络</h1>
+                          <h1 class="layout-post-title">Oracle 安装</h1>
                           <div class="layout-post-meta">
                             <div class="item">
                                <a href="https://mzqk.github.io/tag/j2Ca_XOy9/" class="post--keyword"
@@ -138,68 +138,191 @@
                               
                             </div>
                             <div class="item">
-                              <span>2017-08-06</span>
+                              <span>2020-06-02</span>
                             </div>
                           </div>
                         </div>
                         <div class="layout-post-content">
                           <div class="layout-post-item">
                             
-                            <p><a href="https://github.com/MZqk/hosts">hosts下载地址</a></p>
-<p>首先科普下我们为什么不能访问Google、Twitter、Facebook 之类的网站</p>
+                            <h1 id="linux-安装-oracle软件">Linux 安装 Oracle软件</h1>
+<h2 id="环境准备">环境准备</h2>
+<h3 id="创建用户和用户组">创建用户和用户组</h3>
+<pre><code class="language-bash">groupadd oinstall
+groupadd dba
+useradd -g oinstall -G dba oracle
+passwd oracle
+</code></pre>
+<h3 id="安装依赖">安装依赖</h3>
+<pre><code class="language-bash">yum install gcc make binutils gcc-c++ \
+compat-libstdc++-33elfutils-libelf-devel \
+elfutils-libelf-devel-static ksh libaio \
+libaio-develnumactl-devel sysstat unixODBC \
+unixODBC-devel pcre-devel –y
+</code></pre>
+<h3 id="内核参数调整">内核参数调整</h3>
+<ol>
+<li>关闭selinux</li>
+</ol>
 <blockquote>
-<p>这是因为我们国家有GFW（英文名称Great Firewall of China），<br>
-也称中国防火墙或中国国家防火墙的存在。为什么要有这个东西的<br>
-存在呢？对外的说法是保护国内的网络纯净和谐地发展道路,顺带养<br>
-活下国内的BAT</p>
+<p>/etc/selinux/config</p>
 </blockquote>
+<pre><code class="language-bash"># 修改配置文件参数 SELINUX=disabled
+setenforce 0
+</code></pre>
+<ol start="2">
+<li>修改系统参数</li>
+</ol>
 <blockquote>
-<p>╮(￣⊿￣)╭<strong>我想GFW的存在意义是保护的是外国友人不被国内傻逼打扰•̀.̫•́✧</strong></p>
+<p>/etc/sysctl.conf</p>
 </blockquote>
-<pre><code>为了方便用户记忆，我们将IP变成一个个的域名来输入到浏览器进行访问。而这使得访问网站时要先将其域名解析成 IP。DNS的作用就是进行IP解析，把域名对应到IP。
-在GFW的五种封锁方法中，有一种简单而效果很好的方法是DNS污染。GFW会对DNS的解析过程进行干扰，这会使对某些被干扰的域名返回一个错误的IP地址给你的主机，使你无法正确连接到你要的服务器上读取正确的信息。Hosts 文件本来是用来提高解析效率。在进行 DNS请求以前，系统会先检查自己的Hosts文件中是否有这个地址映射关系，如果有则调用这个IP地址映射，如果没有再向已知的 DNS 服务器提出域名解析。也就是说 Hosts 的请求级别比 DNS 高。当你的Hosts 文件里面有对应的 IP 时，它就会直接访问那个 IP，而不用通过 DNS。所以，当我们直接将Google、Twitter、Facebook 之类的 IP 放入 Hosts 文件后，就可以跳过 DNS的解析这一步，直接就行IP访问，不受 GFW 的 DNS污染干扰了。
+<pre><code class="language-vim">fs.aio-max-nr = 1048576
+fs.file-max = 6815744
+kernel.shmall = 2097152
+kernel.shmmax = 1073741824 #kernel.shmmax 为本机物理内存的一半，单位为byte。
+kernel.shmmni = 4096
+kernel.sem = 250 32000 100 128
+net.ipv4.ip_local_port_range = 9000 65500
+net.core.rmem_default = 262144
+net.core.rmem_max = 4194304
+net.core.wmem_default = 262144
+net.core.wmem_max = 1048576 
+</code></pre>
+<pre><code class="language-bash">sysctl -p
+</code></pre>
+<ol start="3">
+<li>修改用户限制</li>
+</ol>
+<blockquote>
+<p>/etc/security/limits.conf</p>
+</blockquote>
+<pre><code class="language-bash"># 末尾添加
+oracle           soft    nproc           2047
+oracle           hard    nproc           16384
+oracle           soft    nofile          1024
+oracle           hard    nofile         65536
+oracle           soft    stack           10240 
 </code></pre>
 <blockquote>
-<p>通俗易懂的说修改host后就能访问Google、Twitter、Facebook等被墙网站。</p>
+<p>/etc/pam.d/login</p>
 </blockquote>
-<p>下面就来介绍修改hosts文件的方法</p>
-<h2 id="windows">windows</h2>
-<ul>
-<li>修改文件需要管理员权限</li>
-</ul>
-<ol>
-<li>找到文件目录C:\Windows\System32\drivers\etc\hosts</li>
-<li>把下载好的hosts文件全部内容复制到C:\WINDOWS\system32\drivers\etc目录中的hosts文件中</li>
-<li>保存后在重启浏览器输入https://www.google.com.hk看是否能访问</li>
-<li>如果还不可以访问在CMD窗口输入ipconfig /flushdns使其生效。</li>
-</ol>
-<h2 id="linux-and-mac">Linux and Mac</h2>
-<ol>
-<li>Linux与Mac的hosts文件都在相同的目录下 <strong>/etc/hosts</strong></li>
-<li>同样是用下载好的hosts替代原有的文件</li>
-<li>Mac终端输入sudo killall -HUP mDNSResponder使其生效。<br>
-Linux终端输入sudo systemctl restart NetworkManager。</li>
-</ol>
-<p>注意 : 非systemd发行版，终端输入sudo rcnscd restart，如果不清楚请两个都试一次。</p>
-<h2 id="android">Android</h2>
-<ul>
-<li>我们知道Android也是Linux系统中的一种，但其修改办法还是有些许不同</li>
-</ul>
-<ol>
-<li>需要获取root权限</li>
-<li>文件所在路径/system/etc/hosts</li>
-</ol>
-<p>补充一下：</p>
+<pre><code class="language-bash"># 末尾添加
+session required  /lib64/security/pam_limits.so
+session required   pam_limits.so 
+</code></pre>
 <blockquote>
-<p>就是为什么 Hosts的IP要时不时更改，为什么 FB、Twitter 会仍旧上不去。是因为 GFW 的第二个大招，IP 封锁。比如访问国外一个 IP 无法访问，Ping 不通，tracert 这个 IP 后发现，全部在边缘路由器 (GFW) 附近被拦截。换言之，GFW 直接拦截带有这个 IP 头的数据包。所以，如果你更改的 IP 被封锁了，就算你过了 DNS 这一关，也仍旧不能翻过GFW。<strong>而有些站，是直接被屏蔽，无论你怎么添加HOSTS都是不行的。</strong></p>
+<p>/etc/profile</p>
 </blockquote>
+<pre><code class="language-bash"># 末尾添加
+if [ $USER = &quot;oracle&quot; ]; then
+  if [ $SHELL = &quot;/bin/ksh&quot; ]; then
+      ulimit -p 16384
+      ulimit -n 65536
+  else
+      ulimit -u 16384 -n 65536
+  fi
+fi 
+</code></pre>
+<h3 id="配置用户环境">配置用户环境</h3>
+<ol>
+<li>创建软件安装路径</li>
+</ol>
+<pre><code class="language-bash"># 目录与配置文件相关，请按需修改
+mkdir -p /data/oracle/product/11.2.0
+
+mkdir /data/oracle/oradata
+
+mkdir /data/oracle/inventory
+
+mkdir /data/oracle/fast_recovery_area
+
+chown -R oracle:oinstall /data/oracle
+
+chmod -R 775 /data/oracle
+</code></pre>
+<ol start="2">
+<li>配置用户环境变量</li>
+</ol>
+<blockquote>
+<p>.bash_profile</p>
+</blockquote>
+<pre><code class="language-vim"># 末尾添加
+ORACLE_BASE=/data/oracle
+ORACLE_HOME=$ORACLE_BASE/product/11.2.0
+ORACLE_SID=orcl # 实例名与配置文件相关，请按需修改
+PATH=$PATH:$ORACLE_HOME/bin
+export ORACLE_BASE ORACLE_HOME ORACLE_SID PATH
+</code></pre>
+<pre><code class="language-bash">source .bash_profile
+</code></pre>
+<h2 id="配置信息">配置信息</h2>
+<h3 id="数据库响应文件">数据库响应文件</h3>
+<blockquote>
+<p>db_install.rsp</p>
+</blockquote>
+<pre><code class="language-bash"># 静默安装，无需图形界面
+oracle.install.option=INSTALL_DB_SWONLY
+#主机名修改
+ORACLE_HOSTNAME=centos36181
+UNIX_GROUP_NAME=oinstall
+INVENTORY_LOCATION=/data/oracle/inventory
+SELECTED_LANGUAGES=en,zh_CN
+ORACLE_HOME=/data/oracle/product/11.2.0
+ORACLE_BASE=/data/oracle
+oracle.install.db.InstallEdition=EE
+oracle.install.db.DBA_GROUP=dba
+oracle.install.db.OPER_GROUP=dba
+# 客户端字符串
+oracle.install.db.config.starterdb.characterSet=ZHS16GBK
+DECLINE_SECURITY_UPDATES=true
+</code></pre>
+<h3 id="库实例响应文件">库实例响应文件</h3>
+<pre><code class="language-vim"># 选择创建数据库模式
+[CREATEDATABASE]
+
+# 全局数据库的名字=SID+主机域名
+GDBNAME = &quot;orcl.test&quot;
+# 对应的实例名字
+SID = &quot;orcl&quot;
+# 建库用的模板文件
+TEMPLATENAME = &quot;General_Purpose.dbc&quot;
+# SYS管理员密码
+SYSPASSWORD = &quot;123456&quot;
+# SYSTEM管理员密码
+SYSTEMPASSWORD = &quot;123456&quot;
+
+# 数据文件存放目录
+DATAFILEDESTINATION =/data/oracle/oradata
+# 恢复数据存放目录
+RECOVERYAREADESTINATION=/data/oracle/fast_recovery_area
+# 字符集，重要!!! 建库后一般不能更改，所以建库前要确定清楚。
+# (CHARACTERSET = &quot;AL32UTF8&quot; NATIONALCHARACTERSET= &quot;UTF8&quot;)
+CHARACTERSET = &quot;ZHS16GBK&quot;
+# oracle使用物理内存80%（可选）
+TOTALMEMORY = &quot;1638&quot; 
+</code></pre>
+<h2 id="软件安装与卸载">软件安装与卸载</h2>
+<h3 id="安装数据库">安装数据库</h3>
+<pre><code class="language-bash">database/runInstaller -silent -responseFile /database/response/db_install.rsp -ignorePrereq
+</code></pre>
+<h3 id="配置监听">配置监听</h3>
+<pre><code class="language-bash"># 使用oracle用户
+netca /silent /responseFile /database/response/netca.rsp
+</code></pre>
+<h3 id="安装库实例">安装库实例</h3>
+<pre><code class="language-bash"># 使用oracle用户
+dbca -silent -responseFile /database/response/dbca.rsp
+</code></pre>
+<h3 id="卸载数据库">卸载数据库</h3>
+<pre><code class="language-bash">dbca -silent -delete Database -responseFile /database/response/dbca.rsp
+</code></pre>
 
                           </div>
                         </div>
                         <div class="layout-post-social">
                           <div class="item reader">
-                            <div id="/post/shi-yong-xiu-gai-hosts-wen-jian-fang-fa-fang-wen-wai-guo-wang-luo/" class="leancloud-visitors view"
-                              data-flag-title="使用修改 hosts 文件方法访问外国网络">
+                            <div id="/post/oracle-an-zhuang/" class="leancloud-visitors view"
+                              data-flag-title="Oracle 安装">
                               <span class="post-meta-item-text">阅读 </span>
                               <span class="leancloud-visitors-count"></span>
                             </div>
@@ -214,31 +337,8 @@ Linux终端输入sudo systemctl restart NetworkManager。</li>
                               <div class="card-content col-12">
                                 <div class="card-body">
                                   <div class="header">
-                                    <a href="https://mzqk.github.io/post/execl-he-bing-duo-biao-hong/" class="title">
-                                      <h4>execl合并多表宏</h4>
-                                    </a>
-                                  </div>
-                                  <div class="inner">
-                                    <div class="abstract">
-                                      
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-footer">
-                                  <div class="item"><span>上一篇</span></div>
-                                  <div class="item">2017-08-17</div>
-                                </div>
-                              </div>
-                              
-                            </div>
-
-                            <div class="post-card row">
-                              
-                              <div class="card-content col-12">
-                                <div class="card-body">
-                                  <div class="header">
-                                    <a href="https://mzqk.github.io/post/wei-xin-shi-yong-itchat-shi-xian-ji-qi-ren-zi-dong-hui-fu-gong-neng/" class="title">
-                                      <h4>微信使用 Itchat 实现机器人自动回复功能</h4>
+                                    <a href="https://mzqk.github.io/post/ru-he-yue-du-yi-ben-shu/" class="title">
+                                      <h4>如何阅读一本书</h4>
                                     </a>
                                   </div>
                                   <div class="inner">
@@ -249,12 +349,11 @@ Linux终端输入sudo systemctl restart NetworkManager。</li>
                                 </div>
                                 <div class="card-footer">
                                   <div class="item"><span>下一篇</span></div>
-                                  <div class="item">2017-08-03</div>
+                                  <div class="item">2018-12-20</div>
                                 </div>
                               </div>
                               
                             </div>
-
                             
                           </div>
                         </div>
@@ -268,11 +367,30 @@ Linux终端输入sudo systemctl restart NetworkManager。</li>
                       <div class="layout-post-sidebar">
                         <div class="layout-sidebar-item">
                           <ul class="markdownIt-TOC">
-<li>
+<li><a href="#linux-%E5%AE%89%E8%A3%85-oracle%E8%BD%AF%E4%BB%B6">Linux 安装 Oracle软件</a>
 <ul>
-<li><a href="#windows">windows</a></li>
-<li><a href="#linux-and-mac">Linux and Mac</a></li>
-<li><a href="#android">Android</a></li>
+<li><a href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87">环境准备</a>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%92%8C%E7%94%A8%E6%88%B7%E7%BB%84">创建用户和用户组</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96">安装依赖</a></li>
+<li><a href="#%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0%E8%B0%83%E6%95%B4">内核参数调整</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E7%94%A8%E6%88%B7%E7%8E%AF%E5%A2%83">配置用户环境</a></li>
+</ul>
+</li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF">配置信息</a>
+<ul>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%93%8D%E5%BA%94%E6%96%87%E4%BB%B6">数据库响应文件</a></li>
+<li><a href="#%E5%BA%93%E5%AE%9E%E4%BE%8B%E5%93%8D%E5%BA%94%E6%96%87%E4%BB%B6">库实例响应文件</a></li>
+</ul>
+</li>
+<li><a href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E4%B8%8E%E5%8D%B8%E8%BD%BD">软件安装与卸载</a>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85%E6%95%B0%E6%8D%AE%E5%BA%93">安装数据库</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E7%9B%91%E5%90%AC">配置监听</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85%E5%BA%93%E5%AE%9E%E4%BE%8B">安装库实例</a></li>
+<li><a href="#%E5%8D%B8%E8%BD%BD%E6%95%B0%E6%8D%AE%E5%BA%93">卸载数据库</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

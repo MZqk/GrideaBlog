@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mzqk.github.io</id>
     <title>MZZZ</title>
-    <updated>2020-05-29T01:51:07.167Z</updated>
+    <updated>2020-06-02T07:28:32.294Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mzqk.github.io"/>
     <link rel="self" href="https://mzqk.github.io/atom.xml"/>
@@ -11,13 +11,192 @@
     <icon>https://mzqk.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, MZZZ</rights>
     <entry>
+        <title type="html"><![CDATA[Oracle 安装]]></title>
+        <id>https://mzqk.github.io/post/oracle-an-zhuang/</id>
+        <link href="https://mzqk.github.io/post/oracle-an-zhuang/">
+        </link>
+        <updated>2020-06-02T05:48:56.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="linux-安装-oracle软件">Linux 安装 Oracle软件</h1>
+<h2 id="环境准备">环境准备</h2>
+<h3 id="创建用户和用户组">创建用户和用户组</h3>
+<pre><code class="language-bash">groupadd oinstall
+groupadd dba
+useradd -g oinstall -G dba oracle
+passwd oracle
+</code></pre>
+<h3 id="安装依赖">安装依赖</h3>
+<pre><code class="language-bash">yum install gcc make binutils gcc-c++ \
+compat-libstdc++-33elfutils-libelf-devel \
+elfutils-libelf-devel-static ksh libaio \
+libaio-develnumactl-devel sysstat unixODBC \
+unixODBC-devel pcre-devel –y
+</code></pre>
+<h3 id="内核参数调整">内核参数调整</h3>
+<ol>
+<li>关闭selinux</li>
+</ol>
+<blockquote>
+<p>/etc/selinux/config</p>
+</blockquote>
+<pre><code class="language-bash"># 修改配置文件参数 SELINUX=disabled
+setenforce 0
+</code></pre>
+<ol start="2">
+<li>修改系统参数</li>
+</ol>
+<blockquote>
+<p>/etc/sysctl.conf</p>
+</blockquote>
+<pre><code class="language-vim">fs.aio-max-nr = 1048576
+fs.file-max = 6815744
+kernel.shmall = 2097152
+kernel.shmmax = 1073741824 #kernel.shmmax 为本机物理内存的一半，单位为byte。
+kernel.shmmni = 4096
+kernel.sem = 250 32000 100 128
+net.ipv4.ip_local_port_range = 9000 65500
+net.core.rmem_default = 262144
+net.core.rmem_max = 4194304
+net.core.wmem_default = 262144
+net.core.wmem_max = 1048576 
+</code></pre>
+<pre><code class="language-bash">sysctl -p
+</code></pre>
+<ol start="3">
+<li>修改用户限制</li>
+</ol>
+<blockquote>
+<p>/etc/security/limits.conf</p>
+</blockquote>
+<pre><code class="language-bash"># 末尾添加
+oracle           soft    nproc           2047
+oracle           hard    nproc           16384
+oracle           soft    nofile          1024
+oracle           hard    nofile         65536
+oracle           soft    stack           10240 
+</code></pre>
+<blockquote>
+<p>/etc/pam.d/login</p>
+</blockquote>
+<pre><code class="language-bash"># 末尾添加
+session required  /lib64/security/pam_limits.so
+session required   pam_limits.so 
+</code></pre>
+<blockquote>
+<p>/etc/profile</p>
+</blockquote>
+<pre><code class="language-bash"># 末尾添加
+if [ $USER = &quot;oracle&quot; ]; then
+  if [ $SHELL = &quot;/bin/ksh&quot; ]; then
+      ulimit -p 16384
+      ulimit -n 65536
+  else
+      ulimit -u 16384 -n 65536
+  fi
+fi 
+</code></pre>
+<h3 id="配置用户环境">配置用户环境</h3>
+<ol>
+<li>创建软件安装路径</li>
+</ol>
+<pre><code class="language-bash"># 目录与配置文件相关，请按需修改
+mkdir -p /data/oracle/product/11.2.0
+
+mkdir /data/oracle/oradata
+
+mkdir /data/oracle/inventory
+
+mkdir /data/oracle/fast_recovery_area
+
+chown -R oracle:oinstall /data/oracle
+
+chmod -R 775 /data/oracle
+</code></pre>
+<ol start="2">
+<li>配置用户环境变量</li>
+</ol>
+<blockquote>
+<p>.bash_profile</p>
+</blockquote>
+<pre><code class="language-vim"># 末尾添加
+ORACLE_BASE=/data/oracle
+ORACLE_HOME=$ORACLE_BASE/product/11.2.0
+ORACLE_SID=orcl # 实例名与配置文件相关，请按需修改
+PATH=$PATH:$ORACLE_HOME/bin
+export ORACLE_BASE ORACLE_HOME ORACLE_SID PATH
+</code></pre>
+<pre><code class="language-bash">source .bash_profile
+</code></pre>
+<h2 id="配置信息">配置信息</h2>
+<h3 id="数据库响应文件">数据库响应文件</h3>
+<blockquote>
+<p>db_install.rsp</p>
+</blockquote>
+<pre><code class="language-bash"># 静默安装，无需图形界面
+oracle.install.option=INSTALL_DB_SWONLY
+#主机名修改
+ORACLE_HOSTNAME=centos36181
+UNIX_GROUP_NAME=oinstall
+INVENTORY_LOCATION=/data/oracle/inventory
+SELECTED_LANGUAGES=en,zh_CN
+ORACLE_HOME=/data/oracle/product/11.2.0
+ORACLE_BASE=/data/oracle
+oracle.install.db.InstallEdition=EE
+oracle.install.db.DBA_GROUP=dba
+oracle.install.db.OPER_GROUP=dba
+# 客户端字符串
+oracle.install.db.config.starterdb.characterSet=ZHS16GBK
+DECLINE_SECURITY_UPDATES=true
+</code></pre>
+<h3 id="库实例响应文件">库实例响应文件</h3>
+<pre><code class="language-vim"># 选择创建数据库模式
+[CREATEDATABASE]
+
+# 全局数据库的名字=SID+主机域名
+GDBNAME = &quot;orcl.test&quot;
+# 对应的实例名字
+SID = &quot;orcl&quot;
+# 建库用的模板文件
+TEMPLATENAME = &quot;General_Purpose.dbc&quot;
+# SYS管理员密码
+SYSPASSWORD = &quot;123456&quot;
+# SYSTEM管理员密码
+SYSTEMPASSWORD = &quot;123456&quot;
+
+# 数据文件存放目录
+DATAFILEDESTINATION =/data/oracle/oradata
+# 恢复数据存放目录
+RECOVERYAREADESTINATION=/data/oracle/fast_recovery_area
+# 字符集，重要!!! 建库后一般不能更改，所以建库前要确定清楚。
+# (CHARACTERSET = &quot;AL32UTF8&quot; NATIONALCHARACTERSET= &quot;UTF8&quot;)
+CHARACTERSET = &quot;ZHS16GBK&quot;
+# oracle使用物理内存80%（可选）
+TOTALMEMORY = &quot;1638&quot; 
+</code></pre>
+<h2 id="软件安装与卸载">软件安装与卸载</h2>
+<h3 id="安装数据库">安装数据库</h3>
+<pre><code class="language-bash">database/runInstaller -silent -responseFile /database/response/db_install.rsp -ignorePrereq
+</code></pre>
+<h3 id="配置监听">配置监听</h3>
+<pre><code class="language-bash"># 使用oracle用户
+netca /silent /responseFile /database/response/netca.rsp
+</code></pre>
+<h3 id="安装库实例">安装库实例</h3>
+<pre><code class="language-bash"># 使用oracle用户
+dbca -silent -responseFile /database/response/dbca.rsp
+</code></pre>
+<h3 id="卸载数据库">卸载数据库</h3>
+<pre><code class="language-bash">dbca -silent -delete Database -responseFile /database/response/dbca.rsp
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[如何阅读一本书]]></title>
         <id>https://mzqk.github.io/post/ru-he-yue-du-yi-ben-shu/</id>
         <link href="https://mzqk.github.io/post/ru-he-yue-du-yi-ben-shu/">
         </link>
         <updated>2018-12-20T07:39:52.000Z</updated>
         <content type="html"><![CDATA[<h1 id="如何阅读一本书">如何阅读一本书</h1>
-<p><em>挑出阅读的层次说明</em></p>
+<p>挑出阅读的层次说明</p>
 <h2 id="基础阅读层次">基础阅读层次</h2>
 <h4 id="准备阅读阶段">准备阅读阶段</h4>
 <h4 id="认字阶段">认字阶段</h4>
@@ -514,179 +693,6 @@ Linux终端输入sudo systemctl restart NetworkManager。</li>
 <blockquote>
 <p>就是为什么 Hosts的IP要时不时更改，为什么 FB、Twitter 会仍旧上不去。是因为 GFW 的第二个大招，IP 封锁。比如访问国外一个 IP 无法访问，Ping 不通，tracert 这个 IP 后发现，全部在边缘路由器 (GFW) 附近被拦截。换言之，GFW 直接拦截带有这个 IP 头的数据包。所以，如果你更改的 IP 被封锁了，就算你过了 DNS 这一关，也仍旧不能翻过GFW。<strong>而有些站，是直接被屏蔽，无论你怎么添加HOSTS都是不行的。</strong></p>
 </blockquote>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[微信使用 Itchat 实现机器人自动回复功能]]></title>
-        <id>https://mzqk.github.io/post/wei-xin-shi-yong-itchat-shi-xian-ji-qi-ren-zi-dong-hui-fu-gong-neng/</id>
-        <link href="https://mzqk.github.io/post/wei-xin-shi-yong-itchat-shi-xian-ji-qi-ren-zi-dong-hui-fu-gong-neng/">
-        </link>
-        <updated>2017-08-03T07:46:31.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="itchat">itchat</h1>
-<p>itchat是一个开源的微信个人号接口，使用python调用微信从未如此简单。</p>
-<p>使用不到三十行的代码，你就可以完成一个能够处理所有信息的微信机器人。</p>
-<p>当然，该api的使用远不止一个机器人，更多的功能等着你来发现</p>
-<p>该接口与公众号接口<a href="https://github.com/littlecodersh/ItChat.git">itchat</a><br>
-共享类似的操作方式，学习一次掌握两个工具。</p>
-<p>如今微信已经成为了个人社交的很大一部分，希望这个项目能够帮助你扩展你的个人的微信号、方便自己的生活。</p>
-<h2 id="安装">安装</h2>
-<p>可以通过本命令安装itchat：</p>
-<pre><code class="language-python">pip install itchat
-</code></pre>
-<h2 id="简单入门实例">简单入门实例</h2>
-<p>有了itchat，如果你想要给文件传输助手发一条信息，只需要这样：</p>
-<pre><code class="language-python">import itchat
-
-itchat.auto_login()
-
-itchat.send('Hello, filehelper', toUserName='filehelper')
-</code></pre>
-<p>如果你想要回复发给自己的文本消息，只需要这样：</p>
-<pre><code class="language-python">import itchat
-
-@itchat.msg_register(itchat.content.TEXT)
-def text_reply(msg):
-    return msg.text
-
-itchat.auto_login()
-itchat.run()
-</code></pre>
-<h2 id="进阶应用">进阶应用</h2>
-<h3 id="特殊的字典使用方式">特殊的字典使用方式</h3>
-<p>通过打印itchat的用户以及注册消息的参数，可以发现这些值都是字典。</p>
-<p>但实际上itchat精心构造了相应的消息、用户、群聊、公众号类。</p>
-<p>其所有的键值都可以通过这一方式访问：</p>
-<pre><code class="language-python">@itchat.msg_register(TEXT)
-def _(msg):
-    # equals to print(msg['FromUserName'])
-    print(msg.fromUserName)
-</code></pre>
-<p>属性名为键值首字母小写后的内容。</p>
-<pre><code class="language-python">author = itchat.search_friends(nickName='LittleCoder')[0]
-author.send('greeting, littlecoder!')
-</code></pre>
-<h3 id="各类型消息的注册">各类型消息的注册</h3>
-<p>通过如下代码，微信已经可以就日常的各种信息进行获取与回复。</p>
-<pre><code class="language-python">import itchat, time
-from itchat.content import *
-
-@itchat.msg_register([TEXT, MAP, CARD, NOTE, SHARING])
-def text_reply(msg):
-    msg.user.send('%s: %s' % (msg.type, msg.text))
-
-@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
-def download_files(msg):
-    msg.download(msg.fileName)
-    typeSymbol = {
-        PICTURE: 'img',
-        VIDEO: 'vid', }.get(msg.type, 'fil')
-    return '@%s@%s' % (typeSymbol, msg.fileName)
-
-@itchat.msg_register(FRIENDS)
-def add_friend(msg):
-    msg.user.verify()
-    msg.user.send('Nice to meet you!')
-
-@itchat.msg_register(TEXT, isGroupChat=True)
-def text_reply(msg):
-    if msg.isAt:
-        msg.user.send(u'@%s\u2005I received: %s' % (
-            msg.actualNickName, msg.text))
-
-itchat.auto_login(True)
-itchat.run(True)
-</code></pre>
-<h3 id="命令行二维码">命令行二维码</h3>
-<p>通过以下命令可以在登陆的时候使用命令行显示二维码：</p>
-<pre><code class="language-python">itchat.auto_login(enableCmdQR=True)
-</code></pre>
-<p>部分系统可能字幅宽度有出入，可以通过将enableCmdQR赋值为特定的倍数进行调整：</p>
-<pre><code class="language-python"># 如部分的linux系统，块字符的宽度为一个字符（正常应为两字符），故赋值为2
-itchat.auto_login(enableCmdQR=2)
-</code></pre>
-<p>默认控制台背景色为暗色（黑色），若背景色为浅色（白色），可以将enableCmdQR赋值为负值：</p>
-<pre><code class="language-python">itchat.auto_login(enableCmdQR=-1)
-</code></pre>
-<h3 id="退出程序后暂存登陆状态">退出程序后暂存登陆状态</h3>
-<p>通过如下命令登陆，即使程序关闭，一定时间内重新开启也可以不用重新扫码。</p>
-<pre><code class="language-python">itchat.auto_login(hotReload=True)
-</code></pre>
-<h3 id="用户搜索">用户搜索</h3>
-<p>使用<code>search_friends</code>方法可以搜索用户，有四种搜索方式：</p>
-<ol>
-<li>仅获取自己的用户信息</li>
-<li>获取特定<code>UserName</code>的用户信息</li>
-<li>获取备注、微信号、昵称中的任何一项等于<code>name</code>键值的用户</li>
-<li>获取备注、微信号、昵称分别等于相应键值的用户</li>
-</ol>
-<p>其中三、四项可以一同使用，下面是示例程序：</p>
-<pre><code class="language-python"># 获取自己的用户信息，返回自己的属性字典
-itchat.search_friends()
-# 获取特定UserName的用户信息
-itchat.search_friends(userName='@abcdefg1234567')
-# 获取任何一项等于name键值的用户
-itchat.search_friends(name='littlecodersh')
-# 获取分别对应相应键值的用户
-itchat.search_friends(wechatAccount='littlecodersh')
-# 三、四项功能可以一同使用
-itchat.search_friends(name='LittleCoder机器人', wechatAccount='littlecodersh')
-</code></pre>
-<p>关于公众号、群聊的获取与搜索在文档中有更加详细的介绍。</p>
-<h3 id="附件的下载与发送">附件的下载与发送</h3>
-<p>itchat的附件下载方法存储在msg的Text键中。</p>
-<p>发送的文件的文件名（图片给出的默认文件名）都存储在msg的FileName键中。</p>
-<p>下载方法接受一个可用的位置参数（包括文件名），并将文件相应的存储。</p>
-<pre><code class="language-python">@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
-def download_files(msg):
-    msg.download(msg.fileName)
-    itchat.send('@%s@%s' % (
-        'img' if msg['Type'] == 'Picture' else 'fil', msg['FileName']),
-        msg['FromUserName'])
-    return '%s received' % msg['Type']
-</code></pre>
-<p>如果你不需要下载到本地，仅想要读取二进制串进行进一步处理可以不传入参数，方法将会返回图片的二进制串。</p>
-<pre><code class="language-python">@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
-def download_files(msg):
-    with open(msg.fileName, 'wb') as f:
-        f.write(msg.download())
-</code></pre>
-<h3 id="用户多开">用户多开</h3>
-<p>使用如下命令可以完成多开的操作：</p>
-<pre><code class="language-python">import itchat
-
-newInstance = itchat.new_instance()
-newInstance.auto_login(hotReload=True, statusStorageDir='newInstance.pkl')
-
-@newInstance.msg_register(itchat.content.TEXT)
-def reply(msg):
-    return msg.text
-
-newInstance.run()
-</code></pre>
-<h3 id="退出及登陆完成后调用特定方法">退出及登陆完成后调用特定方法</h3>
-<p>登陆完成后的方法需要赋值在<code>loginCallback</code>中。</p>
-<p>而退出后的方法需要赋值在<code>exitCallback</code>中。</p>
-<pre><code class="language-python">import time
-
-import itchat
-
-def lc():
-    print('finish login')
-def ec():
-    print('exit')
-
-itchat.auto_login(loginCallback=lc, exitCallback=ec)
-time.sleep(3)
-itchat.logout()
-</code></pre>
-<p>若不设置loginCallback的值，则将会自动删除二维码图片并清空命令行显示。</p>
-<h2 id="常见问题与解答">常见问题与解答</h2>
-<p>Q: 为什么中文的文件没有办法上传？</p>
-<p>A: 这是由于<code>requests</code>的编码问题导致的。若需要支持中文文件传输，将[fields.py]<a href="py3%E7%89%88%E6%9C%AC%E8%A7%81%5B%E8%BF%99%E9%87%8C%5D%5Bfields.py-3%5D">fields.py-2</a>文件放入requests包的packages/urllib3下即可</p>
-<p>Q: 如何通过这个包将自己的微信号变为控制器？</p>
-<p>A: 有两种方式：发送、接受自己UserName的消息；发送接收文件传输助手（filehelper）的消息</p>
-<p>Q: 为什么我发送信息的时候部分信息没有成功发出来？</p>
-<p>A: 有些账号是天生无法给自己的账号发送信息的，建议使用<code>filehelper</code>代替。</p>
 ]]></content>
     </entry>
 </feed>
