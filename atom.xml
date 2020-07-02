@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mzqk.github.io</id>
     <title>MZZZ</title>
-    <updated>2020-06-02T07:28:32.294Z</updated>
+    <updated>2020-07-02T07:42:57.008Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mzqk.github.io"/>
     <link rel="self" href="https://mzqk.github.io/atom.xml"/>
@@ -42,15 +42,18 @@ unixODBC-devel pcre-devel –y
 setenforce 0
 </code></pre>
 <ol start="2">
-<li>修改系统参数</li>
+<li>修改系统参数（可选）</li>
 </ol>
 <blockquote>
 <p>/etc/sysctl.conf</p>
 </blockquote>
 <pre><code class="language-vim">fs.aio-max-nr = 1048576
 fs.file-max = 6815744
-kernel.shmall = 2097152
-kernel.shmmax = 1073741824 #kernel.shmmax 为本机物理内存的一半，单位为byte。
+#若安装数据库有ORA-27102报错，可调大kernel.shmall、kernel.shmmax值
+kernel.shmall = 4294967296
+#shmall 是全部允许使用的共享内存大小
+kernel.shmmax = 68719476736 
+#shmmax 是单个段允许使用的大小，为本机物理内存的一半，单位为byte。
 kernel.shmmni = 4096
 kernel.sem = 250 32000 100 128
 net.ipv4.ip_local_port_range = 9000 65500
@@ -62,7 +65,7 @@ net.core.wmem_max = 1048576
 <pre><code class="language-bash">sysctl -p
 </code></pre>
 <ol start="3">
-<li>修改用户限制</li>
+<li>修改用户限制（可选）</li>
 </ol>
 <blockquote>
 <p>/etc/security/limits.conf</p>
@@ -100,15 +103,11 @@ fi
 </ol>
 <pre><code class="language-bash"># 目录与配置文件相关，请按需修改
 mkdir -p /data/oracle/product/11.2.0
-
 mkdir /data/oracle/oradata
-
 mkdir /data/oracle/inventory
-
 mkdir /data/oracle/fast_recovery_area
 
 chown -R oracle:oinstall /data/oracle
-
 chmod -R 775 /data/oracle
 </code></pre>
 <ol start="2">
@@ -148,6 +147,9 @@ oracle.install.db.config.starterdb.characterSet=ZHS16GBK
 DECLINE_SECURITY_UPDATES=true
 </code></pre>
 <h3 id="库实例响应文件">库实例响应文件</h3>
+<blockquote>
+<p>dbca.rsp</p>
+</blockquote>
 <pre><code class="language-vim"># 选择创建数据库模式
 [CREATEDATABASE]
 
@@ -174,8 +176,12 @@ TOTALMEMORY = &quot;1638&quot;
 </code></pre>
 <h2 id="软件安装与卸载">软件安装与卸载</h2>
 <h3 id="安装数据库">安装数据库</h3>
-<pre><code class="language-bash">database/runInstaller -silent -responseFile /database/response/db_install.rsp -ignorePrereq
+<pre><code class="language-bash"># 使用oracle用户
+./runInstaller -silent -responseFile /database/response/db_install.rsp -ignorePrereq
 </code></pre>
+<p>以 root 用户的身份执行以下脚本:<br>
+1. /data/oracle/inventory/orainstRoot.sh<br>
+2. /data/oracle/product/11.2.0/root.sh</p>
 <h3 id="配置监听">配置监听</h3>
 <pre><code class="language-bash"># 使用oracle用户
 netca /silent /responseFile /database/response/netca.rsp
@@ -185,7 +191,20 @@ netca /silent /responseFile /database/response/netca.rsp
 dbca -silent -responseFile /database/response/dbca.rsp
 </code></pre>
 <h3 id="卸载数据库">卸载数据库</h3>
-<pre><code class="language-bash">dbca -silent -delete Database -responseFile /database/response/dbca.rsp
+<pre><code class="language-bash">dbca -silent -deleteDatabase -responseFile /database/response/dbca.rsp
+</code></pre>
+<h2 id="常见问题处理">常见问题处理</h2>
+<ol>
+<li>ORA-12514: TNS:listener does not currently know of service requested in connect<br>
+修改文件/data/oracle/product/11.2.0/network/admin/listener.ora</li>
+</ol>
+<pre><code class="language-vim">SID_LIST_LISTENER =  
+(SID_LIST =  
+  (SID_DESC =  
+  (GLOBAL_DBNAME = orcl)
+  (SID_NAME = orcl)
+  )
+)
 </code></pre>
 ]]></content>
     </entry>
