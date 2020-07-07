@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mzqk.github.io</id>
     <title>MZZZ</title>
-    <updated>2020-07-03T02:46:34.776Z</updated>
+    <updated>2020-07-07T01:47:10.158Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mzqk.github.io"/>
     <link rel="self" href="https://mzqk.github.io/atom.xml"/>
@@ -10,6 +10,198 @@
     <logo>https://mzqk.github.io/images/avatar.png</logo>
     <icon>https://mzqk.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, MZZZ</rights>
+    <entry>
+        <title type="html"><![CDATA[用 Docker 部署 Seafile 服务]]></title>
+        <id>https://mzqk.github.io/post/yong-docker-bu-shu-seafile-fu-wu/</id>
+        <link href="https://mzqk.github.io/post/yong-docker-bu-shu-seafile-fu-wu/">
+        </link>
+        <updated>2020-06-17T01:44:39.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="用-docker-部署-seafile-服务">用 Docker 部署 Seafile 服务</h1>
+<h2 id="快速开始">快速开始</h2>
+<h3 id="安装-docker-compose">安装 docker-compose</h3>
+<p>因为 Seafile v7.x.x 容器是通过 docker-compose 命令运行的，所以您应该先在服务器上安装该命令。</p>
+<pre><code class="language-bash"># for CentOS
+yum install docker-compose -y
+
+# for Ubuntu
+apt-get install docker-compose -y
+
+</code></pre>
+<h3 id="下载并修改-docker-composeyml">下载并修改 docker-compose.yml</h3>
+<p>下载 <a href="https://docs.seafile.com/d/cb1d3f97106847abbf31/files/?p=/docker/pro-edition/docker-compose.yml">docker-compose.yml</a> 示例文件到您的服务器上，然后根据您的实际环境修改该文件。尤其是以下几项配置：</p>
+<ul>
+<li>MySQL root 用户的密码 (MYSQL_ROOT_PASSWORD and DB_ROOT_PASSWD)</li>
+<li>持久化存储 MySQL 数据的 volumes 目录 (volumes)</li>
+<li>持久化存储 Seafile 数据的 volumes 目录 (volumes)</li>
+<li>持久化存储 Elasticsearch 索引数据的 volumes 目录 (volumes)</li>
+</ul>
+<h3 id="启动-seafile-服务">启动 Seafile 服务</h3>
+<p>执行以下命令启动 Seafile 服务</p>
+<pre><code class="language-bash">docker-compose up -d
+
+</code></pre>
+<p>需要等待几分钟，等容器首次启动时的初始化操作完成后，您就可以在浏览器上访问<code>http://seafile.example.com</code> 来打开 Seafile 主页。</p>
+<p>**注意：您应该在 **<code>docker-compose.yml</code><strong>文件所在的目下执行以上命令。</strong></p>
+<h3 id="安装授权文件seafile-licensetxt">安装授权文件(seafile-license.txt)</h3>
+<p>如果您已经向 Seafile 软件商购买了专业版的授权文件<code>seafile-license.txt</code>，您只需要将该授权文件拷贝至 Seafile 数据持久化目录中的<code>seafile/</code>目录下，然后重启docker容器，即可完成授权文件的安装。 假如，Seafile 数据持久化目录为<code>/opt/seafile-data</code>，那么，在您的宿主机上执行以下操作：</p>
+<pre><code>cp /path/to/seafile-license.txt /opt/seafile-data/seafile/
+
+</code></pre>
+<p>然后重启这个容器：</p>
+<pre><code>docker-compose restart
+
+</code></pre>
+<h2 id="更多配置项">更多配置项</h2>
+<h3 id="自定义管理员用户名和密码">自定义管理员用户名和密码</h3>
+<p>默认的管理员账号是 <code>me@example.com</code> 并且该账号的密码是 <code>asecret</code>，您可以在 <code>docker-compose.yml</code> 中配置不同的用户名和密码，为此您需要做如下配置：</p>
+<pre><code>seafile:
+    ...
+
+    environment:
+        ...
+        - SEAFILE_ADMIN_EMAIL=me@example.com
+        - SEAFILE_ADMIN_PASSWORD=a_very_secret_password
+        ...
+
+</code></pre>
+<h3 id="使用-lets-encrypt-ssl-证书">使用 Let's encrypt SSL 证书</h3>
+<p>如果您把 <code>SEAFILE_SERVER_LETSENCRYPT</code> 设置为 <code>true</code>，该容器将会自动为您申请一个 letsencrypt 机构颁发的 SSL 证书，并开启 https 访问，为此您需要做如下配置：</p>
+<pre><code>seafile:
+    ...
+    ports:
+        - &quot;80:80&quot;
+        - &quot;443:443&quot;
+    ...
+    environment:
+        ...
+        - SEAFILE_SERVER_LETSENCRYPT=true
+        - SEAFILE_SERVER_HOSTNAME=seafile.example.com
+        ...
+
+</code></pre>
+<p>如果您想要使用自己的 SSL 证书，而且如果用来持久化存储 Seafile 数据的目录为 <code>/opt/seafile-data</code>，您可以做如下处理：</p>
+<ul>
+<li>创建 <code>/opt/seafile-data/ssl</code> 目录，然后拷贝您的证书文件和密钥文件到ssl目录下。</li>
+<li>假设您的站点名称是 <code>seafile.example.com</code>，那么您的证书名称必须就是 <code>seafile.example.com.crt</code>，密钥文件名称就必须是 <code>seafile.example.com.key</code>。</li>
+</ul>
+<h3 id="修改-seafile-服务的配置">修改 Seafile 服务的配置</h3>
+<p>Seafile 的配置文件存放在 <code>shared/seafile/conf</code> 目录下，您可以根据<a href="https://manual-cn.seafile.com/">Seafile 手册</a>的指导来修改这些配置项。</p>
+<p>一旦修改了配置文件，您需要重启服务以使其生效：</p>
+<pre><code class="language-bash">docker-compose restart
+
+</code></pre>
+<h3 id="查找日志">查找日志</h3>
+<p>Seafile 容器中 Seafile 服务本身的日志文件存放在 <code>/shared/logs/seafile</code> 目录下，或者您可以在宿主机上 Seafile 容器的卷目录中找到这些日志，例如：<code>/opt/seafile-data/logs/seafile</code></p>
+<p>同样 Seafile 容器的系统日志存放在 <code>/shared/logs/var-log</code> 目录下，或者宿主机目录 <code>/opt/seafile-data/logs/var-log</code>。</p>
+<h3 id="增加一个新的管理员">增加一个新的管理员</h3>
+<p>确保各容器正常运行，然后执行以下命令：</p>
+<pre><code class="language-bash">docker exec -it seafile /opt/seafile/seafile-server-latest/reset-admin.sh
+
+</code></pre>
+<p>根据提示输入用户名和密码，您现在有了一个新的管理帐户。</p>
+<h2 id="seafile-目录结构">Seafile 目录结构</h2>
+<h3 id="shared"><code>/shared</code></h3>
+<p>共享卷的挂载点,您可以选择在容器外部存储某些持久性信息.在这个项目中，我们会在外部保存各种日志文件和上传数据。 这使您可以轻松重建容器而不会丢失重要信息。</p>
+<ul>
+<li>/shared/seafile: Seafile 服务的配置文件以及数据文件</li>
+<li>/shared/logs: 日志目录
+<ul>
+<li>/shared/logs/var-log: 我们将容器内的<code>/var/log</code>链接到本目录。您可以在<code>/shared/logs/var-log/nginx/</code>中找到 nginx 的日志文件</li>
+<li>/shared/logs/seafile: Seafile 服务运行产生的日志文件目录。比如您可以在 <code>/shared/logs/seafile/seafile.log</code> 文件中看到 seaf-server 的日志</li>
+</ul>
+</li>
+<li>/shared/ssl: 存放证书的目录，默认不存在</li>
+</ul>
+<h3 id="升级-seafile-服务">升级 Seafile 服务</h3>
+<p>如果要升级 Seafile 服务到最新版本：</p>
+<pre><code class="language-sh">docker pull docker.seafile.top/seafileltd/seafile-pro-mc:latest
+docker-compose down
+docker-compose up -d
+
+</code></pre>
+<h2 id="备份和恢复">备份和恢复</h2>
+<h3 id="目录结构">目录结构</h3>
+<p>我们假设您的 seafile 数据卷路径是 <code>/opt/seafile-data</code>，并且您想将备份数据存放到 <code>/opt/seafile-backup</code> 目录下。</p>
+<p>您可以创建一个类似以下 <code>/opt/seafile-backup</code> 的目录结构：</p>
+<pre><code class="language-struct">/opt/seafile-backup
+---- databases/  用来存放 MySQL 容器的备份数据
+---- data/  用来存放 Seafile 容器的备份数据
+
+</code></pre>
+<p>要备份的数据文件：</p>
+<pre><code class="language-struct">/opt/seafile-data/seafile/conf  # configuration files
+/opt/seafile-data/seafile/seafile-data # data of seafile
+/opt/seafile-data/seafile/seahub-data # data of seahub
+
+</code></pre>
+<h3 id="备份数据">备份数据</h3>
+<p>步骤：</p>
+<ol>
+<li>备份 MySQL 数据库数据；</li>
+<li>备份 Seafile 数据目录；</li>
+</ol>
+<ul>
+<li>
+<p>备份数据库：</p>
+<pre><code class="language-bash"># 建议每次将数据库备份到一个单独的文件中。至少在一周内不要覆盖旧的数据库备份。
+cd /opt/seafile-backup/databases
+docker exec -it seafile-mysql mysqldump  -uroot --opt ccnet_db &gt; ccnet_db.sql
+docker exec -it seafile-mysql mysqldump  -uroot --opt seafile_db &gt; seafile_db.sql
+docker exec -it seafile-mysql mysqldump  -uroot --opt seahub_db &gt; seahub_db.sql
+
+</code></pre>
+</li>
+<li>
+<p>备份 Seafile 资料库数据：</p>
+<ul>
+<li>
+<p>直接复制整个数据目录</p>
+<pre><code class="language-bash">cp -R /opt/seafile-data/seafile /opt/seafile-backup/data/
+cd /opt/seafile-backup/data &amp;&amp; rm -rf ccnet
+
+</code></pre>
+</li>
+<li>
+<p>使用 rsync 执行增量备份</p>
+<pre><code class="language-bash">rsync -az /opt/seafile-data/seafile /opt/seafile-backup/data/
+cd /opt/seafile-backup/data &amp;&amp; rm -rf ccnet
+
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="恢复数据">恢复数据</h3>
+<ul>
+<li>
+<p>恢复数据库：</p>
+<pre><code class="language-bash">docker cp /opt/seafile-backup/databases/ccnet_db.sql seafile-mysql:/tmp/ccnet_db.sql
+docker cp /opt/seafile-backup/databases/seafile_db.sql seafile-mysql:/tmp/seafile_db.sql
+docker cp /opt/seafile-backup/databases/seahub_db.sql seafile-mysql:/tmp/seahub_db.sql
+
+docker exec -it seafile-mysql /bin/sh -c &quot;mysql -uroot ccnet_db &lt; /tmp/ccnet_db.sql&quot;
+docker exec -it seafile-mysql /bin/sh -c &quot;mysql -uroot seafile_db &lt; /tmp/seafile_db.sql&quot;
+docker exec -it seafile-mysql /bin/sh -c &quot;mysql -uroot seahub_db &lt; /tmp/seahub_db.sql&quot;
+
+</code></pre>
+</li>
+<li>
+<p>恢复 seafile 数据：</p>
+<pre><code class="language-bash">cp -R /opt/seafile-backup/data/* /opt/seafile-data/seafile/
+
+</code></pre>
+</li>
+</ul>
+<h2 id="垃圾回收">垃圾回收</h2>
+<p>在 seafile 中，当文件被删除时，组成这些文件的块数据不会立即删除，因为可能有其他文件也会引用这些块数据(用于去重功能的实现)。为了真正删除无用的块数据，还需要额外运行&quot;<a href="https://manual-cn.seafile.com/maintain/seafile_gc.html">GC</a>&quot;程序。GC 会自动检测到哪些数据块不再被任何文件所引用，并清除它们。</p>
+<p>GC 脚本被放在docker容器的 <code>/scripts</code> 目录下。执行 GC 的方法很简单：<code>docker exec seafile /scripts/gc.sh</code>。对于社区版来说，该程序会暂停 Seafile 服务，但这是一个相对较快的程序，一旦程序运行完成，Seafile 服务也会自动重新启动。而专业版提供了在线运行 GC 的功能，不会暂停 Seafile 服务。</p>
+<h2 id="问题排查">问题排查</h2>
+<p>您可以运行 <code>docker exec</code> 之类的docker命令来查找错误。</p>
+<pre><code class="language-sh">docker exec -it seafile /bin/bash
+
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Oracle 安装]]></title>
         <id>https://mzqk.github.io/post/oracle-an-zhuang/</id>
@@ -205,6 +397,1244 @@ dbca -silent -responseFile /database/response/dbca.rsp
   (SID_NAME = orcl)
   )
 )
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Nginx入门]]></title>
+        <id>https://mzqk.github.io/post/nginx-ji-chu-ru-men/</id>
+        <link href="https://mzqk.github.io/post/nginx-ji-chu-ru-men/">
+        </link>
+        <updated>2019-12-25T01:35:17.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="nginx入门">Nginx入门</h1>
+<h2 id="nginx简介">Nginx简介</h2>
+<h3 id="简介">简介</h3>
+<p>Nginx 是一款轻量级的 Web 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器，其特点是占有内存少，并发能力强。</p>
+<h3 id="特点">特点</h3>
+<ol>
+<li>高并发</li>
+<li>内存消耗少</li>
+<li>成本低廉</li>
+<li>配置简单</li>
+<li>内置健康检查功能</li>
+<li>节省带宽</li>
+<li>稳定性高</li>
+<li>支持热部署</li>
+</ol>
+<h3 id="常见web服务器">常见WEB服务器</h3>
+<ul>
+<li>
+<p>Apache</p>
+</li>
+<li>
+<p>Lighttpd</p>
+</li>
+<li>
+<p>Tomcat</p>
+</li>
+<li>
+<p>Tengine</p>
+</li>
+<li>
+<p>IBM WebSphere</p>
+</li>
+<li>
+<p>IIS</p>
+</li>
+<li>
+<p>LVS</p>
+</li>
+<li>
+<p>HAProxy</p>
+</li>
+</ul>
+<h2 id="nginx安装">Nginx安装</h2>
+<h3 id="在线安装">在线安装</h3>
+<h4 id="linux">Linux</h4>
+<p>apt install nginx</p>
+<p>yum install nginx</p>
+<p>查询默认配置文件<br>
+nginx -t</p>
+<h4 id="windows">Windows</h4>
+<p>官网下载ngixn文件解压至制定目录</p>
+<h3 id="源码安装">源码安装</h3>
+<ol>
+<li>下载源码包（包含基础依赖包，如prce库）</li>
+<li>./configure 根据需求进行配置</li>
+<li>make install 指定目录安装</li>
+</ol>
+<pre><code class="language-shell">wget http://nginx.org/download/nginx-1.16.1.tar.gz
+tar -zxvf nginx-1.16.1.tar.gz
+./configure
+    --sbin-path=/usr/local/nginx/nginx
+    --conf-path=/usr/local/nginx/nginx.conf
+    --pid-path=/usr/local/nginx/nginx.pid
+    --with-http_ssl_module
+make &amp;&amp; make install
+</code></pre>
+<p><a href="http://nginx.org/en/docs/configure.html">官方编译参数</a></p>
+<h2 id="nginx基础">Nginx基础</h2>
+<h3 id="基础使用">基础使用</h3>
+<h4 id="启动">启动</h4>
+<pre><code class="language-shell">nginx #正常启动应用
+nginx -c /etc/nginx/conf/nginx.conf #指定配置文件启动 
+</code></pre>
+<h4 id="停止">停止</h4>
+<pre><code class="language-shell">nginx -s stop #停止nginx应用
+pkill -9 nginx #停止nginx所有进程
+kill -INT `cat /run/nginx.pid` #指定pid发起停止信号
+</code></pre>
+<h4 id="平滑重启">平滑重启</h4>
+<pre><code class="language-shell">nginx -s reload #重启应用
+kill -HUP `cat /run/nginx.pid` #指定pid发起重启信号
+</code></pre>
+<h3 id="基础配置">基础配置</h3>
+<h4 id="目录结构">目录结构</h4>
+<pre><code>/etc/nginx/
+├── conf.d
+├── default.d
+├── fastcgi.conf
+├── fastcgi.conf.default
+├── fastcgi_params
+├── fastcgi_params.default
+├── koi-utf
+├── koi-win
+├── mime.types
+├── mime.types.default
+├── nginx.conf
+├── nginx.conf.default
+├── nginx.conf.rpmnew
+├── scgi_params
+├── scgi_params.default
+├── uwsgi_params
+├── uwsgi_params.default
+└── win-utf
+</code></pre>
+<pre><code>/usr/share/nginx/
+├── html
+│   ├── 404.html
+│   ├── 50x.html
+│   ├── 50x.html_bak
+│   ├── en-US -&gt; ../../doc/HTML/en-US
+│   ├── icons
+│   │   └── poweredby.png -&gt; ../../../pixmaps/poweredby.png
+│   ├── img -&gt; ../../doc/HTML/img
+│   ├── index.html -&gt; ../../doc/HTML/index.html
+│   ├── index.html_bak
+│   ├── nginx-logo.png
+│   └── poweredby.png -&gt; nginx-logo.png
+└── modules
+    ├── mod-http-image-filter.conf
+    ├── mod-http-perl.conf
+    ├── mod-http-xslt-filter.conf
+    ├── mod-mail.conf
+    └── mod-stream.conf
+</code></pre>
+<pre><code>/var/log/nginx/
+├── access.log
+└── error.log
+
+/run/nginx.pid 
+</code></pre>
+<h4 id="配置文件">配置文件</h4>
+<pre><code class="language-shell">#主配置
+user www www; #使用用户和组
+worker_processes auto; #工作进程数
+error_log /var/log/nginx/error.log; #错误日志保存位置
+pid /run/nginx.pid; #进程pid存放位置
+
+include /usr/share/nginx/modules/*.conf;  #模块加载目录
+#事件模型
+events {
+    worker_connections 1024; #最大连接数
+}
+#http服务器
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] &quot;$request&quot; '
+                      '$status $body_bytes_sent &quot;$http_referer&quot; '
+                      '&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;'; #日志输出格式
+
+    access_log  /var/log/nginx/access.log  main; #标准日志保存位置
+
+    sendfile            on; #开启高效文件传输模式，对于普通应用设为 on，如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络I/O处理速度，降低系统的负载。注意：如果图片显示不正常把这个改成off。
+    tcp_nopush          on;	#此选项允许或禁止使用socke的TCP_CORK的选项，此选项仅在使用sendfile的时候使用
+    tcp_nodelay         on; #将连接转变为长连接
+    keepalive_timeout   65; #长连接超时时间，单位是秒
+    types_hash_max_size 2048; 
+
+    include             /etc/nginx/mime.types; #设定mime类型,类型由mime.type文件定义
+    default_type        application/octet-stream; 
+
+    include /etc/nginx/conf.d/*.conf; #加载其他配置文件
+    # 虚拟主机
+    server {
+        listen       80 default_server;
+        listen       [::]:80 default_server; #监听端口
+        server_name  _;  #域名，可以有多个
+        root         /usr/share/nginx/html; #web服务器根目录
+
+        include /etc/nginx/default.d/*.conf; #加载其他配置文件
+
+        location / {
+            proxy_pass        http://127.0.0.1/;
+            proxy_set_header   Host             $host;
+            proxy_set_header   X-Real-IP        $remote_addr;
+            proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for; #获取用户真实IP
+        }
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+}
+</code></pre>
+<h3 id="基础优化">基础优化</h3>
+<h4 id="日志文件配置">日志文件配置</h4>
+<pre><code class="language-shell">#!/bin/bash
+#脚本用于切割nginx日志文件
+#请配置脚本为每天00:00启动
+#crontab -e 00 00 * * * /bin/bash /root/spilt_nginx_log.sh
+
+#设置nginx日志文件目录
+log_path=&quot;/var/log/nginx/&quot;
+
+#根据时间切割日志文件
+mkdir -p ${log_path}${date -d &quot;yesterday&quot; +&quot;%Y%m&quot;}
+mv ${log_path}access.log ${log_path}${date -d &quot;yesterday&quot; +&quot;%Y%m&quot;}/access_${date -d &quot;yesterday&quot; +&quot;%Y%m%d&quot;}.log
+
+#重启nginx
+kill -HUP `cat /run/nginx.pid`
+</code></pre>
+<h4 id="压缩输出配置">压缩输出配置</h4>
+<pre><code>gzip on;
+gzip_mini_length 1k;
+gzip_buffer 4 16k;
+gzip_http_version 1.1;
+gzip_comp_level 2;
+gzip_tesxt_plain application/x-javascript text/css application/xml;
+gzip_vary on;
+</code></pre>
+<h4 id="缓存配置">缓存配置</h4>
+<pre><code>location ~ .*\.{git|jpg|jpeg|png|bmp|swf}$
+{
+    expires 30d;
+}
+location ~ .*\.{js|css}?$
+{
+    expires 1h;
+}
+</code></pre>
+<h4 id="url重写">URL重写</h4>
+<pre><code>#根据浏览器标识，访问资源重定向到指定文件目录（以下为IE)
+if ($http_user_agent ~ MSIE ) {
+   rewrite ^(.*)$ /msie/$1 break;
+}
+
+#将移动客户端的请求重定向到其他服务器
+if    ($http_user_agent ~* '(iphone|ipod)' )  { 
+　　　　rewrite ^.+    http://mobile.site.com$uri;
+}
+
+#.用户使用POST方式请求数据时候，返回405：
+if ($request_method = POST ) {
+   return 405;
+}
+
+#访问xxxx时重定向到xxxx目录
+location /xxxx {
+     rewrite ^/xxxx/.*$ /xxxx permanent;
+}
+</code></pre>
+<h2 id="nginx常用功能">Nginx常用功能</h2>
+<h3 id="反向代理">反向代理</h3>
+<pre><code class="language-shell"> http{
+ 	server{
+        listen       80;
+        server_name  localhost;
+        location / { 
+        proxy_pass http://localhost:8080;     
+ 	}
+ }
+</code></pre>
+<h3 id="负载均衡">负载均衡</h3>
+<p><a href="http://nginx.org/en/docs/http/load_balancing.html">官方说明</a></p>
+<pre><code class="language-shell">http {
+ upstream myproject {
+ server 127.0.0.1:8000 weight=3;
+ server 127.0.0.1:8001;
+ server 127.0.0.1:8002;
+ server 127.0.0.1:8003;
+ }
+ 	server {
+ 	listen 80;
+	 server_name www.domain.com;
+ 	location / {
+ 		proxy_pass http://myproject;
+ 		}
+ 	}
+}
+</code></pre>
+<h3 id="正向代理">正向代理</h3>
+<pre><code class="language-shell">http{
+    server{
+        listen 8888;
+        location / {
+            resolver 8.8.8.8;
+            proxy_pass	http://$http_host$request_uri;
+        }
+    }
+}
+</code></pre>
+<h3 id="http服务器ssl">HTTP服务器（SSL）</h3>
+<p><a href="http://nginx.org/en/docs/http/configuring_https_servers.html">官方说明</a></p>
+<pre><code class="language-shell">http {
+  server {
+    listen	443;
+    server_name	localhost;
+    ssl	on;
+    ssl_certificate      /usr/local/nginx/conf/cert.pem;
+    ssl_certificate_key  /usr/local/nginx/conf/cert.key;
+  }
+}
+</code></pre>
+<h3 id="文件服务器">文件服务器</h3>
+<pre><code class="language-shell">http{
+    server{
+        listen 80;
+        server_name localhost;
+        root /usr/share/nginx/html/;
+    }
+}
+</code></pre>
+<h3 id="缓存服务器">缓存服务器</h3>
+<pre><code>http{
+	upstream myproject {
+        server 192.168.1.112:8001;
+        server 192.168.1.112:8002;
+        server 192.168.1.112:8003;
+    	}
+
+	proxy_buffering on;
+	proxy_cache_valid any 10m;
+	proxy_cache_path /data/cache levels=1:2 keys_zone=my_cache:10m max_size=1000m inactive=600m;
+	proxy_temp_path /data/temp;
+	proxy_buffer_size 4k;
+	proxy_buffers 100 8k;
+
+	server {
+    	listen       80;
+    	server_name  localhost jeson.t.imooc.io; 
+    	location / {
+        	proxy_cache my_cache;  #开启缓存
+       		proxy_pass http://myproject;
+            proxy_cache_key $host$uri$is_args$args; #定义缓存的key
+    }
+}
+</code></pre>
+<h2 id="nginx模块">Nginx模块</h2>
+<h3 id="http模块">HTTP模块</h3>
+<ul>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_core_module.html">ngx_http_core_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_access_module.html">ngx_http_access_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_addition_module.html">ngx_http_addition_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_api_module.html">ngx_http_api_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_auth_basic_module.html">ngx_http_auth_basic_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_auth_jwt_module.html">ngx_http_auth_jwt_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_auth_request_module.html">ngx_http_auth_request_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_autoindex_module.html">ngx_http_autoindex_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_browser_module.html">ngx_http_browser_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_charset_module.html">ngx_http_charset_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_dav_module.html">ngx_http_dav_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_empty_gif_module.html">ngx_http_empty_gif_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_f4f_module.html">ngx_http_f4f_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html">ngx_http_fastcgi_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_flv_module.html">ngx_http_flv_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_geo_module.html">ngx_http_geo_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_geoip_module.html">ngx_http_geoip_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_grpc_module.html">ngx_http_grpc_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_gunzip_module.html">ngx_http_gunzip_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_gzip_module.html">ngx_http_gzip_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_gzip_static_module.html">ngx_http_gzip_static_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_headers_module.html">ngx_http_headers_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_hls_module.html">ngx_http_hls_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_image_filter_module.html">ngx_http_image_filter_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_index_module.html">ngx_http_index_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_js_module.html">ngx_http_js_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_keyval_module.html">ngx_http_keyval_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_limit_conn_module.html">ngx_http_limit_conn_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_limit_req_module.html">ngx_http_limit_req_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_log_module.html">ngx_http_log_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_map_module.html">ngx_http_map_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_memcached_module.html">ngx_http_memcached_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_mirror_module.html">ngx_http_mirror_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_mp4_module.html">ngx_http_mp4_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_perl_module.html">ngx_http_perl_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_proxy_module.html">ngx_http_proxy_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_random_index_module.html">ngx_http_random_index_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_realip_module.html">ngx_http_realip_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_referer_module.html">ngx_http_referer_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_rewrite_module.html">ngx_http_rewrite_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_scgi_module.html">ngx_http_scgi_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_secure_link_module.html">ngx_http_secure_link_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_session_log_module.html">ngx_http_session_log_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_slice_module.html">ngx_http_slice_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_spdy_module.html">ngx_http_spdy_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_split_clients_module.html">ngx_http_split_clients_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_ssi_module.html">ngx_http_ssi_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_ssl_module.html">ngx_http_ssl_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_status_module.html">ngx_http_status_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_stub_status_module.html">ngx_http_stub_status_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_sub_module.html">ngx_http_sub_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_upstream_module.html">ngx_http_upstream_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_upstream_conf_module.html">ngx_http_upstream_conf_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_upstream_hc_module.html">ngx_http_upstream_hc_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_userid_module.html">ngx_http_userid_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_uwsgi_module.html">ngx_http_uwsgi_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_v2_module.html">ngx_http_v2_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_xslt_module.html">ngx_http_xslt_module</a></li>
+</ul>
+<h3 id="邮箱模块">邮箱模块</h3>
+<ul>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_core_module.html">ngx_mail_core_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_auth_http_module.html">ngx_mail_auth_http_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_proxy_module.html">ngx_mail_proxy_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_ssl_module.html">ngx_mail_ssl_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_imap_module.html">ngx_mail_imap_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_pop3_module.html">ngx_mail_pop3_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_smtp_module.html">ngx_mail_smtp_module</a></li>
+</ul>
+<h3 id="strean模块">Strean模块</h3>
+<ul>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_core_module.html">ngx_stream_core_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_access_module.html">ngx_stream_access_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_geo_module.html">ngx_stream_geo_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_geoip_module.html">ngx_stream_geoip_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_js_module.html">ngx_stream_js_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_keyval_module.html">ngx_stream_keyval_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_limit_conn_module.html">ngx_stream_limit_conn_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_log_module.html">ngx_stream_log_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_map_module.html">ngx_stream_map_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_proxy_module.html">ngx_stream_proxy_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_realip_module.html">ngx_stream_realip_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_return_module.html">ngx_stream_return_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_split_clients_module.html">ngx_stream_split_clients_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_ssl_module.html">ngx_stream_ssl_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_ssl_preread_module.html">ngx_stream_ssl_preread_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_upstream_module.html">ngx_stream_upstream_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_upstream_hc_module.html">ngx_stream_upstream_hc_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_zone_sync_module.html">ngx_stream_zone_sync_module</a></li>
+</ul>
+<h2 id="slb实例">SLB实例</h2>
+<h3 id="产品架构">产品架构</h3>
+<h4 id="基础架构说明">基础架构说明</h4>
+<p>阿里云当前提供四层和七层的负载均衡服务。</p>
+<ul>
+<li>四层采用开源软件LVS（Linux Virtual Server）+ keepalived的方式实现负载均衡，并根据云计算需求对其进行了个性化定制。</li>
+<li>七层采用Tengine实现负载均衡。Tengine是由淘宝网发起的Web服务器项目，它在Nginx的基础上，针对有大访问量的网站需求，添加了很多高级功能和特性。<br>
+<a href="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4092/1566871290938_zh-CN.png"><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4092/1566871290938_zh-CN.png" alt="Tengine" loading="lazy"></a></li>
+</ul>
+<p>如下图所示，各个地域的四层负载均衡实际上是由多台LVS机器部署成一个LVS集群来运行的。采用集群部署模式极大地保证了异常情况下负载均衡服务的可用性、稳定性与可扩展性。</p>
+<figure data-type="image" tabindex="1"><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4092/1566871290939_zh-CN.png" alt="LVS" loading="lazy"></figure>
+<p>LVS集群内的每台LVS都会进行会话，通过组播报文同步到该集群内的其它LVS机器上，从而实现LVS集群内各台机器间的会话同步。如下图所示，当客户端向服务端传输三个数据包后，在LVS1上建立的会话A开始同步到其它LVS机器上。图中实线表示现有的连接，图中虚线表示当LVS1出现故障或进行维护时，这部分流量会走到一台可以正常运行的机器LVS2上。因而负载均衡集群支持热升级，并且在机器故障和集群维护时最大程度对用户透明，不影响用户业务。</p>
+<p><strong>说明</strong> 对于连接未建立（三次握手未完成），或者已建立连接但未触发会话同步机制，热升级不保证连接不中断，需要依靠客户端重新发起连接。</p>
+<figure data-type="image" tabindex="2"><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4092/1566871290941_zh-CN.png" alt="LVS" loading="lazy"></figure>
+<h4 id="入网流量路径">入网流量路径</h4>
+<p>对于入网流量，负载均衡会根据用户在控制台或API上配置的转发策略，对来自前端的访问请求进行转发和处理，数据流转如<a href="https://help.aliyun.com/document_detail/27544.html?spm=a2c4g.11186623.6.546.3bdf54931Vjryc#d7e30">图 1</a>所示。</p>
+<p>图 1. 入网流量路径<br>
+<a href="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4114/15668712912333_zh-CN.png"><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4114/15668712912333_zh-CN.png" alt="img" loading="lazy"></a></p>
+<ol>
+<li>TCP/UDP协议和HTTP/HTTPS协议的流量都需要经过LVS集群进行转发。</li>
+<li>LVS集群内的每一台节点服务器均匀地分配海量访问请求，并且每一台节点服务器之间都有会话同步策略，以保证高可用。
+<ul>
+<li>如果相应的负载均衡实例服务端口使用的是四层协议（TCP或UDP），那么LVS集群内每个节点都会根据负载均衡实例负载均衡策略，将其承载的服务请求按策略直接分发到后端ECS服务器。</li>
+<li>如果相应的负载均衡实例服务端口使用的是七层HTTP协议，那么LVS集群内每个节点会先将其承载的服务请求均分到Tengine集群，Tengine集群内的每个节点再根据负载均衡策略，将服务请求按策略最终分发到后端ECS服务器。</li>
+<li>如果相应的负载均衡实例服务端口使用的是七层HTTPS协议，与上述HTTP处理过程类似，差别是在按策略将服务请求最终分发到后端ECS服务器前，先调用Key Server进行证书验证及数据包加解密等前置操作。</li>
+</ul>
+</li>
+</ol>
+<h4 id="出网流量路径">出网流量路径</h4>
+<p>负载均衡SLB和后端ECS之间是通过内网进行通信的。</p>
+<ul>
+<li>
+<p>如果ECS仅仅处理来自负载均衡的请求，可以不购买公网带宽（ECS公网IP/弹性公网IP/NAT网关等）。</p>
+<p><strong>说明</strong> 早期创建的一些ECS上直接分配了公网IP（ifconfig中可见接口上分配的公网ip地址），此类ECS如果仅通过SLB对外提供服务，即便在公网接口（网卡）上看到有流量统计，也不会产生ECS的公网费用。</p>
+</li>
+<li>
+<p>如果需要直接通过后端ECS对外提供服务，或后端ECS有访问外网的需求， 那么需要相应的配置或购买ECS公网IP/弹性公网IP/NAT网关等服务。</p>
+</li>
+</ul>
+<p>ECS的公网流量访问路径如<a href="https://help.aliyun.com/document_detail/27544.html?spm=a2c4g.11186623.6.546.3bdf54931Vjryc#d7e90">图 2</a>所示。</p>
+<p>图 2. 出网流量路径<br>
+<a href="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4114/15668712912335_zh-CN.png"><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4114/15668712912335_zh-CN.png" alt="img" loading="lazy"></a></p>
+<p>总体原则：流量从哪里进来，就从哪里出去。</p>
+<ol>
+<li>通过负载均衡进入的流量在负载均衡SLB上限速/计费，仅收取出方向流量费用，入方向流量不收取（在未来可能会改变），SLB到ECS之间是阿里云内网通信，不收取流量费用。</li>
+<li>来自弹性公网IP/NAT网关的流量，分别在弹性公网IP/NAT网关上进行限速/计费，如果在购买ECS时选择了公网带宽，限速/计费点在ECS上。</li>
+<li>负载均衡SLB仅提供被动访问公网的能力，即后端ECS只能在收到通过负载均衡SLB转发来的公网的请求时，才能访问公网回应该请求，如后端ECS希望主动发起公网访问，则需要配置/购买ECS公网带宽、弹性公网IP或NAT网关来实现。</li>
+<li>ECS公网带宽（购买ECS时配置）、弹性公网IP、NAT网关均可以实现ECS的双向公网访问（访问或被访问），但没有流量分发和负载均衡的能力。</li>
+</ol>
+<h3 id="快速入门">快速入门</h3>
+<video id="video" controls="" preload="none" poster="">
+ <source id="mp4" src="https://cloud.video.taobao.com/play/u/3171458687/p/1/e/6/t/1/50265550292.mp4" type="video/mp4">
+</video>
+<p>​</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[kubeadm安装k8s]]></title>
+        <id>https://mzqk.github.io/post/kubeadm-an-zhuang-k8s/</id>
+        <link href="https://mzqk.github.io/post/kubeadm-an-zhuang-k8s/">
+        </link>
+        <updated>2019-03-05T01:46:06.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="kubeadm安装k8s">kubeadm安装k8s</h1>
+<p>kubeadm是官方社区推出的一个用于快速部署kubernetes集群的工具。</p>
+<h2 id="准备环境">准备环境</h2>
+<pre><code>关闭防火墙：
+$ systemctl stop firewalld
+$ systemctl disable firewalld
+
+关闭selinux：
+$ sed -i 's/enforcing/disabled/' /etc/selinux/config 
+$ setenforce 0
+
+关闭swap：
+$ swapoff -a  $ 临时
+$ vim /etc/fstab  $ 永久
+
+添加主机名与IP对应关系（记得设置主机名）：
+$ cat /etc/hosts
+192.168.31.62 k8s-master
+192.168.31.62 k8s-node1
+192.168.31.63 k8s-node2
+
+将桥接的IPv4流量传递到iptables的链：
+$ cat &gt; /etc/sysctl.d/k8s.conf &lt;&lt; EOF
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+$ sysctl --system
+</code></pre>
+<h2 id="所有节点安装dockerkubeadmkubelet">所有节点安装Docker/kubeadm/kubelet</h2>
+<ol>
+<li>安装Docker</li>
+</ol>
+<p>Kubernetes默认CRI（容器运行时）为Docker，因此先安装Docker。</p>
+<pre><code>$ wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo
+$ yum -y install docker-ce-18.06.1.ce-3.el7
+$ systemctl enable docker &amp;&amp; systemctl start docker
+$ docker --version
+Docker version 18.06.1-ce, build e68fc7a
+</code></pre>
+<ol start="2">
+<li>添加阿里云YUM软件源</li>
+</ol>
+<pre><code>$ cat &gt; /etc/yum.repos.d/kubernetes.repo &lt;&lt; EOF
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+</code></pre>
+<ol start="3">
+<li>安装kubeadm，kubelet和kubectl</li>
+</ol>
+<p>由于版本更新频繁，这里指定版本号部署：</p>
+<pre><code>$ yum install -y kubelet-1.13.3 kubeadm-1.13.3 kubectl-1.13.3
+$ systemctl enable kubelet
+</code></pre>
+<h2 id="部署kubernetes-master">部署Kubernetes Master</h2>
+<pre><code>$ kubeadm init \
+  --apiserver-advertise-address=192.168.31.62 \
+  --image-repository registry.aliyuncs.com/google_containers \
+  --kubernetes-version v1.13.3 \
+  --service-cidr=10.1.0.0/16\
+  --pod-network-cidr=10.244.0.0/16
+</code></pre>
+<p>这个初始化过程需要几分钟，具体时间取决于你的网络。</p>
+<p>由于默认拉取镜像地址k8s.gcr.io国内无法访问，这里指定阿里云镜像仓库地址。</p>
+<p>使用kubectl工具：</p>
+<pre><code>mkdir -p $HOME/.kubesudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/configsudo chown $(id -u):$(id -g) $HOME/.kube/config
+$ kubectl get nodes
+</code></pre>
+<h2 id="安装pod网络插件cni">安装Pod网络插件（CNI）</h2>
+<pre><code>$ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/a70459be0084506e4ec919aa1c114638878db11b/Documentation/kube-flannel.yml
+</code></pre>
+<p>确保能够访问到quay.io这个registery。</p>
+<h2 id="加入kubernetes-node">加入Kubernetes Node</h2>
+<p>向集群添加新节点，执行在kubeadm init输出的kubeadm join命令：</p>
+<pre><code>$  kubeadm join 192.168.31.64:6443 --token l79g5t.6ov4jkddwqki1dxe --discovery-token-ca-cert-hash sha256:4f07f9068c543130461c9db368d62b4aabc22105451057f887defa35f47fa076
+</code></pre>
+<h2 id="测试kubernetes集群">测试kubernetes集群</h2>
+<p>在Kubernetes集群中创建一个pod，验证是否正常运行：</p>
+<pre><code>$ kubectl create deployment nginx --image=nginx
+$ kubectl expose deployment nginx --port=80 --type=NodePort
+$ kubectl get pod,svc
+</code></pre>
+<p>访问地址：http://NodeIP:Port</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[二进制部署 Kubernetes 集群]]></title>
+        <id>https://mzqk.github.io/post/er-jin-zhi-bu-shu-kubernetes-ji-qun/</id>
+        <link href="https://mzqk.github.io/post/er-jin-zhi-bu-shu-kubernetes-ji-qun/">
+        </link>
+        <updated>2019-03-05T01:43:26.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="二进制部署-kubernetes-集群">二进制部署 Kubernetes 集群</h1>
+<h2 id="安装etcd">安装Etcd</h2>
+<p>使用cfssl来生成自签证书，先下载cfssl工具：</p>
+<pre><code>wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
+wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
+wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64
+chmod +x cfssl_linux-amd64 cfssljson_linux-amd64 cfssl-certinfo_linux-amd64
+mv cfssl_linux-amd64 /usr/local/bin/cfssl
+mv cfssljson_linux-amd64 /usr/local/bin/cfssljson
+mv cfssl-certinfo_linux-amd64 /usr/bin/cfssl-certinfo
+</code></pre>
+<ol>
+<li>生成证书</li>
+</ol>
+<p>创建以下三个文件：</p>
+<pre><code># cat ca-config.json
+{
+  &quot;signing&quot;: {
+    &quot;default&quot;: {
+      &quot;expiry&quot;: &quot;87600h&quot;
+    },
+    &quot;profiles&quot;: {
+      &quot;www&quot;: {
+         &quot;expiry&quot;: &quot;87600h&quot;,
+         &quot;usages&quot;: [
+            &quot;signing&quot;,
+            &quot;key encipherment&quot;,
+            &quot;server auth&quot;,
+            &quot;client auth&quot;
+        ]
+      }
+    }
+  }
+}
+
+# cat ca-csr.json
+{
+    &quot;CN&quot;: &quot;etcd CA&quot;,
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;Beijing&quot;,
+            &quot;ST&quot;: &quot;Beijing&quot;
+        }
+    ]
+}
+
+# cat server-csr.json
+{
+    &quot;CN&quot;: &quot;etcd&quot;,
+    &quot;hosts&quot;: [
+    &quot;192.168.31.63&quot;,
+    &quot;192.168.31.65&quot;,
+    &quot;192.168.31.66&quot;
+    ],
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;BeiJing&quot;,
+            &quot;ST&quot;: &quot;BeiJing&quot;
+        }
+    ]
+}
+</code></pre>
+<p>生成证书：</p>
+<pre><code>cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=www server-csr.json | cfssljson -bare server
+# ls *pem
+ca-key.pem  ca.pem  server-key.pem  server.pem
+</code></pre>
+<ol start="2">
+<li>部属Etcd</li>
+</ol>
+<p>二进制包下载地址：https://github.com/coreos/etcd/releases/tag/v3.2.12</p>
+<p>创建etcd配置文件：</p>
+<pre><code># cat /opt/etcd/cfg/etcd   
+#[Member]
+ETCD_NAME=&quot;etcd01&quot;
+ETCD_DATA_DIR=&quot;/var/lib/etcd/default.etcd&quot;
+ETCD_LISTEN_PEER_URLS=&quot;https://192.168.31.63:2380&quot;
+ETCD_LISTEN_CLIENT_URLS=&quot;https://192.168.31.63:2379&quot;
+
+#[Clustering]
+ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;https://192.168.31.63:2380&quot;
+ETCD_ADVERTISE_CLIENT_URLS=&quot;https://192.168.31.63:2379&quot;
+ETCD_INITIAL_CLUSTER=&quot;etcd01=https://192.168.31.63:2380,etcd02=https://192.168.31.65:2380,etcd03=https://192.168.31.66:2380&quot;
+ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster&quot;
+ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;
+</code></pre>
+<ul>
+<li>ETCD_NAME 节点名称</li>
+<li>ETCD_DATA_DIR 数据目录</li>
+<li>ETCD_LISTEN_PEER_URLS 集群通信监听地址</li>
+<li>ETCD_LISTEN_CLIENT_URLS 客户端访问监听地址</li>
+<li>ETCD_INITIAL_ADVERTISE_PEER_URLS 集群通告地址</li>
+<li>ETCD_ADVERTISE_CLIENT_URLS 客户端通告地址</li>
+<li>ETCD_INITIAL_CLUSTER 集群节点地址</li>
+<li>ETCD_INITIAL_CLUSTER_TOKEN 集群Token</li>
+<li>ETCD_INITIAL_CLUSTER_STATE 加入集群的当前状态，new是新集群，existing表示加入已有集群</li>
+</ul>
+<p>systemd管理etcd：</p>
+<pre><code># cat /usr/lib/systemd/system/etcd.service 
+[Unit]
+Description=Etcd Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+EnvironmentFile=/opt/etcd/cfg/etcd
+ExecStart=/opt/etcd/bin/etcd \
+--name=${ETCD_NAME} \
+--data-dir=${ETCD_DATA_DIR} \
+--listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \
+--listen-client-urls=${ETCD_LISTEN_CLIENT_URLS},http://127.0.0.1:2379 \
+--advertise-client-urls=${ETCD_ADVERTISE_CLIENT_URLS} \
+--initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
+--initial-cluster=${ETCD_INITIAL_CLUSTER} \
+--initial-cluster-token=${ETCD_INITIAL_CLUSTER_TOKEN} \
+--initial-cluster-state=new \
+--cert-file=/opt/etcd/ssl/server.pem \
+--key-file=/opt/etcd/ssl/server-key.pem \
+--peer-cert-file=/opt/etcd/ssl/server.pem \
+--peer-key-file=/opt/etcd/ssl/server-key.pem \
+--trusted-ca-file=/opt/etcd/ssl/ca.pem \
+--peer-trusted-ca-file=/opt/etcd/ssl/ca.pem
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>把刚才生成的证书拷贝到配置文件中的位置:</p>
+<pre><code>cp ca*pem server*pem /opt/etcd/ssl
+</code></pre>
+<p>启动并设置开启启动：</p>
+<pre><code># systemctl start etcd
+# systemctl enable etcd
+</code></pre>
+<p>都部署完成后，检查etcd集群状态：</p>
+<pre><code># /opt/etcd/bin/etcdctl \
+--ca-file=ca.pem --cert-file=server.pem --key-file=server-key.pem \
+--endpoints=&quot;https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379&quot; \
+cluster-health
+member 18218cfabd4e0dea is healthy: got healthy result from https://192.168.31.63:2379
+member 541c1c40994c939b is healthy: got healthy result from https://192.168.31.65:2379
+member a342ea2798d20705 is healthy: got healthy result from https://192.168.31.66:2379
+cluster is healthy
+</code></pre>
+<h2 id="在node安装docker">在Node安装Docker</h2>
+<pre><code># yum install -y yum-utils device-mapper-persistent-data lvm2
+# yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+# yum install docker-ce -y
+# curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://bc437cce.m.daocloud.io
+# systemctl start docker
+# systemctl enable docker
+</code></pre>
+<h2 id="部署flannel网络">部署Flannel网络</h2>
+<p>Falnnel要用etcd存储自身一个子网信息，所以要保证能成功连接Etcd，写入预定义子网段：</p>
+<pre><code># /opt/etcd/bin/etcdctl \
+--ca-file=ca.pem --cert-file=server.pem --key-file=server-key.pem \
+--endpoints=&quot;https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379&quot; \
+set /coreos.com/network/config  '{ &quot;Network&quot;: &quot;172.17.0.0/16&quot;, &quot;Backend&quot;: {&quot;Type&quot;: &quot;vxlan&quot;}}'
+</code></pre>
+<p>下载二进制包：</p>
+<pre><code># wget https://github.com/coreos/flannel/releases/download/v0.10.0/flannel-v0.10.0-linux-amd64.tar.gz
+# tar zxvf flannel-v0.9.1-linux-amd64.tar.gz
+# mv flanneld mk-docker-opts.sh /opt/kubernetes/bin
+</code></pre>
+<p>配置Flannel：</p>
+<pre><code># cat /opt/kubernetes/cfg/flanneld
+FLANNEL_OPTIONS=&quot;--etcd-endpoints=https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379 -etcd-cafile=/opt/etcd/ssl/ca.pem -etcd-certfile=/opt/etcd/ssl/server.pem -etcd-keyfile=/opt/etcd/ssl/server-key.pem&quot;
+</code></pre>
+<p>systemd管理Flannel：</p>
+<pre><code># cat /usr/lib/systemd/system/flanneld.service
+[Unit]
+Description=Flanneld overlay address etcd agent
+After=network-online.target network.target
+Before=docker.service
+
+[Service]
+Type=notify
+EnvironmentFile=/opt/kubernetes/cfg/flanneld
+ExecStart=/opt/kubernetes/bin/flanneld --ip-masq $FLANNEL_OPTIONS
+ExecStartPost=/opt/kubernetes/bin/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /run/flannel/subnet.env
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>配置Docker启动指定子网段：</p>
+<pre><code># cat /usr/lib/systemd/system/docker.service 
+
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network-online.target firewalld.service
+Wants=network-online.target
+
+[Service]
+Type=notify
+EnvironmentFile=/run/flannel/subnet.env
+ExecStart=/usr/bin/dockerd $DOCKER_NETWORK_OPTIONS
+ExecReload=/bin/kill -s HUP $MAINPID
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+TimeoutStartSec=0
+Delegate=yes
+KillMode=process
+Restart=on-failure
+StartLimitBurst=3
+StartLimitInterval=60s
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>重启flannel和docker：</p>
+<pre><code># systemctl daemon-reload
+# systemctl start flanneld
+# systemctl enable flanneld
+# systemctl restart docker
+</code></pre>
+<p>检查是否生效：</p>
+<pre><code># ps -ef |grep docker
+root     20941     1  1 Jun28 ?        09:15:34 /usr/bin/dockerd --bip=172.17.34.1/24 --ip-masq=false --mtu=1450
+# ip addr
+3607: flannel.1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UNKNOWN 
+    link/ether 8a:2e:3d:09:dd:82 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.34.0/32 scope global flannel.1
+       valid_lft forever preferred_lft forever
+3608: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP 
+    link/ether 02:42:31:8f:d3:02 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.34.1/24 brd 172.17.34.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:31ff:fe8f:d302/64 scope link 
+       valid_lft forever preferred_lft forever
+</code></pre>
+<p>确保docker0与flannel.1在同一网段,如果能通说明Flannel部署成功。</p>
+<h2 id="在master节点部署组件">在Master节点部署组件</h2>
+<p>在部署Kubernetes之前一定要确保etcd、flannel、docker是正常工作的，否则先解决问题再继续。</p>
+<ol>
+<li>生成证书</li>
+</ol>
+<p>创建CA证书：</p>
+<pre><code># cat ca-config.json
+{
+  &quot;signing&quot;: {
+    &quot;default&quot;: {
+      &quot;expiry&quot;: &quot;87600h&quot;
+    },
+    &quot;profiles&quot;: {
+      &quot;kubernetes&quot;: {
+         &quot;expiry&quot;: &quot;87600h&quot;,
+         &quot;usages&quot;: [
+            &quot;signing&quot;,
+            &quot;key encipherment&quot;,
+            &quot;server auth&quot;,
+            &quot;client auth&quot;
+        ]
+      }
+    }
+  }
+}
+
+# cat ca-csr.json
+{
+    &quot;CN&quot;: &quot;kubernetes&quot;,
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;Beijing&quot;,
+            &quot;ST&quot;: &quot;Beijing&quot;,
+            &quot;O&quot;: &quot;k8s&quot;,
+            &quot;OU&quot;: &quot;System&quot;
+        }
+    ]
+}
+
+# cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
+</code></pre>
+<p>生成apiserver证书：</p>
+<pre><code># cat server-csr.json
+{
+    &quot;CN&quot;: &quot;kubernetes&quot;,
+    &quot;hosts&quot;: [
+      &quot;10.0.0.1&quot;,
+      &quot;127.0.0.1&quot;,
+      &quot;192.168.31.63&quot;,
+      &quot;kubernetes&quot;,
+      &quot;kubernetes.default&quot;,
+      &quot;kubernetes.default.svc&quot;,
+      &quot;kubernetes.default.svc.cluster&quot;,
+      &quot;kubernetes.default.svc.cluster.local&quot;
+    ],
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;BeiJing&quot;,
+            &quot;ST&quot;: &quot;BeiJing&quot;,
+            &quot;O&quot;: &quot;k8s&quot;,
+            &quot;OU&quot;: &quot;System&quot;
+        }
+    ]
+}
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes server-csr.json | cfssljson -bare server
+</code></pre>
+<p>生成kube-proxy证书：</p>
+<pre><code># cat kube-proxy-csr.json
+{
+  &quot;CN&quot;: &quot;system:kube-proxy&quot;,
+  &quot;hosts&quot;: [],
+  &quot;key&quot;: {
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  },
+  &quot;names&quot;: [
+    {
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;L&quot;: &quot;BeiJing&quot;,
+      &quot;ST&quot;: &quot;BeiJing&quot;,
+      &quot;O&quot;: &quot;k8s&quot;,
+      &quot;OU&quot;: &quot;System&quot;
+    }
+  ]
+}
+
+# cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-proxy-csr.json | cfssljson -bare kube-proxy
+</code></pre>
+<p>最终生成以下证书文件：</p>
+<pre><code># ls *pem
+ca-key.pem  ca.pem  kube-proxy-key.pem  kube-proxy.pem  server-key.pem  server.pem
+</code></pre>
+<ol start="2">
+<li>部署apiserver组件</li>
+</ol>
+<p>下载二进制包：https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.12.md</p>
+<pre><code># mkdir /opt/kubernetes/{bin,cfg,ssl} -p
+# tar zxvf kubernetes-server-linux-amd64.tar.gz
+# cd kubernetes/server/bin
+# cp kube-apiserver kube-scheduler kube-controller-manager kubectl /opt/kubernetes/bin
+</code></pre>
+<p>创建token文件:</p>
+<pre><code># cat /opt/kubernetes/cfg/token.csv
+674c457d4dcf2eefe4920d7dbb6b0ddc,kubelet-bootstrap,10001,&quot;system:kubelet-bootstrap&quot;
+</code></pre>
+<p>创建apiserver配置文件：</p>
+<pre><code># cat /opt/kubernetes/cfg/kube-apiserver 
+
+KUBE_APISERVER_OPTS=&quot;--logtostderr=true \
+--v=4 \
+--etcd-servers=https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379 \
+--bind-address=192.168.31.63 \
+--secure-port=6443 \
+--advertise-address=192.168.31.63 \
+--allow-privileged=true \
+--service-cluster-ip-range=10.0.0.0/24 \
+--enable-admission-plugins=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota,NodeRestriction \
+--authorization-mode=RBAC,Node \
+--enable-bootstrap-token-auth \
+--token-auth-file=/opt/kubernetes/cfg/token.csv \
+--service-node-port-range=30000-50000 \
+--tls-cert-file=/opt/kubernetes/ssl/server.pem  \
+--tls-private-key-file=/opt/kubernetes/ssl/server-key.pem \
+--client-ca-file=/opt/kubernetes/ssl/ca.pem \
+--service-account-key-file=/opt/kubernetes/ssl/ca-key.pem \
+--etcd-cafile=/opt/etcd/ssl/ca.pem \
+--etcd-certfile=/opt/etcd/ssl/server.pem \
+--etcd-keyfile=/opt/etcd/ssl/server-key.pem&quot;
+</code></pre>
+<p>配置好前面生成的证书，确保能连接etcd。</p>
+<p>systemd管理apiserver：</p>
+<pre><code># cat /usr/lib/systemd/system/kube-apiserver.service 
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+EnvironmentFile=-/opt/kubernetes/cfg/kube-apiserver
+ExecStart=/opt/kubernetes/bin/kube-apiserver $KUBE_APISERVER_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>启动：</p>
+<pre><code># systemctl daemon-reload
+# systemctl enable kube-apiserver
+# systemctl restart kube-apiserver
+</code></pre>
+<ol start="3">
+<li>部署scheduler组件</li>
+</ol>
+<p>创建schduler配置文件：</p>
+<pre><code># cat /opt/kubernetes/cfg/kube-scheduler 
+
+KUBE_SCHEDULER_OPTS=&quot;--logtostderr=true \
+--v=4 \
+--master=127.0.0.1:8080 \
+--leader-elect&quot;
+</code></pre>
+<p>systemd管理schduler组件：</p>
+<pre><code># cat /usr/lib/systemd/system/kube-scheduler.service 
+[Unit]
+Description=Kubernetes Scheduler
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+EnvironmentFile=-/opt/kubernetes/cfg/kube-scheduler
+ExecStart=/opt/kubernetes/bin/kube-scheduler $KUBE_SCHEDULER_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>启动：</p>
+<pre><code># systemctl daemon-reload
+# systemctl enable kube-scheduler
+# systemctl restart kube-scheduler
+</code></pre>
+<ol start="4">
+<li>
+<h3 id="部署controller-manager组件">部署controller-manager组件</h3>
+</li>
+</ol>
+<p>创建controller-manager配置文件：</p>
+<pre><code># cat /opt/kubernetes/cfg/kube-controller-manager 
+KUBE_CONTROLLER_MANAGER_OPTS=&quot;--logtostderr=true \
+--v=4 \
+--master=127.0.0.1:8080 \
+--leader-elect=true \
+--address=127.0.0.1 \
+--service-cluster-ip-range=10.0.0.0/24 \
+--cluster-name=kubernetes \
+--cluster-signing-cert-file=/opt/kubernetes/ssl/ca.pem \
+--cluster-signing-key-file=/opt/kubernetes/ssl/ca-key.pem  \
+--root-ca-file=/opt/kubernetes/ssl/ca.pem \
+--service-account-private-key-file=/opt/kubernetes/ssl/ca-key.pem&quot;
+</code></pre>
+<p>systemd管理controller-manager组件：</p>
+<pre><code># cat /usr/lib/systemd/system/kube-controller-manager.service 
+[Unit]
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+EnvironmentFile=-/opt/kubernetes/cfg/kube-controller-manager
+ExecStart=/opt/kubernetes/bin/kube-controller-manager $KUBE_CONTROLLER_MANAGER_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>启动：</p>
+<pre><code># systemctl daemon-reload
+# systemctl enable kube-controller-manager
+# systemctl restart kube-controller-manager
+</code></pre>
+<p>所有组件都已经启动成功，通过kubectl工具查看当前集群组件状态：</p>
+<pre><code># /opt/kubernetes/bin/kubectl get cs
+NAME                 STATUS    MESSAGE             ERROR
+scheduler            Healthy   ok                  
+etcd-0               Healthy   {&quot;health&quot;:&quot;true&quot;}   
+etcd-2               Healthy   {&quot;health&quot;:&quot;true&quot;}   
+etcd-1               Healthy   {&quot;health&quot;:&quot;true&quot;}   
+controller-manager   Healthy   ok
+</code></pre>
+<h2 id="在node节点部署组件">在Node节点部署组件</h2>
+<p>Master apiserver启用TLS认证后，Node节点kubelet组件想要加入集群，必须使用CA签发的有效证书才能与apiserver通信，当Node节点很多时，签署证书是一件很繁琐的事情，因此有了TLS Bootstrapping机制，kubelet会以一个低权限用户自动向apiserver申请证书，kubelet的证书由apiserver动态签署。</p>
+<ol>
+<li>
+<h3 id="将kubelet-bootstrap用户绑定到系统集群角色">将kubelet-bootstrap用户绑定到系统集群角色</h3>
+</li>
+</ol>
+<pre><code>kubectl create clusterrolebinding kubelet-bootstrap \
+  --clusterrole=system:node-bootstrapper \
+  --user=kubelet-bootstrap
+</code></pre>
+<ol start="2">
+<li>
+<h3 id="创建kubeconfig文件">创建kubeconfig文件</h3>
+</li>
+</ol>
+<p>在生成kubernetes证书的目录下执行以下命令生成kubeconfig文件：</p>
+<pre><code># 创建kubelet bootstrapping kubeconfig 
+BOOTSTRAP_TOKEN=674c457d4dcf2eefe4920d7dbb6b0ddc
+KUBE_APISERVER=&quot;https://192.168.31.63:6443&quot;
+
+# 设置集群参数
+kubectl config set-cluster kubernetes \
+  --certificate-authority=./ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=bootstrap.kubeconfig
+
+# 设置客户端认证参数
+kubectl config set-credentials kubelet-bootstrap \
+  --token=${BOOTSTRAP_TOKEN} \
+  --kubeconfig=bootstrap.kubeconfig
+
+# 设置上下文参数
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kubelet-bootstrap \
+  --kubeconfig=bootstrap.kubeconfig
+
+# 设置默认上下文
+kubectl config use-context default --kubeconfig=bootstrap.kubeconfig
+
+#----------------------
+
+# 创建kube-proxy kubeconfig文件
+
+kubectl config set-cluster kubernetes \
+  --certificate-authority=./ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config set-credentials kube-proxy \
+  --client-certificate=./kube-proxy.pem \
+  --client-key=./kube-proxy-key.pem \
+  --embed-certs=true \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kube-proxy \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+
+</code></pre>
+<p>将这两个文件拷贝到Node节点/opt/kubernetes/cfg目录下:</p>
+<pre><code># ls
+bootstrap.kubeconfig  kube-proxy.kubeconfig
+</code></pre>
+<ol start="3">
+<li>部署kubelet组件</li>
+</ol>
+<p>将前面下载的二进制包中的kubelet和kube-proxy拷贝到/opt/kubernetes/bin目录下。</p>
+<p>创建kubelet配置文件：</p>
+<pre><code># cat /opt/kubernetes/cfg/kubelet
+KUBELET_OPTS=&quot;--logtostderr=true \
+--v=4 \
+--hostname-override=192.168.31.65 \
+--kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
+--bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
+--config=/opt/kubernetes/cfg/kubelet.config \
+--cert-dir=/opt/kubernetes/ssl \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0&quot;
+</code></pre>
+<p>其中/opt/kubernetes/cfg/kubelet.config配置文件如下：</p>
+<pre><code>kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+address: 192.168.31.65
+port: 10250
+readOnlyPort: 10255
+cgroupDriver: cgroupfs
+clusterDNS: [&quot;10.0.0.2&quot;]
+clusterDomain: cluster.local.
+failSwapOn: false
+authentication:
+  anonymous:
+    enabled: true
+</code></pre>
+<p>systemd管理kubelet组件：</p>
+<pre><code># cat /usr/lib/systemd/system/kubelet.service 
+[Unit]
+Description=Kubernetes Kubelet
+After=docker.service
+Requires=docker.service
+
+[Service]
+EnvironmentFile=/opt/kubernetes/cfg/kubelet
+ExecStart=/opt/kubernetes/bin/kubelet $KUBELET_OPTS
+Restart=on-failure
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>启动：</p>
+<pre><code># systemctl daemon-reload
+# systemctl enable kubelet
+# systemctl restart kubelet
+</code></pre>
+<p>在Master审批Node加入集群：</p>
+<p>启动后还没加入到集群中，需要手动允许该节点才可以。</p>
+<p>在Master节点查看请求签名的Node：</p>
+<pre><code># kubectl get csr
+# kubectl certificate approve XXXX
+# kubectl get node
+</code></pre>
+<ol start="4">
+<li>部署kube-proxy组件</li>
+</ol>
+<p>创建kube-proxy配置文件：</p>
+<pre><code># cat /opt/kubernetes/cfg/kube-proxy
+KUBE_PROXY_OPTS=&quot;--logtostderr=true \
+--v=4 \
+--hostname-override=192.168.31.65 \
+--cluster-cidr=10.0.0.0/24 \
+--kubeconfig=/opt/kubernetes/cfg/kube-proxy.kubeconfig&quot;
+</code></pre>
+<p>systemd管理kube-proxy组件：</p>
+<pre><code># cat /usr/lib/systemd/system/kube-proxy.service 
+[Unit]
+Description=Kubernetes Proxy
+After=network.target
+
+[Service]
+EnvironmentFile=-/opt/kubernetes/cfg/kube-proxy
+ExecStart=/opt/kubernetes/bin/kube-proxy $KUBE_PROXY_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>启动：</p>
+<pre><code># systemctl daemon-reload
+# systemctl enable kube-proxy
+# systemctl restart kube-proxy
+</code></pre>
+<h2 id="查看集群状态">查看集群状态</h2>
+<pre><code># kubectl get node
+# kubectl run nginx --image=nginx --replicas=3
+# kubectl expose deployment nginx --port=88 --target-port=80 --type=NodePort
+# kubectl get pods,svc
+
 </code></pre>
 ]]></content>
     </entry>
@@ -561,157 +1991,6 @@ wget http://kernel.com/download/kernel.rpm<br>
 rpm -ivh kernel.rpm<br>
 重启后确认内核版本<br>
 uname -r</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[简单监控windows服务批处理脚本]]></title>
-        <id>https://mzqk.github.io/post/jian-dan-jian-kong-windows-fu-wu-pi-chu-li-jiao-ben/</id>
-        <link href="https://mzqk.github.io/post/jian-dan-jian-kong-windows-fu-wu-pi-chu-li-jiao-ben/">
-        </link>
-        <updated>2017-10-30T09:25:03.000Z</updated>
-        <content type="html"><![CDATA[<pre><code class="language-bat">@echo off
-rem 定义循环间隔时间和监测的服务：
-set secs=6000
-set srvname=&quot;Redis&quot;
- 
-echo.
-echo ========================================
-echo ==         查询计算机服务的状态，     ==
-echo ==     每间隔%secs%秒种进行一次查询，     ==
-echo ==     如发现其停止，则立即启动。     ==
-echo ========================================
-echo.
-echo 此脚本监测的服务是：%srvname%
-echo.
- 
-if %srvname%. == . goto end
- 
-:chkit
-set svrst=0
-for /F &quot;tokens=1* delims= &quot; %%a in ('net start') do if /I &quot;%%a %%b&quot; == %srvname% set svrst=1
-if %svrst% == 0 net start %srvname%
-set svrst=
-rem 下面的命令用于延时，否则可能会导致cpu单个核心满载。
-ping -n %secs% 127.0.0.1 &gt; nul
-goto chkit
- 
-:end
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[linux文件无法删除处理]]></title>
-        <id>https://mzqk.github.io/post/linux-wen-jian-wu-fa-shan-chu-chu-li/</id>
-        <link href="https://mzqk.github.io/post/linux-wen-jian-wu-fa-shan-chu-chu-li/">
-        </link>
-        <updated>2017-10-20T09:20:31.000Z</updated>
-        <summary type="html"><![CDATA[<p>文件能够通过ls命令查看，但是却不能做修改</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>文件能够通过ls命令查看，但是却不能做修改</p>
-<!-- more -->
-<ol>
-<li>文件存在隐藏属性<br>
-通过lsattr查看文件属性，再用chattr命令去除特殊属性</li>
-<li>通过磁盘inode查找文件<br>
-ls -i 查看文件inode节点</li>
-<li>通过节点找出文件，并做其它操作<br>
-find . -inum 94251 -exec  rm -f {} ;</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[execl合并多表宏]]></title>
-        <id>https://mzqk.github.io/post/execl-he-bing-duo-biao-hong/</id>
-        <link href="https://mzqk.github.io/post/execl-he-bing-duo-biao-hong/">
-        </link>
-        <updated>2017-08-17T09:27:40.000Z</updated>
-        <content type="html"><![CDATA[<pre><code>Sub 合并当前目录下所有工作簿的全部工作表()
-Dim MyPath, MyName, AWbName
-Dim Wb As Workbook, WbN As String
-Dim G As Long
-Dim Num As Long
-Dim BOX As String
-Application.ScreenUpdating = False
-MyPath = ActiveWorkbook.Path
-MyName = Dir(MyPath &amp; &quot;\&quot; &amp; &quot;*.xls&quot;)
-AWbName = ActiveWorkbook.Name
-Num = 0
-Do While MyName &lt;&gt; &quot;&quot;
-If MyName &lt;&gt; AWbName Then
-Set Wb = Workbooks.Open(MyPath &amp; &quot;\&quot; &amp; MyName)
-Num = Num + 1
-With Workbooks(1).ActiveSheet
-.Cells(.Range(&quot;B65536&quot;).End(xlUp).Row + 2, 1) = Left(MyName, Len(MyName) - 4)
-For G = 1 To Sheets.Count
-Wb.Sheets(G).UsedRange.Copy .Cells(.Range(&quot;B65536&quot;).End(xlUp).Row + 1, 1)
-Next
-WbN = WbN &amp; Chr(13) &amp; Wb.Name
-Wb.Close False
-End With
-End If
-MyName = Dir
-Loop
-Range(&quot;B1&quot;).Select
-Application.ScreenUpdating = True
-MsgBox &quot;共合并了&quot; &amp; Num &amp; &quot;个工作薄下的全部工作表。如下：&quot; &amp; Chr(13) &amp; WbN, vbInformation, &quot;提示&quot;
-End Sub
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[使用修改 hosts 文件方法访问外国网络]]></title>
-        <id>https://mzqk.github.io/post/shi-yong-xiu-gai-hosts-wen-jian-fang-fa-fang-wen-wai-guo-wang-luo/</id>
-        <link href="https://mzqk.github.io/post/shi-yong-xiu-gai-hosts-wen-jian-fang-fa-fang-wen-wai-guo-wang-luo/">
-        </link>
-        <updated>2017-08-06T07:46:09.000Z</updated>
-        <content type="html"><![CDATA[<p><a href="https://github.com/MZqk/hosts">hosts下载地址</a></p>
-<p>首先科普下我们为什么不能访问Google、Twitter、Facebook 之类的网站</p>
-<blockquote>
-<p>这是因为我们国家有GFW（英文名称Great Firewall of China），<br>
-也称中国防火墙或中国国家防火墙的存在。为什么要有这个东西的<br>
-存在呢？对外的说法是保护国内的网络纯净和谐地发展道路,顺带养<br>
-活下国内的BAT</p>
-</blockquote>
-<blockquote>
-<p>╮(￣⊿￣)╭<strong>我想GFW的存在意义是保护的是外国友人不被国内傻逼打扰•̀.̫•́✧</strong></p>
-</blockquote>
-<pre><code>为了方便用户记忆，我们将IP变成一个个的域名来输入到浏览器进行访问。而这使得访问网站时要先将其域名解析成 IP。DNS的作用就是进行IP解析，把域名对应到IP。
-在GFW的五种封锁方法中，有一种简单而效果很好的方法是DNS污染。GFW会对DNS的解析过程进行干扰，这会使对某些被干扰的域名返回一个错误的IP地址给你的主机，使你无法正确连接到你要的服务器上读取正确的信息。Hosts 文件本来是用来提高解析效率。在进行 DNS请求以前，系统会先检查自己的Hosts文件中是否有这个地址映射关系，如果有则调用这个IP地址映射，如果没有再向已知的 DNS 服务器提出域名解析。也就是说 Hosts 的请求级别比 DNS 高。当你的Hosts 文件里面有对应的 IP 时，它就会直接访问那个 IP，而不用通过 DNS。所以，当我们直接将Google、Twitter、Facebook 之类的 IP 放入 Hosts 文件后，就可以跳过 DNS的解析这一步，直接就行IP访问，不受 GFW 的 DNS污染干扰了。
-</code></pre>
-<blockquote>
-<p>通俗易懂的说修改host后就能访问Google、Twitter、Facebook等被墙网站。</p>
-</blockquote>
-<p>下面就来介绍修改hosts文件的方法</p>
-<h2 id="windows">windows</h2>
-<ul>
-<li>修改文件需要管理员权限</li>
-</ul>
-<ol>
-<li>找到文件目录C:\Windows\System32\drivers\etc\hosts</li>
-<li>把下载好的hosts文件全部内容复制到C:\WINDOWS\system32\drivers\etc目录中的hosts文件中</li>
-<li>保存后在重启浏览器输入https://www.google.com.hk看是否能访问</li>
-<li>如果还不可以访问在CMD窗口输入ipconfig /flushdns使其生效。</li>
-</ol>
-<h2 id="linux-and-mac">Linux and Mac</h2>
-<ol>
-<li>Linux与Mac的hosts文件都在相同的目录下 <strong>/etc/hosts</strong></li>
-<li>同样是用下载好的hosts替代原有的文件</li>
-<li>Mac终端输入sudo killall -HUP mDNSResponder使其生效。<br>
-Linux终端输入sudo systemctl restart NetworkManager。</li>
-</ol>
-<p>注意 : 非systemd发行版，终端输入sudo rcnscd restart，如果不清楚请两个都试一次。</p>
-<h2 id="android">Android</h2>
-<ul>
-<li>我们知道Android也是Linux系统中的一种，但其修改办法还是有些许不同</li>
-</ul>
-<ol>
-<li>需要获取root权限</li>
-<li>文件所在路径/system/etc/hosts</li>
-</ol>
-<p>补充一下：</p>
-<blockquote>
-<p>就是为什么 Hosts的IP要时不时更改，为什么 FB、Twitter 会仍旧上不去。是因为 GFW 的第二个大招，IP 封锁。比如访问国外一个 IP 无法访问，Ping 不通，tracert 这个 IP 后发现，全部在边缘路由器 (GFW) 附近被拦截。换言之，GFW 直接拦截带有这个 IP 头的数据包。所以，如果你更改的 IP 被封锁了，就算你过了 DNS 这一关，也仍旧不能翻过GFW。<strong>而有些站，是直接被屏蔽，无论你怎么添加HOSTS都是不行的。</strong></p>
-</blockquote>
 ]]></content>
     </entry>
 </feed>

@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<link rel="apple-touch-icon"
+  href="https://cdn.jsdelivr.net/gh/chiperman/Blog-photos/./img/iocn/aojep-i6dt9.49j3g5o9xbg.png">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta HTTP-EQUIV="expires" CONTENT="0">
+<meta name="apple-mobile-web-app-title" content="XiaoX 博客">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<title>二进制部署 Kubernetes 集群 | MZZZ</title>
+
+<link rel="stylesheet" href="https://mzqk.github.io/styles/main.css">
+<link href="https://fonts.googleapis.com/css?family=Dancing+Script|Noto+Sans+SC:300|Montserrat&display=swap"
+  rel="stylesheet">
+<link href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css" rel="stylesheet" />
+<!-- 下面是我自己的iconfont -->
+<link href="https://at.alicdn.com/t/font_1651848_9ur7s2zwgll.css" rel="stylesheet" />
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<script type='text/javascript' src='https://mzqk.github.io/media/scripts/script.js'></script>
+<link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet" />
+<script src="https://cdn.bootcss.com/wow/1.1.2/wow.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.8/highlight.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+<script>
+  wow = new WOW({
+    boxClass: 'wow',
+    animateClass: 'animated',
+    offset: 0,
+    mobile: true,
+    live: true
+  });
+  wow.init();
+</script>
+
+</head>
+
+<body class="post-template-default single single-post postid-70 single-format-standard">
+	<div id="wrapper">
+				<header id="header" class="site-header" >
+			<div class="site-branding">
+				<h1 class="site-title">
+					<div class="post-title-name">
+						<a href="https://mzqk.github.io" rel="home">二进制部署 Kubernetes 集群</a>
+					</div>
+				</h1>
+				<h2 class="site-description">这世界总有些人做着美梦逆来顺受</h2>
+			</div>
+			<nav id="nav-wrapper">
+				<div class="container">
+					<div class="nav-toggle">
+						<div class="bars">
+							<div class="bar"></div>
+							<div class="bar"></div>
+							<div class="bar"></div>
+						</div>
+					</div>
+					<div class="clear"></div>
+					<ul id="" class="dove">
+						
+
+						<li>
+
+							<a href="/"> 首页</a></li>
+
+						
+
+						<li>
+
+							<a href="/archives"> 归档</a></li>
+
+						
+
+						<li>
+
+							<a href="/post/about"> 关于</a></li>
+
+						
+
+					</ul>
+					</li>
+
+					</ul>
+				</div>
+			</nav>
+
+			<div class="jingge">
+				
+				
+				
+				
+				
+				
+				<a href="https://github.com/MZqk" target="_blank"><i class="iconfont icon-github"></i></a>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				<a href="tencent://message/?uin=961504168&amp;Site=&amp;Menu=yes" target="_blank"><i class="iconfont icon-qq"></i></a>
+				
+				
+				
+				<a href="https://weibo.com/532267456?is_all=1" target="_blank"><i class="iconfont icon-weibo"></i></a>
+				
+				
+				
+				
+			</div>
+			<form id="gridea-search-form" data-update="1594086421671" action="/search/index.html">
+				<div class="search-box">
+					<input class="search-txt" name="q" placeholder="Type to search" />
+					<a class="search-btn">
+						<i class="iconfont icon-search1" action="/search/index.html"></i>
+					</a>
+				</div>
+			</form>
+		</header>
+		<div id="content" class="container">
+			<div class="row">
+				<div class="col-md-8 site-main">
+					<article id="post-70"
+						class="post-70 post type-post status-publish format-standard hentry category-5 tag-10 tag-9 tag-11">
+						<div class="entry-content">
+							<div class="entry-meta">
+								<div class="entry-info">
+									<time>
+										2019-03-05
+									</time>
+									<span>
+										18 min read
+									</span>
+									<!-- id 将作为查询条件 -->
+									<span id="/er-jin-zhi-bu-shu-kubernetes-ji-qun/" class="leancloud_visitors"  data-flag-title="二进制部署 Kubernetes 集群">
+										<span class="leancloud-visitors-count"></span>次阅读
+									</span>
+									<span class="isTop">
+										<script type="text/javascript">
+											var isTop;
+											isTop = false;
+											if (isTop == true) {
+												// document.write("<i class="iconfont icon-icon-test"></i>")
+												document.write("<span>⭐ Top</span>");
+											}
+										  </script>
+									</span>
+								</div>
+							</div>
+							<div class="wow zoomIn entry-summary song">
+								<h1 id="二进制部署-kubernetes-集群">二进制部署 Kubernetes 集群</h1>
+<h2 id="安装etcd">安装Etcd</h2>
+<p>使用cfssl来生成自签证书，先下载cfssl工具：</p>
+<pre><code>wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
+wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
+wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64
+chmod +x cfssl_linux-amd64 cfssljson_linux-amd64 cfssl-certinfo_linux-amd64
+mv cfssl_linux-amd64 /usr/local/bin/cfssl
+mv cfssljson_linux-amd64 /usr/local/bin/cfssljson
+mv cfssl-certinfo_linux-amd64 /usr/bin/cfssl-certinfo
+</code></pre>
+<ol>
+<li>生成证书</li>
+</ol>
+<p>创建以下三个文件：</p>
+<pre><code># cat ca-config.json
+{
+  &quot;signing&quot;: {
+    &quot;default&quot;: {
+      &quot;expiry&quot;: &quot;87600h&quot;
+    },
+    &quot;profiles&quot;: {
+      &quot;www&quot;: {
+         &quot;expiry&quot;: &quot;87600h&quot;,
+         &quot;usages&quot;: [
+            &quot;signing&quot;,
+            &quot;key encipherment&quot;,
+            &quot;server auth&quot;,
+            &quot;client auth&quot;
+        ]
+      }
+    }
+  }
+}
+
+# cat ca-csr.json
+{
+    &quot;CN&quot;: &quot;etcd CA&quot;,
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;Beijing&quot;,
+            &quot;ST&quot;: &quot;Beijing&quot;
+        }
+    ]
+}
+
+# cat server-csr.json
+{
+    &quot;CN&quot;: &quot;etcd&quot;,
+    &quot;hosts&quot;: [
+    &quot;192.168.31.63&quot;,
+    &quot;192.168.31.65&quot;,
+    &quot;192.168.31.66&quot;
+    ],
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;BeiJing&quot;,
+            &quot;ST&quot;: &quot;BeiJing&quot;
+        }
+    ]
+}
+</code></pre>
+<p>生成证书：</p>
+<pre><code>cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=www server-csr.json | cfssljson -bare server
+# ls *pem
+ca-key.pem  ca.pem  server-key.pem  server.pem
+</code></pre>
+<ol start="2">
+<li>部属Etcd</li>
+</ol>
+<p>二进制包下载地址：https://github.com/coreos/etcd/releases/tag/v3.2.12</p>
+<p>创建etcd配置文件：</p>
+<pre><code># cat /opt/etcd/cfg/etcd   
+#[Member]
+ETCD_NAME=&quot;etcd01&quot;
+ETCD_DATA_DIR=&quot;/var/lib/etcd/default.etcd&quot;
+ETCD_LISTEN_PEER_URLS=&quot;https://192.168.31.63:2380&quot;
+ETCD_LISTEN_CLIENT_URLS=&quot;https://192.168.31.63:2379&quot;
+
+#[Clustering]
+ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;https://192.168.31.63:2380&quot;
+ETCD_ADVERTISE_CLIENT_URLS=&quot;https://192.168.31.63:2379&quot;
+ETCD_INITIAL_CLUSTER=&quot;etcd01=https://192.168.31.63:2380,etcd02=https://192.168.31.65:2380,etcd03=https://192.168.31.66:2380&quot;
+ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster&quot;
+ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;
+</code></pre>
+<ul>
+<li>ETCD_NAME 节点名称</li>
+<li>ETCD_DATA_DIR 数据目录</li>
+<li>ETCD_LISTEN_PEER_URLS 集群通信监听地址</li>
+<li>ETCD_LISTEN_CLIENT_URLS 客户端访问监听地址</li>
+<li>ETCD_INITIAL_ADVERTISE_PEER_URLS 集群通告地址</li>
+<li>ETCD_ADVERTISE_CLIENT_URLS 客户端通告地址</li>
+<li>ETCD_INITIAL_CLUSTER 集群节点地址</li>
+<li>ETCD_INITIAL_CLUSTER_TOKEN 集群Token</li>
+<li>ETCD_INITIAL_CLUSTER_STATE 加入集群的当前状态，new是新集群，existing表示加入已有集群</li>
+</ul>
+<p>systemd管理etcd：</p>
+<pre><code># cat /usr/lib/systemd/system/etcd.service 
+[Unit]
+Description=Etcd Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+EnvironmentFile=/opt/etcd/cfg/etcd
+ExecStart=/opt/etcd/bin/etcd \
+--name=${ETCD_NAME} \
+--data-dir=${ETCD_DATA_DIR} \
+--listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \
+--listen-client-urls=${ETCD_LISTEN_CLIENT_URLS},http://127.0.0.1:2379 \
+--advertise-client-urls=${ETCD_ADVERTISE_CLIENT_URLS} \
+--initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
+--initial-cluster=${ETCD_INITIAL_CLUSTER} \
+--initial-cluster-token=${ETCD_INITIAL_CLUSTER_TOKEN} \
+--initial-cluster-state=new \
+--cert-file=/opt/etcd/ssl/server.pem \
+--key-file=/opt/etcd/ssl/server-key.pem \
+--peer-cert-file=/opt/etcd/ssl/server.pem \
+--peer-key-file=/opt/etcd/ssl/server-key.pem \
+--trusted-ca-file=/opt/etcd/ssl/ca.pem \
+--peer-trusted-ca-file=/opt/etcd/ssl/ca.pem
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>把刚才生成的证书拷贝到配置文件中的位置:</p>
+<pre><code>cp ca*pem server*pem /opt/etcd/ssl
+</code></pre>
+<p>启动并设置开启启动：</p>
+<pre><code># systemctl start etcd
+# systemctl enable etcd
+</code></pre>
+<p>都部署完成后，检查etcd集群状态：</p>
+<pre><code># /opt/etcd/bin/etcdctl \
+--ca-file=ca.pem --cert-file=server.pem --key-file=server-key.pem \
+--endpoints=&quot;https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379&quot; \
+cluster-health
+member 18218cfabd4e0dea is healthy: got healthy result from https://192.168.31.63:2379
+member 541c1c40994c939b is healthy: got healthy result from https://192.168.31.65:2379
+member a342ea2798d20705 is healthy: got healthy result from https://192.168.31.66:2379
+cluster is healthy
+</code></pre>
+<h2 id="在node安装docker">在Node安装Docker</h2>
+<pre><code># yum install -y yum-utils device-mapper-persistent-data lvm2
+# yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+# yum install docker-ce -y
+# curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://bc437cce.m.daocloud.io
+# systemctl start docker
+# systemctl enable docker
+</code></pre>
+<h2 id="部署flannel网络">部署Flannel网络</h2>
+<p>Falnnel要用etcd存储自身一个子网信息，所以要保证能成功连接Etcd，写入预定义子网段：</p>
+<pre><code># /opt/etcd/bin/etcdctl \
+--ca-file=ca.pem --cert-file=server.pem --key-file=server-key.pem \
+--endpoints=&quot;https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379&quot; \
+set /coreos.com/network/config  '{ &quot;Network&quot;: &quot;172.17.0.0/16&quot;, &quot;Backend&quot;: {&quot;Type&quot;: &quot;vxlan&quot;}}'
+</code></pre>
+<p>下载二进制包：</p>
+<pre><code># wget https://github.com/coreos/flannel/releases/download/v0.10.0/flannel-v0.10.0-linux-amd64.tar.gz
+# tar zxvf flannel-v0.9.1-linux-amd64.tar.gz
+# mv flanneld mk-docker-opts.sh /opt/kubernetes/bin
+</code></pre>
+<p>配置Flannel：</p>
+<pre><code># cat /opt/kubernetes/cfg/flanneld
+FLANNEL_OPTIONS=&quot;--etcd-endpoints=https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379 -etcd-cafile=/opt/etcd/ssl/ca.pem -etcd-certfile=/opt/etcd/ssl/server.pem -etcd-keyfile=/opt/etcd/ssl/server-key.pem&quot;
+</code></pre>
+<p>systemd管理Flannel：</p>
+<pre><code># cat /usr/lib/systemd/system/flanneld.service
+[Unit]
+Description=Flanneld overlay address etcd agent
+After=network-online.target network.target
+Before=docker.service
+
+[Service]
+Type=notify
+EnvironmentFile=/opt/kubernetes/cfg/flanneld
+ExecStart=/opt/kubernetes/bin/flanneld --ip-masq $FLANNEL_OPTIONS
+ExecStartPost=/opt/kubernetes/bin/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /run/flannel/subnet.env
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>配置Docker启动指定子网段：</p>
+<pre><code># cat /usr/lib/systemd/system/docker.service 
+
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network-online.target firewalld.service
+Wants=network-online.target
+
+[Service]
+Type=notify
+EnvironmentFile=/run/flannel/subnet.env
+ExecStart=/usr/bin/dockerd $DOCKER_NETWORK_OPTIONS
+ExecReload=/bin/kill -s HUP $MAINPID
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+TimeoutStartSec=0
+Delegate=yes
+KillMode=process
+Restart=on-failure
+StartLimitBurst=3
+StartLimitInterval=60s
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>重启flannel和docker：</p>
+<pre><code># systemctl daemon-reload
+# systemctl start flanneld
+# systemctl enable flanneld
+# systemctl restart docker
+</code></pre>
+<p>检查是否生效：</p>
+<pre><code># ps -ef |grep docker
+root     20941     1  1 Jun28 ?        09:15:34 /usr/bin/dockerd --bip=172.17.34.1/24 --ip-masq=false --mtu=1450
+# ip addr
+3607: flannel.1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UNKNOWN 
+    link/ether 8a:2e:3d:09:dd:82 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.34.0/32 scope global flannel.1
+       valid_lft forever preferred_lft forever
+3608: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP 
+    link/ether 02:42:31:8f:d3:02 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.34.1/24 brd 172.17.34.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:31ff:fe8f:d302/64 scope link 
+       valid_lft forever preferred_lft forever
+</code></pre>
+<p>确保docker0与flannel.1在同一网段,如果能通说明Flannel部署成功。</p>
+<h2 id="在master节点部署组件">在Master节点部署组件</h2>
+<p>在部署Kubernetes之前一定要确保etcd、flannel、docker是正常工作的，否则先解决问题再继续。</p>
+<ol>
+<li>生成证书</li>
+</ol>
+<p>创建CA证书：</p>
+<pre><code># cat ca-config.json
+{
+  &quot;signing&quot;: {
+    &quot;default&quot;: {
+      &quot;expiry&quot;: &quot;87600h&quot;
+    },
+    &quot;profiles&quot;: {
+      &quot;kubernetes&quot;: {
+         &quot;expiry&quot;: &quot;87600h&quot;,
+         &quot;usages&quot;: [
+            &quot;signing&quot;,
+            &quot;key encipherment&quot;,
+            &quot;server auth&quot;,
+            &quot;client auth&quot;
+        ]
+      }
+    }
+  }
+}
+
+# cat ca-csr.json
+{
+    &quot;CN&quot;: &quot;kubernetes&quot;,
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;Beijing&quot;,
+            &quot;ST&quot;: &quot;Beijing&quot;,
+            &quot;O&quot;: &quot;k8s&quot;,
+            &quot;OU&quot;: &quot;System&quot;
+        }
+    ]
+}
+
+# cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
+</code></pre>
+<p>生成apiserver证书：</p>
+<pre><code># cat server-csr.json
+{
+    &quot;CN&quot;: &quot;kubernetes&quot;,
+    &quot;hosts&quot;: [
+      &quot;10.0.0.1&quot;,
+      &quot;127.0.0.1&quot;,
+      &quot;192.168.31.63&quot;,
+      &quot;kubernetes&quot;,
+      &quot;kubernetes.default&quot;,
+      &quot;kubernetes.default.svc&quot;,
+      &quot;kubernetes.default.svc.cluster&quot;,
+      &quot;kubernetes.default.svc.cluster.local&quot;
+    ],
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;BeiJing&quot;,
+            &quot;ST&quot;: &quot;BeiJing&quot;,
+            &quot;O&quot;: &quot;k8s&quot;,
+            &quot;OU&quot;: &quot;System&quot;
+        }
+    ]
+}
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes server-csr.json | cfssljson -bare server
+</code></pre>
+<p>生成kube-proxy证书：</p>
+<pre><code># cat kube-proxy-csr.json
+{
+  &quot;CN&quot;: &quot;system:kube-proxy&quot;,
+  &quot;hosts&quot;: [],
+  &quot;key&quot;: {
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  },
+  &quot;names&quot;: [
+    {
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;L&quot;: &quot;BeiJing&quot;,
+      &quot;ST&quot;: &quot;BeiJing&quot;,
+      &quot;O&quot;: &quot;k8s&quot;,
+      &quot;OU&quot;: &quot;System&quot;
+    }
+  ]
+}
+
+# cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-proxy-csr.json | cfssljson -bare kube-proxy
+</code></pre>
+<p>最终生成以下证书文件：</p>
+<pre><code># ls *pem
+ca-key.pem  ca.pem  kube-proxy-key.pem  kube-proxy.pem  server-key.pem  server.pem
+</code></pre>
+<ol start="2">
+<li>部署apiserver组件</li>
+</ol>
+<p>下载二进制包：https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.12.md</p>
+<pre><code># mkdir /opt/kubernetes/{bin,cfg,ssl} -p
+# tar zxvf kubernetes-server-linux-amd64.tar.gz
+# cd kubernetes/server/bin
+# cp kube-apiserver kube-scheduler kube-controller-manager kubectl /opt/kubernetes/bin
+</code></pre>
+<p>创建token文件:</p>
+<pre><code># cat /opt/kubernetes/cfg/token.csv
+674c457d4dcf2eefe4920d7dbb6b0ddc,kubelet-bootstrap,10001,&quot;system:kubelet-bootstrap&quot;
+</code></pre>
+<p>创建apiserver配置文件：</p>
+<pre><code># cat /opt/kubernetes/cfg/kube-apiserver 
+
+KUBE_APISERVER_OPTS=&quot;--logtostderr=true \
+--v=4 \
+--etcd-servers=https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379 \
+--bind-address=192.168.31.63 \
+--secure-port=6443 \
+--advertise-address=192.168.31.63 \
+--allow-privileged=true \
+--service-cluster-ip-range=10.0.0.0/24 \
+--enable-admission-plugins=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota,NodeRestriction \
+--authorization-mode=RBAC,Node \
+--enable-bootstrap-token-auth \
+--token-auth-file=/opt/kubernetes/cfg/token.csv \
+--service-node-port-range=30000-50000 \
+--tls-cert-file=/opt/kubernetes/ssl/server.pem  \
+--tls-private-key-file=/opt/kubernetes/ssl/server-key.pem \
+--client-ca-file=/opt/kubernetes/ssl/ca.pem \
+--service-account-key-file=/opt/kubernetes/ssl/ca-key.pem \
+--etcd-cafile=/opt/etcd/ssl/ca.pem \
+--etcd-certfile=/opt/etcd/ssl/server.pem \
+--etcd-keyfile=/opt/etcd/ssl/server-key.pem&quot;
+</code></pre>
+<p>配置好前面生成的证书，确保能连接etcd。</p>
+<p>systemd管理apiserver：</p>
+<pre><code># cat /usr/lib/systemd/system/kube-apiserver.service 
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+EnvironmentFile=-/opt/kubernetes/cfg/kube-apiserver
+ExecStart=/opt/kubernetes/bin/kube-apiserver $KUBE_APISERVER_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>启动：</p>
+<pre><code># systemctl daemon-reload
+# systemctl enable kube-apiserver
+# systemctl restart kube-apiserver
+</code></pre>
+<ol start="3">
+<li>部署scheduler组件</li>
+</ol>
+<p>创建schduler配置文件：</p>
+<pre><code># cat /opt/kubernetes/cfg/kube-scheduler 
+
+KUBE_SCHEDULER_OPTS=&quot;--logtostderr=true \
+--v=4 \
+--master=127.0.0.1:8080 \
+--leader-elect&quot;
+</code></pre>
+<p>systemd管理schduler组件：</p>
+<pre><code># cat /usr/lib/systemd/system/kube-scheduler.service 
+[Unit]
+Description=Kubernetes Scheduler
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+EnvironmentFile=-/opt/kubernetes/cfg/kube-scheduler
+ExecStart=/opt/kubernetes/bin/kube-scheduler $KUBE_SCHEDULER_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>启动：</p>
+<pre><code># systemctl daemon-reload
+# systemctl enable kube-scheduler
+# systemctl restart kube-scheduler
+</code></pre>
+<ol start="4">
+<li>
+<h3 id="部署controller-manager组件">部署controller-manager组件</h3>
+</li>
+</ol>
+<p>创建controller-manager配置文件：</p>
+<pre><code># cat /opt/kubernetes/cfg/kube-controller-manager 
+KUBE_CONTROLLER_MANAGER_OPTS=&quot;--logtostderr=true \
+--v=4 \
+--master=127.0.0.1:8080 \
+--leader-elect=true \
+--address=127.0.0.1 \
+--service-cluster-ip-range=10.0.0.0/24 \
+--cluster-name=kubernetes \
+--cluster-signing-cert-file=/opt/kubernetes/ssl/ca.pem \
+--cluster-signing-key-file=/opt/kubernetes/ssl/ca-key.pem  \
+--root-ca-file=/opt/kubernetes/ssl/ca.pem \
+--service-account-private-key-file=/opt/kubernetes/ssl/ca-key.pem&quot;
+</code></pre>
+<p>systemd管理controller-manager组件：</p>
+<pre><code># cat /usr/lib/systemd/system/kube-controller-manager.service 
+[Unit]
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+EnvironmentFile=-/opt/kubernetes/cfg/kube-controller-manager
+ExecStart=/opt/kubernetes/bin/kube-controller-manager $KUBE_CONTROLLER_MANAGER_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>启动：</p>
+<pre><code># systemctl daemon-reload
+# systemctl enable kube-controller-manager
+# systemctl restart kube-controller-manager
+</code></pre>
+<p>所有组件都已经启动成功，通过kubectl工具查看当前集群组件状态：</p>
+<pre><code># /opt/kubernetes/bin/kubectl get cs
+NAME                 STATUS    MESSAGE             ERROR
+scheduler            Healthy   ok                  
+etcd-0               Healthy   {&quot;health&quot;:&quot;true&quot;}   
+etcd-2               Healthy   {&quot;health&quot;:&quot;true&quot;}   
+etcd-1               Healthy   {&quot;health&quot;:&quot;true&quot;}   
+controller-manager   Healthy   ok
+</code></pre>
+<h2 id="在node节点部署组件">在Node节点部署组件</h2>
+<p>Master apiserver启用TLS认证后，Node节点kubelet组件想要加入集群，必须使用CA签发的有效证书才能与apiserver通信，当Node节点很多时，签署证书是一件很繁琐的事情，因此有了TLS Bootstrapping机制，kubelet会以一个低权限用户自动向apiserver申请证书，kubelet的证书由apiserver动态签署。</p>
+<ol>
+<li>
+<h3 id="将kubelet-bootstrap用户绑定到系统集群角色">将kubelet-bootstrap用户绑定到系统集群角色</h3>
+</li>
+</ol>
+<pre><code>kubectl create clusterrolebinding kubelet-bootstrap \
+  --clusterrole=system:node-bootstrapper \
+  --user=kubelet-bootstrap
+</code></pre>
+<ol start="2">
+<li>
+<h3 id="创建kubeconfig文件">创建kubeconfig文件</h3>
+</li>
+</ol>
+<p>在生成kubernetes证书的目录下执行以下命令生成kubeconfig文件：</p>
+<pre><code># 创建kubelet bootstrapping kubeconfig 
+BOOTSTRAP_TOKEN=674c457d4dcf2eefe4920d7dbb6b0ddc
+KUBE_APISERVER=&quot;https://192.168.31.63:6443&quot;
+
+# 设置集群参数
+kubectl config set-cluster kubernetes \
+  --certificate-authority=./ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=bootstrap.kubeconfig
+
+# 设置客户端认证参数
+kubectl config set-credentials kubelet-bootstrap \
+  --token=${BOOTSTRAP_TOKEN} \
+  --kubeconfig=bootstrap.kubeconfig
+
+# 设置上下文参数
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kubelet-bootstrap \
+  --kubeconfig=bootstrap.kubeconfig
+
+# 设置默认上下文
+kubectl config use-context default --kubeconfig=bootstrap.kubeconfig
+
+#----------------------
+
+# 创建kube-proxy kubeconfig文件
+
+kubectl config set-cluster kubernetes \
+  --certificate-authority=./ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config set-credentials kube-proxy \
+  --client-certificate=./kube-proxy.pem \
+  --client-key=./kube-proxy-key.pem \
+  --embed-certs=true \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kube-proxy \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+
+</code></pre>
+<p>将这两个文件拷贝到Node节点/opt/kubernetes/cfg目录下:</p>
+<pre><code># ls
+bootstrap.kubeconfig  kube-proxy.kubeconfig
+</code></pre>
+<ol start="3">
+<li>部署kubelet组件</li>
+</ol>
+<p>将前面下载的二进制包中的kubelet和kube-proxy拷贝到/opt/kubernetes/bin目录下。</p>
+<p>创建kubelet配置文件：</p>
+<pre><code># cat /opt/kubernetes/cfg/kubelet
+KUBELET_OPTS=&quot;--logtostderr=true \
+--v=4 \
+--hostname-override=192.168.31.65 \
+--kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
+--bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
+--config=/opt/kubernetes/cfg/kubelet.config \
+--cert-dir=/opt/kubernetes/ssl \
+--pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0&quot;
+</code></pre>
+<p>其中/opt/kubernetes/cfg/kubelet.config配置文件如下：</p>
+<pre><code>kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+address: 192.168.31.65
+port: 10250
+readOnlyPort: 10255
+cgroupDriver: cgroupfs
+clusterDNS: [&quot;10.0.0.2&quot;]
+clusterDomain: cluster.local.
+failSwapOn: false
+authentication:
+  anonymous:
+    enabled: true
+</code></pre>
+<p>systemd管理kubelet组件：</p>
+<pre><code># cat /usr/lib/systemd/system/kubelet.service 
+[Unit]
+Description=Kubernetes Kubelet
+After=docker.service
+Requires=docker.service
+
+[Service]
+EnvironmentFile=/opt/kubernetes/cfg/kubelet
+ExecStart=/opt/kubernetes/bin/kubelet $KUBELET_OPTS
+Restart=on-failure
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>启动：</p>
+<pre><code># systemctl daemon-reload
+# systemctl enable kubelet
+# systemctl restart kubelet
+</code></pre>
+<p>在Master审批Node加入集群：</p>
+<p>启动后还没加入到集群中，需要手动允许该节点才可以。</p>
+<p>在Master节点查看请求签名的Node：</p>
+<pre><code># kubectl get csr
+# kubectl certificate approve XXXX
+# kubectl get node
+</code></pre>
+<ol start="4">
+<li>部署kube-proxy组件</li>
+</ol>
+<p>创建kube-proxy配置文件：</p>
+<pre><code># cat /opt/kubernetes/cfg/kube-proxy
+KUBE_PROXY_OPTS=&quot;--logtostderr=true \
+--v=4 \
+--hostname-override=192.168.31.65 \
+--cluster-cidr=10.0.0.0/24 \
+--kubeconfig=/opt/kubernetes/cfg/kube-proxy.kubeconfig&quot;
+</code></pre>
+<p>systemd管理kube-proxy组件：</p>
+<pre><code># cat /usr/lib/systemd/system/kube-proxy.service 
+[Unit]
+Description=Kubernetes Proxy
+After=network.target
+
+[Service]
+EnvironmentFile=-/opt/kubernetes/cfg/kube-proxy
+ExecStart=/opt/kubernetes/bin/kube-proxy $KUBE_PROXY_OPTS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>启动：</p>
+<pre><code># systemctl daemon-reload
+# systemctl enable kube-proxy
+# systemctl restart kube-proxy
+</code></pre>
+<h2 id="查看集群状态">查看集群状态</h2>
+<pre><code># kubectl get node
+# kubectl run nginx --image=nginx --replicas=3
+# kubectl expose deployment nginx --port=88 --target-port=80 --type=NodePort
+# kubectl get pods,svc
+
+</code></pre>
+
+							</div>
+							<div class="wow zoomIn vt-post-tags">
+								
+							</div>
+							<nav class="navigation3 post-navigation3" role="navigation">
+
+								<div class="nav-links3">
+									
+									<div class="wow zoomIn nav-previous3"><a href="https://mzqk.github.io/post/kubeadm-an-zhuang-k8s/"
+											rel="prev"> kubeadm安装k8s</a></div>
+									
+									
+									<div class="wow zoomIn nav-next3"><a href="https://mzqk.github.io/post/ru-he-yue-du-yi-ben-shu/"
+											rel="next"> 如何阅读一本书</a></div>
+									
+								</div>
+							</nav>
+							<div class="wow zoomIn author-info" style="visibility: visible; animation-name: zoomIn;">
+								<div class="author-avatar pull-left"><img
+										src="https://mzqk.github.io/images/avatar.png"></div>
+								
+								<div class="author-description">
+									<div class="author-title">
+										<div class="author-link" rel="author">MZZZ</div>
+									</div>
+									
+									
+						</div>
+					</article>
+					<div id="marlin_lite_about_widget-2" class="wow zoomIn widget marlin_lite_about_widget"
+						data-wow-delay="0.1s">
+
+						
+						<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='https://mzqk.github.io/media/scripts/Valine.min.js'></script>
+<!-- <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script> -->
+
+
+
+<div class="comment"></div>
+<script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV, 
+            el: '.comment',
+            lang: 'zh-cn',
+            visitor: true,
+            
+            
+            emoticon_list: ["吐.png","喷血.png","狂汗.png","不说话.png","汗.png","坐等.png","献花.png","不高兴.png","中刀.png","害羞.png","皱眉.png","小眼睛.png","中指.png","尴尬.png","瞅你.png","想一想.png","中枪.png","得意.png","肿包.png","扇耳光.png","亲亲.png","惊喜.png","脸红.png","无所谓.png","便便.png","愤怒.png","蜡烛.png","献黄瓜.png","内伤.png","投降.png","观察.png","看不见.png","击掌.png","抠鼻.png","邪恶.png","看热闹.png","口水.png","抽烟.png","锁眉.png","装大款.png","吐舌.png","无奈.png","长草.png","赞一个.png","呲牙.png","无语.png","阴暗.png","不出所料.png","咽气.png","期待.png","高兴.png","吐血倒地.png","哭泣.png","欢呼.png","黑线.png","喜极而泣.png","喷水.png","深思.png","鼓掌.png","暗地观察.png"],
+            	
+            	
+            
+        });
+    </script> 
+
+
+					</div>
+				</div>
+				<div class="tocc col l3 hide-on-med-and-down">
+
+    <div class="toc-widget">
+
+        <div class="toc-title"></div>
+
+        <div id="toc-content">
+
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.5.0/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '.entry-summary',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('.entry-summary').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+    });
+
+    $(function () {
+        var bt;
+        bt = $('.toc-widget');
+        if ($(document).width() > 480) {
+            $(window).scroll(function () {
+                var st;
+                st = $(window).scrollTop();
+                if (st > 450) {
+                    return bt.css('display', 'block');
+                } else {
+                    return bt.css('display', 'none');
+                }
+            })
+        }
+    });
+</script>
+			</div>
+		</div>
+		<footer id="colophon" class="site-footer">
+	<div class="container">
+		<div class="copyright">
+			
+			<b>Crafted with 💔 by <a href="https://chiperman.github.io/about/" target="_blank">chiperman</a></b>
+			<br>
+			<b>Eleven forever.</b>
+			<br>
+			<span class="runtime">
+				「我」已经运行了<script type="text/javascript">
+					var urodz = new Date("05/07/2018");
+					var now = new Date();
+					var ile = now.getTime() - urodz.getTime();
+					var dni = Math.floor(ile / (1000 * 60 * 60 * 24));
+					document.write(+dni)
+				</script>天
+				<br>
+			</span>
+			<b>Theme: </b>
+			<a href="https://github.com/chiperman/gridea-theme-xiaox" target="_blank" title="Pan">
+				<span><b>Pan - XiaoX</b></span>
+			</a>
+			<b>. Powered by </b>
+			<a href="https://gridea.dev/" target="_blank" title="Gridea">
+				<span><b>Gridea</b></span>
+			</a>
+		</div>
+	</div><!-- .container -->
+</footer><!-- #colophon -->
+	</div>
+
+	<script src="https://cdn.bootcss.com/fitvids/1.2.0/jquery.fitvids.min.js"></script>
+
+<script
+  src="https://cdn.jsdelivr.net/gh/MZqk/mzqk.github.io/media/scripts/marlin-scripts.js">
+</script>
+
+<script src="//tokinx.github.io/lately/lately.min.js"></script>
+<script>
+  jQuery(document).ready(function () {
+    $.lately({
+      'target': '.lately-a,.lately-b,.lately-c'
+    })
+  });
+</script>
+<style type="text/css">
+  /* 一键到顶部 */
+  a.back_to_top {
+    text-decoration: none;
+    position: fixed;
+    bottom: 65px;
+    right: 30px;
+    background: #f0f0f0;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    line-height: 36px;
+    font-size: 18px;
+    text-align: center;
+    transition-duration: .5s;
+    transition-propety: background-color;
+    display: none;
+  }
+
+  a.back_to_top span {
+    color: #888;
+  }
+
+  a.back_to_top:hover {
+    cursor: pointer;
+    background: #dfdfdf;
+  }
+
+  a.back_to_top:hover span {
+    color: #555;
+  }
+
+  @media print,
+  screen and (max-width: 580px) {
+    .back_to_top {
+      display: none !important;
+    }
+  }
+
+  /* 一键到底部 */
+
+  a.down_to_bottom {
+    text-decoration: none;
+    position: fixed;
+    bottom: 15px;
+    right: 30px;
+    background: #f0f0f0;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    line-height: 36px;
+    font-size: 18px;
+    text-align: center;
+    transition-duration: .5s;
+    transition-propety: background-color;
+    display: none;
+  }
+
+  a.down_to_bottom span {
+    color: #888;
+  }
+
+  a.down_to_bottom:hover {
+    cursor: pointer;
+    background: #dfdfdf;
+  }
+
+  a.down_to_bottom:hover span {
+    color: #555;
+  }
+
+  @media print,
+  screen and (max-width: 580px) {
+    .down_to_bottom {
+      display: none !important;
+    }
+  }
+</style>
+
+
+<a id="back_to_top" href="#" class="back_to_top"><span><i class="iconfont icon-xiangshang"></i></span>
+</a>
+
+<a id="down_to_bottom" href="#" class="down_to_bottom"><span><i class="iconfont icon-xiangxia"></i></span>
+</a>
+
+<script src="//instant.page/3.0.0" type="module" defer
+  integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+<script>
+  function getScrollTop() {
+    var scrollTop = 0,
+      bodyScrollTop = 0,
+      documentScrollTop = 0;
+    if (document.body) {
+      bodyScrollTop = document.body.scrollTop;
+    }
+    if (document.documentElement) {
+      documentScrollTop = document.documentElement.scrollTop;
+    }
+    scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+    return scrollTop;
+  };
+
+  function getScrollHeight() {
+    var scrollHeight = 0,
+      bodyScrollHeight = 0,
+      documentScrollHeight = 0;
+    if (document.body) {
+      bSH = document.body.scrollHeight;
+    }
+    if (document.documentElement) {
+      dSH = document.documentElement.scrollHeight;
+    }
+    scrollHeight = (bSH - dSH > 0) ? bSH : dSH;
+    return scrollHeight;
+  };
+
+  function getWindowHeight() {
+    var windowHeight = 0;
+    if (document.compatMode == "CSS1Compat") {
+      windowHeight = document.documentElement.clientHeight;
+    } else {
+      windowHeight = document.body.clientHeight;
+    }
+    return windowHeight;
+  };
+
+  $(document).ready((function (_this) {
+    return function () {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function () {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block');
+          } else {
+            return bt.css('display', 'none');
+          }
+        });
+        return bt.click(function () {
+          $('body,html').animate({
+            scrollTop: 0
+          }, 800);
+          return false;
+        });
+      }
+    };
+  })(this));
+
+  $(document).ready((function (_this) {
+    return function () {
+      var bt;
+      bt = $('#down_to_bottom');
+      if ($(document).width() > 480) {
+        $(window).scroll(function () {
+          var st;
+          st = $(window).scrollTop();
+          if (getScrollTop() + getWindowHeight() == getScrollHeight()) {
+            return bt.css('display', 'none');
+          } else {
+            return bt.css('display', 'block');
+          }
+        });
+        return bt.click(function () {
+          $('body,html').animate({
+            scrollTop: $('body,html')[0].scrollHeight
+          }, 800);
+          return false;
+        });
+      }
+    };
+  })(this));
+</script>
+	<script data-no-instant>
+		(function ($) {
+			$.extend({
+				adamsOverload: function () {
+					$('.navigation:eq(0)').remove();
+					$("").attr("rel", "external");
+					$("a[rel='external'],a[rel='external nofollow']").attr("target", "_blank");
+					$("a.vi").attr("rel", "");
+					$.viewImage({
+						'target': 'img',
+						'exclude': '.vsmile-icons img,.gallery img',
+						'delay': 300
+					});
+					$.lately({
+						'target': '.commentmetadata a,.infos time,.post-list time'
+					});
+					prettyPrint();
+
+					$('ul.links li a').each(function () {
+						if ($(this).parent().find('.bg').length == 0) {
+							$(this).parent().append(
+								'<!---<div class="bg" style="background-image:url(https://c3.glgoo.top/s2/favicons?domain=' +
+								$(this).attr("href") + ')"></div>--->')
+						}
+					});
+				}
+			});
+		})(jQuery);
+		jQuery.adamsOverload();
+	</script>
+
+</body>
+
+</html>

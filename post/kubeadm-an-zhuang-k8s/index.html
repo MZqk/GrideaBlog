@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-<title>Linux 常用命令 | MZZZ</title>
+<title>kubeadm安装k8s | MZZZ</title>
 
 <link rel="stylesheet" href="https://mzqk.github.io/styles/main.css">
 <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Noto+Sans+SC:300|Montserrat&display=swap"
@@ -48,7 +48,7 @@
 			<div class="site-branding">
 				<h1 class="site-title">
 					<div class="post-title-name">
-						<a href="https://mzqk.github.io" rel="home">Linux 常用命令</a>
+						<a href="https://mzqk.github.io" rel="home">kubeadm安装k8s</a>
 					</div>
 				</h1>
 				<h2 class="site-description">这世界总有些人做着美梦逆来顺受</h2>
@@ -142,13 +142,13 @@
 							<div class="entry-meta">
 								<div class="entry-info">
 									<time>
-										2017-06-17
+										2019-03-05
 									</time>
 									<span>
-										9 min read
+										3 min read
 									</span>
 									<!-- id 将作为查询条件 -->
-									<span id="/linux-chang-yong-ming-ling/" class="leancloud_visitors"  data-flag-title="Linux 常用命令">
+									<span id="/kubeadm-an-zhuang-k8s/" class="leancloud_visitors"  data-flag-title="kubeadm安装k8s">
 										<span class="leancloud-visitors-count"></span>次阅读
 									</span>
 									<span class="isTop">
@@ -164,484 +164,109 @@
 								</div>
 							</div>
 							<div class="wow zoomIn entry-summary song">
-								<h1 id="awk">awk</h1>
-<h2 id="awk语法">awk语法</h2>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-F</td>
-<td>以指定字符作为分割字段</td>
-</tr>
-</tbody>
-</table>
-<h2 id="awk用法">awk用法</h2>
-<p>打印/etc/passwd内容</p>
-<pre><code>awk '{print}' /etc/passwd
+								<h1 id="kubeadm安装k8s">kubeadm安装k8s</h1>
+<p>kubeadm是官方社区推出的一个用于快速部署kubernetes集群的工具。</p>
+<h2 id="准备环境">准备环境</h2>
+<pre><code>关闭防火墙：
+$ systemctl stop firewalld
+$ systemctl disable firewalld
+
+关闭selinux：
+$ sed -i 's/enforcing/disabled/' /etc/selinux/config 
+$ setenforce 0
+
+关闭swap：
+$ swapoff -a  $ 临时
+$ vim /etc/fstab  $ 永久
+
+添加主机名与IP对应关系（记得设置主机名）：
+$ cat /etc/hosts
+192.168.31.62 k8s-master
+192.168.31.62 k8s-node1
+192.168.31.63 k8s-node2
+
+将桥接的IPv4流量传递到iptables的链：
+$ cat &gt; /etc/sysctl.d/k8s.conf &lt;&lt; EOF
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+$ sysctl --system
 </code></pre>
-<blockquote>
-<p>root❌0:0:root:/root:/bin/bash<br>
-daemon❌1:1:daemon:/usr/sbin:/usr/sbin/nologin<br>
-bin❌2:2:bin:/bin:/usr/sbin/nologin<br>
-sys❌3:3:sys:/dev:/usr/sbin/nologin<br>
-sync❌4:65534:sync:/bin:/bin/sync<br>
-games❌5:60:games:/usr/games:/usr/sbin/nologin<br>
-man❌6:12👨/var/cache/man:/usr/sbin/nologin<br>
-lp❌7:7:lp:/var/spool/lpd:/usr/sbin/nologin<br>
-mail❌8:8:mail:/var/mail:/usr/sbin/nologin<br>
-news❌9:9:news:/var/spool/news:/usr/sbin/nologin<br>
-uucp❌10:10:uucp:/var/spool/uucp:/usr/sbin/nologin<br>
-proxy❌13:13:proxy:/bin:/usr/sbin/nologin<br>
-www-data❌33:33:www-data:/var/www:/usr/sbin/nologin<br>
-backup❌34:34:backup:/var/backups:/usr/sbin/nologin</p>
-</blockquote>
-<p>以冒号为分隔符取1、3、6位内容</p>
-<pre><code>awk -F &quot;:&quot; '{print $1 $3 $6}' /etc/passwd
+<h2 id="所有节点安装dockerkubeadmkubelet">所有节点安装Docker/kubeadm/kubelet</h2>
+<ol>
+<li>安装Docker</li>
+</ol>
+<p>Kubernetes默认CRI（容器运行时）为Docker，因此先安装Docker。</p>
+<pre><code>$ wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo
+$ yum -y install docker-ce-18.06.1.ce-3.el7
+$ systemctl enable docker &amp;&amp; systemctl start docker
+$ docker --version
+Docker version 18.06.1-ce, build e68fc7a
 </code></pre>
-<blockquote>
-<p>bin2/bin<br>
-sys3/dev<br>
-sync4/bin<br>
-games5/usr/games<br>
-man6/var/cache/man<br>
-lp7/var/spool/lpd<br>
-mail8/var/mail<br>
-news9/var/spool/news<br>
-uucp10/var/spool/uucp<br>
-proxy13/bin<br>
-www-data33/var/www<br>
-backup34/var/backups</p>
-</blockquote>
-<p>取出内容以Tab建作为分隔符</p>
-<pre><code>awk -F &quot;:&quot; '{print $1 &quot;\t&quot; $3 &quot;\t&quot; $6}' /etc/passwd
+<ol start="2">
+<li>添加阿里云YUM软件源</li>
+</ol>
+<pre><code>$ cat &gt; /etc/yum.repos.d/kubernetes.repo &lt;&lt; EOF
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
 </code></pre>
-<blockquote>
-<p>root    0       /root<br>
-daemon  1       /usr/sbin<br>
-bin     2       /bin<br>
-sys     3       /dev<br>
-sync    4       /bin<br>
-games   5       /usr/games<br>
-man     6       /var/cache/man<br>
-lp      7       /var/spool/lpd<br>
-mail    8       /var/mail<br>
-news    9       /var/spool/news<br>
-uucp    10      /var/spool/uucp<br>
-proxy   13      /bin<br>
-www-data        33      /var/www<br>
-backup  34      /var/backups</p>
-</blockquote>
-<p>内容加以排版</p>
-<pre><code>awk -F &quot;:&quot; '{print &quot;ID=&quot;$1 &quot;\t 家目录=&quot;$6}' /etc/passwd
+<ol start="3">
+<li>安装kubeadm，kubelet和kubectl</li>
+</ol>
+<p>由于版本更新频繁，这里指定版本号部署：</p>
+<pre><code>$ yum install -y kubelet-1.13.3 kubeadm-1.13.3 kubectl-1.13.3
+$ systemctl enable kubelet
 </code></pre>
-<blockquote>
-<p>ID=root    家目录=/root<br>
-ID=daemon        家目录=/usr/sbin<br>
-ID=bin   家目录=/bin<br>
-ID=sys   家目录=/dev<br>
-ID=sync  家目录=/bin<br>
-ID=games         家目录=/usr/games<br>
-ID=man   家目录=/var/cache/man<br>
-ID=lp    家目录=/var/spool/lpd<br>
-ID=mail  家目录=/var/mail<br>
-ID=news  家目录=/var/spool/news<br>
-ID=uucp  家目录=/var/spool/uucp<br>
-ID=proxy         家目录=/bin<br>
-ID=www-data      家目录=/var/www<br>
-ID=backup        家目录=/var/backups</p>
-</blockquote>
-<h1 id="crontab">crontab</h1>
-<h2 id="crontab语法">crontab语法</h2>
-<blockquote>
-<p>-l  列出定时任务列表<br>
--e  编辑定时任务内容<br>
--u  设定指定用户</p>
-</blockquote>
-<h2 id="crontab用法">crontab用法</h2>
-<figure data-type="image" tabindex="1"><img src="http://note.youdao.com/yws/public/resource/2142162fc5a9548c53c40de42a6d3551/xmlnote/6750B9C6F7CA497D94D48E94183B9C28/3566" alt="crontab" loading="lazy"></figure>
-<blockquote>
-<p>星号（*）：代表所有可能的值，例如month字段如果是星号，则表示在满足其它字段的制约条件后每月都执行该命令操作。</p>
-</blockquote>
-<blockquote>
-<p>逗号（,）：可以用逗号隔开的值指定一个列表范围，例如，“1,2,5,7,8,9”</p>
-</blockquote>
-<blockquote>
-<p>中杠（-）：可以用整数之间的中杠表示一个整数范围，例如“2-6”表示“2,3,4,5,6”</p>
-</blockquote>
-<blockquote>
-<p>正斜线（/）：可以用正斜线指定时间的间隔频率，例如“0-23/2”表示每两小时执行一次。同时正斜线可以和星号一起使用，例如*/10，如果用在minute字段，表示每十分钟执行一次。</p>
-</blockquote>
-<h1 id="cat">cat</h1>
-<h1 id="chattr">chattr</h1>
-<h1 id="date">date</h1>
-<h1 id="find">find</h1>
-<h1 id="expr">expr</h1>
-<h1 id="git">git</h1>
-<h2 id="git-配置">Git 配置</h2>
-<p>添加git信息</p>
-<pre><code class="language-bash">git config --global user.name &quot;Scott Chacon&quot;   
-git config --global user.email &quot;schacon@gmail.com&quot;
-# --global 为全局选项
+<h2 id="部署kubernetes-master">部署Kubernetes Master</h2>
+<pre><code>$ kubeadm init \
+  --apiserver-advertise-address=192.168.31.62 \
+  --image-repository registry.aliyuncs.com/google_containers \
+  --kubernetes-version v1.13.3 \
+  --service-cidr=10.1.0.0/16\
+  --pod-network-cidr=10.244.0.0/16
 </code></pre>
-<p>git信息配置文件</p>
-<blockquote>
-<p>~/.gitconfig</p>
-</blockquote>
-<h2 id="git仓库">Git仓库</h2>
-<p>克隆一个项目</p>
-<pre><code class="language-bash">git clone https://github.com/MZqk/boco
+<p>这个初始化过程需要几分钟，具体时间取决于你的网络。</p>
+<p>由于默认拉取镜像地址k8s.gcr.io国内无法访问，这里指定阿里云镜像仓库地址。</p>
+<p>使用kubectl工具：</p>
+<pre><code>mkdir -p $HOME/.kubesudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/configsudo chown $(id -u):$(id -g) $HOME/.kube/config
+$ kubectl get nodes
 </code></pre>
-<p>初始化一个仓库</p>
-<pre><code class="language-bash">cd ./
-git init
+<h2 id="安装pod网络插件cni">安装Pod网络插件（CNI）</h2>
+<pre><code>$ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/a70459be0084506e4ec919aa1c114638878db11b/Documentation/kube-flannel.yml
 </code></pre>
-<h2 id="git流程">Git流程</h2>
-<pre><code class="language-bash">git add
-#添加新创建或修改的文件到本地的缓存区（Index）
-git rm
-#删除后会自动将已删除文件的信息添加到缓存区
-git commit
-#命令提交到本地代码库
-git status
-#查看当前git仓库的状态
-git diff --cached
-#如果没有--cached参数，git diff 会显示当前你所有已做的但没有加入到索引里的修改
-git push origin master
-#将本地仓库同步到远端服务器
+<p>确保能够访问到quay.io这个registery。</p>
+<h2 id="加入kubernetes-node">加入Kubernetes Node</h2>
+<p>向集群添加新节点，执行在kubeadm init输出的kubeadm join命令：</p>
+<pre><code>$  kubeadm join 192.168.31.64:6443 --token l79g5t.6ov4jkddwqki1dxe --discovery-token-ca-cert-hash sha256:4f07f9068c543130461c9db368d62b4aabc22105451057f887defa35f47fa076
 </code></pre>
-<h2 id="分支与合并">分支与合并</h2>
-<pre><code>git branch 
-#查看当前的分支列表
-git branch experimental
-#创建一个新的叫 experimental的分支
-git checkout experimental
-#切换到experimental分支
-git merge  -m 'merge experimental branch' experimental
-#将experimental分支合并到当前分支
-git branch -d experimental
-#只能删除那些已经被当前分支的合并的分支. 如果你要强制删除某个分支的话就用git branch –D
-git reset --hard HEAD^
-#回到合并之前的状态
+<h2 id="测试kubernetes集群">测试kubernetes集群</h2>
+<p>在Kubernetes集群中创建一个pod，验证是否正常运行：</p>
+<pre><code>$ kubectl create deployment nginx --image=nginx
+$ kubectl expose deployment nginx --port=80 --type=NodePort
+$ kubectl get pod,svc
 </code></pre>
-<h2 id="git日志">Git日志</h2>
-<pre><code>git log
-#显示所有的提交
-git log v2.5.. Makefile fs/
-#找出所有从&quot;v2.5“开始在fs目录下的所有Makefile的修改
-git log --stat
-打印详细的提交记录
-git log --pretty=oneline
-格式化日志输出,可用medium,full,fuller,email 或raw
-git log --graph --pretty=oneline
-可视化提交图
-git log --pretty=format:'%h : %s' --topo-order --graph
-提交按拓扑顺序来显示
-</code></pre>
-<h1 id="grep">grep</h1>
-<h1 id="sed">sed</h1>
-<h2 id="sed语法">sed语法</h2>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-n</td>
-<td>显示处理后的过程，自动换行</td>
-</tr>
-</tbody>
-</table>
-<h2 id="sed用法">sed用法</h2>
-<p>文件内容</p>
-<blockquote>
-<p>line 1 This is a book<br>
-line 2 That is a pen<br>
-line 3 Happy Holiday<br>
-line 4 Niscenter is a good place<br>
-line 5 End</p>
-</blockquote>
-<p>删除第2到4行内容</p>
-<pre><code>sed '2,4d' file
-</code></pre>
-<blockquote>
-<p>line 1 This is a book<br>
-line 5 End</p>
-</blockquote>
-<p>替换每行第一个is为error</p>
-<pre><code>sed 's/is/error/' file
-</code></pre>
-<blockquote>
-<p>line 1 Therror is a book<br>
-line 2 That error a pen<br>
-line 3 Happy Holiday<br>
-line 4 Nerrorcenter is a good place<br>
-line 5 End</p>
-</blockquote>
-<p>替换全部的is为error</p>
-<pre><code>sed 's/is/error/g' file
-</code></pre>
-<blockquote>
-<p>line 1 Therror error a book<br>
-line 2 That error a pen<br>
-line 3 Happy Holiday<br>
-line 4 Nerrorcenter error a good place<br>
-line 5 End</p>
-</blockquote>
-<p>在有center内容的一行替换is为xx</p>
-<pre><code>sed '/center/s/is/xx/g' file
-</code></pre>
-<blockquote>
-<p>line 1 This is a book<br>
-line 2 That is a pen<br>
-line 3 Happy Holiday<br>
-line 4 Nxxcenter xx a good place<br>
-line 5 End</p>
-</blockquote>
-<h1 id="tar">tar</h1>
-<h2 id="tar语法">tar语法</h2>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-c  --crate</td>
-<td>创建新的归档,即打包</td>
-</tr>
-<tr>
-<td>-r  --append</td>
-<td>向压缩文件追加内容</td>
-</tr>
-<tr>
-<td>-t  --list</td>
-<td>查看压缩全部的内容</td>
-</tr>
-<tr>
-<td>-u  --update</td>
-<td>更新压缩文件</td>
-</tr>
-<tr>
-<td>-x  --extract</td>
-<td>释放归档文件，即解压</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>显示操作过程</td>
-</tr>
-<tr>
-<td>-z</td>
-<td>解压tar.gz、tgz文件选项</td>
-</tr>
-<tr>
-<td>-j</td>
-<td>解压tar.bz2文件</td>
-</tr>
-<tr>
-<td>-f</td>
-<td>制定压缩文件名</td>
-</tr>
-<tr>
-<td>-C</td>
-<td>切换至指定目录</td>
-</tr>
-<tr>
-<td>--exclude file</td>
-<td>压缩过程中排除指定文件</td>
-</tr>
-</tbody>
-</table>
-<h2 id="tar用法">tar用法</h2>
-<ul>
-<li>tar</li>
-</ul>
-<blockquote>
-<p>tar -xvf filename.tar</p>
-</blockquote>
-<blockquote>
-<p>tar -cvf filename.tar dirname</p>
-</blockquote>
-<ul>
-<li>tar.gz</li>
-</ul>
-<blockquote>
-<p>tar -zxvf filename.tar.gz</p>
-</blockquote>
-<blockquote>
-<p>tar -zxcf filename.tar.gz dirname</p>
-</blockquote>
-<ul>
-<li>tar.bz2</li>
-</ul>
-<blockquote>
-<p>tar -jxvf filename.tar.bz2</p>
-</blockquote>
-<blockquote>
-<p>tar -jxcf filename.tar.bz2 dirname</p>
-</blockquote>
-<h1 id="test">test</h1>
-<h2 id="test语法">test语法</h2>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-d</td>
-<td>如果文件为一个目录，则为真</td>
-</tr>
-<tr>
-<td>-e</td>
-<td>如果文件存在，则为真</td>
-</tr>
-<tr>
-<td>-G</td>
-<td>如果文件存在且归该组所有，则为真</td>
-</tr>
-<tr>
-<td>-O</td>
-<td>如果文件存在并且归该用户所有，则为真</td>
-</tr>
-<tr>
-<td>-s</td>
-<td>如果文件的长度不为零，则为真</td>
-</tr>
-<tr>
-<td>-r</td>
-<td>如果文件可读，则为真</td>
-</tr>
-<tr>
-<td>-w</td>
-<td>如果文件可写，则为真</td>
-</tr>
-<tr>
-<td>-x</td>
-<td>如果文件可执行，则为真</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>-eq</td>
-<td>数值等于,则为真</td>
-</tr>
-<tr>
-<td>-ne</td>
-<td>数值不等于,则为真</td>
-</tr>
-<tr>
-<td>-gt</td>
-<td>数值大于,则为真</td>
-</tr>
-<tr>
-<td>-ge</td>
-<td>数值小于等于,则为真</td>
-</tr>
-<tr>
-<td>-lt</td>
-<td>数值小于,则为真</td>
-</tr>
-<tr>
-<td>-le</td>
-<td>数值小于等于,则为真</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>=</td>
-<td>字符相等，则为真</td>
-</tr>
-<tr>
-<td>!=</td>
-<td>字符不相等，则为真</td>
-</tr>
-<tr>
-<td>-z</td>
-<td>字符串长度为零，则为真</td>
-</tr>
-<tr>
-<td>-n</td>
-<td>字符串长度不为零，则为真</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Shell还提供了与( -a )、或( -o )、非( ! )三个逻辑操作符用于将测试条件连接起来，其优先级为：&quot;!&quot;最高，&quot;-a&quot;次之，&quot;-o&quot;最低。</strong></p>
-<h2 id="test用法">test用法</h2>
-<h3 id="文件测试">文件测试</h3>
-<pre><code>cd /bin
-if test -e ./bash 
-then
-    echo '文件已存在!'  
-else
-    echo '文件不存在!' 
-fi
-</code></pre>
-<p>输出结果</p>
-<blockquote>
-<p>文件已存在!</p>
-</blockquote>
-<h3 id="数值测试">数值测试</h3>
-<pre><code>num1=100 
-num2=100
-if test $[num1] -eq $[num2]
-then    
-    echo '两个数相等！'   
-else
-    echo '两个数不相等！' 
-fi
-</code></pre>
-<p>输出结果</p>
-<blockquote>
-<p>两个数相等！</p>
-</blockquote>
-<h3 id="字符串测试">字符串测试</h3>
-<pre><code>num1=&quot;ru1noob&quot;
-num2=&quot;runoob&quot;
-if test $num1 = $num2
-then
-    echo '两个字符串相等!'
-else
-    echo '两个字符串不相等!'
-fi
-</code></pre>
-<p>输出结果</p>
-<blockquote>
-<p>两个字符串不相等!</p>
-</blockquote>
-<h1 id="xarge">xarge</h1>
+<p>访问地址：http://NodeIP:Port</p>
 
 							</div>
 							<div class="wow zoomIn vt-post-tags">
-								
-								<a href="https://mzqk.github.io/tag/TBUMTnH7e/" rel="tag">Linux</a>
 								
 							</div>
 							<nav class="navigation3 post-navigation3" role="navigation">
 
 								<div class="nav-links3">
 									
-									<div class="wow zoomIn nav-previous3"><a href="https://mzqk.github.io/post/shell-jiao-cheng-ji-chu-jiao-cheng/"
-											rel="prev"> Shell 教程基础教程</a></div>
+									<div class="wow zoomIn nav-previous3"><a href="https://mzqk.github.io/post/nginx-ji-chu-ru-men/"
+											rel="prev"> Nginx入门</a></div>
 									
 									
-									<div class="wow zoomIn nav-next3"><a href="https://mzqk.github.io/post/oracle-sysdate-shi-jian-han-shu/"
-											rel="next"> Oracle Sysdate 时间函数</a></div>
+									<div class="wow zoomIn nav-next3"><a href="https://mzqk.github.io/post/er-jin-zhi-bu-shu-kubernetes-ji-qun/"
+											rel="next"> 二进制部署 Kubernetes 集群</a></div>
 									
 								</div>
 							</nav>

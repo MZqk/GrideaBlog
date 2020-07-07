@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<link rel="apple-touch-icon"
+  href="https://cdn.jsdelivr.net/gh/chiperman/Blog-photos/./img/iocn/aojep-i6dt9.49j3g5o9xbg.png">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta HTTP-EQUIV="expires" CONTENT="0">
+<meta name="apple-mobile-web-app-title" content="XiaoX 博客">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<title>Nginx入门 | MZZZ</title>
+
+<link rel="stylesheet" href="https://mzqk.github.io/styles/main.css">
+<link href="https://fonts.googleapis.com/css?family=Dancing+Script|Noto+Sans+SC:300|Montserrat&display=swap"
+  rel="stylesheet">
+<link href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css" rel="stylesheet" />
+<!-- 下面是我自己的iconfont -->
+<link href="https://at.alicdn.com/t/font_1651848_9ur7s2zwgll.css" rel="stylesheet" />
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<script type='text/javascript' src='https://mzqk.github.io/media/scripts/script.js'></script>
+<link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet" />
+<script src="https://cdn.bootcss.com/wow/1.1.2/wow.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.8/highlight.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+<script>
+  wow = new WOW({
+    boxClass: 'wow',
+    animateClass: 'animated',
+    offset: 0,
+    mobile: true,
+    live: true
+  });
+  wow.init();
+</script>
+
+</head>
+
+<body class="post-template-default single single-post postid-70 single-format-standard">
+	<div id="wrapper">
+				<header id="header" class="site-header" >
+			<div class="site-branding">
+				<h1 class="site-title">
+					<div class="post-title-name">
+						<a href="https://mzqk.github.io" rel="home">Nginx入门</a>
+					</div>
+				</h1>
+				<h2 class="site-description">这世界总有些人做着美梦逆来顺受</h2>
+			</div>
+			<nav id="nav-wrapper">
+				<div class="container">
+					<div class="nav-toggle">
+						<div class="bars">
+							<div class="bar"></div>
+							<div class="bar"></div>
+							<div class="bar"></div>
+						</div>
+					</div>
+					<div class="clear"></div>
+					<ul id="" class="dove">
+						
+
+						<li>
+
+							<a href="/"> 首页</a></li>
+
+						
+
+						<li>
+
+							<a href="/archives"> 归档</a></li>
+
+						
+
+						<li>
+
+							<a href="/post/about"> 关于</a></li>
+
+						
+
+					</ul>
+					</li>
+
+					</ul>
+				</div>
+			</nav>
+
+			<div class="jingge">
+				
+				
+				
+				
+				
+				
+				<a href="https://github.com/MZqk" target="_blank"><i class="iconfont icon-github"></i></a>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				<a href="tencent://message/?uin=961504168&amp;Site=&amp;Menu=yes" target="_blank"><i class="iconfont icon-qq"></i></a>
+				
+				
+				
+				<a href="https://weibo.com/532267456?is_all=1" target="_blank"><i class="iconfont icon-weibo"></i></a>
+				
+				
+				
+				
+			</div>
+			<form id="gridea-search-form" data-update="1594086421671" action="/search/index.html">
+				<div class="search-box">
+					<input class="search-txt" name="q" placeholder="Type to search" />
+					<a class="search-btn">
+						<i class="iconfont icon-search1" action="/search/index.html"></i>
+					</a>
+				</div>
+			</form>
+		</header>
+		<div id="content" class="container">
+			<div class="row">
+				<div class="col-md-8 site-main">
+					<article id="post-70"
+						class="post-70 post type-post status-publish format-standard hentry category-5 tag-10 tag-9 tag-11">
+						<div class="entry-content">
+							<div class="entry-meta">
+								<div class="entry-info">
+									<time>
+										2019-12-25
+									</time>
+									<span>
+										12 min read
+									</span>
+									<!-- id 将作为查询条件 -->
+									<span id="/nginx-ji-chu-ru-men/" class="leancloud_visitors"  data-flag-title="Nginx入门">
+										<span class="leancloud-visitors-count"></span>次阅读
+									</span>
+									<span class="isTop">
+										<script type="text/javascript">
+											var isTop;
+											isTop = false;
+											if (isTop == true) {
+												// document.write("<i class="iconfont icon-icon-test"></i>")
+												document.write("<span>⭐ Top</span>");
+											}
+										  </script>
+									</span>
+								</div>
+							</div>
+							<div class="wow zoomIn entry-summary song">
+								<h1 id="nginx入门">Nginx入门</h1>
+<h2 id="nginx简介">Nginx简介</h2>
+<h3 id="简介">简介</h3>
+<p>Nginx 是一款轻量级的 Web 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器，其特点是占有内存少，并发能力强。</p>
+<h3 id="特点">特点</h3>
+<ol>
+<li>高并发</li>
+<li>内存消耗少</li>
+<li>成本低廉</li>
+<li>配置简单</li>
+<li>内置健康检查功能</li>
+<li>节省带宽</li>
+<li>稳定性高</li>
+<li>支持热部署</li>
+</ol>
+<h3 id="常见web服务器">常见WEB服务器</h3>
+<ul>
+<li>
+<p>Apache</p>
+</li>
+<li>
+<p>Lighttpd</p>
+</li>
+<li>
+<p>Tomcat</p>
+</li>
+<li>
+<p>Tengine</p>
+</li>
+<li>
+<p>IBM WebSphere</p>
+</li>
+<li>
+<p>IIS</p>
+</li>
+<li>
+<p>LVS</p>
+</li>
+<li>
+<p>HAProxy</p>
+</li>
+</ul>
+<h2 id="nginx安装">Nginx安装</h2>
+<h3 id="在线安装">在线安装</h3>
+<h4 id="linux">Linux</h4>
+<p>apt install nginx</p>
+<p>yum install nginx</p>
+<p>查询默认配置文件<br>
+nginx -t</p>
+<h4 id="windows">Windows</h4>
+<p>官网下载ngixn文件解压至制定目录</p>
+<h3 id="源码安装">源码安装</h3>
+<ol>
+<li>下载源码包（包含基础依赖包，如prce库）</li>
+<li>./configure 根据需求进行配置</li>
+<li>make install 指定目录安装</li>
+</ol>
+<pre><code class="language-shell">wget http://nginx.org/download/nginx-1.16.1.tar.gz
+tar -zxvf nginx-1.16.1.tar.gz
+./configure
+    --sbin-path=/usr/local/nginx/nginx
+    --conf-path=/usr/local/nginx/nginx.conf
+    --pid-path=/usr/local/nginx/nginx.pid
+    --with-http_ssl_module
+make &amp;&amp; make install
+</code></pre>
+<p><a href="http://nginx.org/en/docs/configure.html">官方编译参数</a></p>
+<h2 id="nginx基础">Nginx基础</h2>
+<h3 id="基础使用">基础使用</h3>
+<h4 id="启动">启动</h4>
+<pre><code class="language-shell">nginx #正常启动应用
+nginx -c /etc/nginx/conf/nginx.conf #指定配置文件启动 
+</code></pre>
+<h4 id="停止">停止</h4>
+<pre><code class="language-shell">nginx -s stop #停止nginx应用
+pkill -9 nginx #停止nginx所有进程
+kill -INT `cat /run/nginx.pid` #指定pid发起停止信号
+</code></pre>
+<h4 id="平滑重启">平滑重启</h4>
+<pre><code class="language-shell">nginx -s reload #重启应用
+kill -HUP `cat /run/nginx.pid` #指定pid发起重启信号
+</code></pre>
+<h3 id="基础配置">基础配置</h3>
+<h4 id="目录结构">目录结构</h4>
+<pre><code>/etc/nginx/
+├── conf.d
+├── default.d
+├── fastcgi.conf
+├── fastcgi.conf.default
+├── fastcgi_params
+├── fastcgi_params.default
+├── koi-utf
+├── koi-win
+├── mime.types
+├── mime.types.default
+├── nginx.conf
+├── nginx.conf.default
+├── nginx.conf.rpmnew
+├── scgi_params
+├── scgi_params.default
+├── uwsgi_params
+├── uwsgi_params.default
+└── win-utf
+</code></pre>
+<pre><code>/usr/share/nginx/
+├── html
+│   ├── 404.html
+│   ├── 50x.html
+│   ├── 50x.html_bak
+│   ├── en-US -&gt; ../../doc/HTML/en-US
+│   ├── icons
+│   │   └── poweredby.png -&gt; ../../../pixmaps/poweredby.png
+│   ├── img -&gt; ../../doc/HTML/img
+│   ├── index.html -&gt; ../../doc/HTML/index.html
+│   ├── index.html_bak
+│   ├── nginx-logo.png
+│   └── poweredby.png -&gt; nginx-logo.png
+└── modules
+    ├── mod-http-image-filter.conf
+    ├── mod-http-perl.conf
+    ├── mod-http-xslt-filter.conf
+    ├── mod-mail.conf
+    └── mod-stream.conf
+</code></pre>
+<pre><code>/var/log/nginx/
+├── access.log
+└── error.log
+
+/run/nginx.pid 
+</code></pre>
+<h4 id="配置文件">配置文件</h4>
+<pre><code class="language-shell">#主配置
+user www www; #使用用户和组
+worker_processes auto; #工作进程数
+error_log /var/log/nginx/error.log; #错误日志保存位置
+pid /run/nginx.pid; #进程pid存放位置
+
+include /usr/share/nginx/modules/*.conf;  #模块加载目录
+#事件模型
+events {
+    worker_connections 1024; #最大连接数
+}
+#http服务器
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] &quot;$request&quot; '
+                      '$status $body_bytes_sent &quot;$http_referer&quot; '
+                      '&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;'; #日志输出格式
+
+    access_log  /var/log/nginx/access.log  main; #标准日志保存位置
+
+    sendfile            on; #开启高效文件传输模式，对于普通应用设为 on，如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络I/O处理速度，降低系统的负载。注意：如果图片显示不正常把这个改成off。
+    tcp_nopush          on;	#此选项允许或禁止使用socke的TCP_CORK的选项，此选项仅在使用sendfile的时候使用
+    tcp_nodelay         on; #将连接转变为长连接
+    keepalive_timeout   65; #长连接超时时间，单位是秒
+    types_hash_max_size 2048; 
+
+    include             /etc/nginx/mime.types; #设定mime类型,类型由mime.type文件定义
+    default_type        application/octet-stream; 
+
+    include /etc/nginx/conf.d/*.conf; #加载其他配置文件
+    # 虚拟主机
+    server {
+        listen       80 default_server;
+        listen       [::]:80 default_server; #监听端口
+        server_name  _;  #域名，可以有多个
+        root         /usr/share/nginx/html; #web服务器根目录
+
+        include /etc/nginx/default.d/*.conf; #加载其他配置文件
+
+        location / {
+            proxy_pass        http://127.0.0.1/;
+            proxy_set_header   Host             $host;
+            proxy_set_header   X-Real-IP        $remote_addr;
+            proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for; #获取用户真实IP
+        }
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+}
+</code></pre>
+<h3 id="基础优化">基础优化</h3>
+<h4 id="日志文件配置">日志文件配置</h4>
+<pre><code class="language-shell">#!/bin/bash
+#脚本用于切割nginx日志文件
+#请配置脚本为每天00:00启动
+#crontab -e 00 00 * * * /bin/bash /root/spilt_nginx_log.sh
+
+#设置nginx日志文件目录
+log_path=&quot;/var/log/nginx/&quot;
+
+#根据时间切割日志文件
+mkdir -p ${log_path}${date -d &quot;yesterday&quot; +&quot;%Y%m&quot;}
+mv ${log_path}access.log ${log_path}${date -d &quot;yesterday&quot; +&quot;%Y%m&quot;}/access_${date -d &quot;yesterday&quot; +&quot;%Y%m%d&quot;}.log
+
+#重启nginx
+kill -HUP `cat /run/nginx.pid`
+</code></pre>
+<h4 id="压缩输出配置">压缩输出配置</h4>
+<pre><code>gzip on;
+gzip_mini_length 1k;
+gzip_buffer 4 16k;
+gzip_http_version 1.1;
+gzip_comp_level 2;
+gzip_tesxt_plain application/x-javascript text/css application/xml;
+gzip_vary on;
+</code></pre>
+<h4 id="缓存配置">缓存配置</h4>
+<pre><code>location ~ .*\.{git|jpg|jpeg|png|bmp|swf}$
+{
+    expires 30d;
+}
+location ~ .*\.{js|css}?$
+{
+    expires 1h;
+}
+</code></pre>
+<h4 id="url重写">URL重写</h4>
+<pre><code>#根据浏览器标识，访问资源重定向到指定文件目录（以下为IE)
+if ($http_user_agent ~ MSIE ) {
+   rewrite ^(.*)$ /msie/$1 break;
+}
+
+#将移动客户端的请求重定向到其他服务器
+if    ($http_user_agent ~* '(iphone|ipod)' )  { 
+　　　　rewrite ^.+    http://mobile.site.com$uri;
+}
+
+#.用户使用POST方式请求数据时候，返回405：
+if ($request_method = POST ) {
+   return 405;
+}
+
+#访问xxxx时重定向到xxxx目录
+location /xxxx {
+     rewrite ^/xxxx/.*$ /xxxx permanent;
+}
+</code></pre>
+<h2 id="nginx常用功能">Nginx常用功能</h2>
+<h3 id="反向代理">反向代理</h3>
+<pre><code class="language-shell"> http{
+ 	server{
+        listen       80;
+        server_name  localhost;
+        location / { 
+        proxy_pass http://localhost:8080;     
+ 	}
+ }
+</code></pre>
+<h3 id="负载均衡">负载均衡</h3>
+<p><a href="http://nginx.org/en/docs/http/load_balancing.html">官方说明</a></p>
+<pre><code class="language-shell">http {
+ upstream myproject {
+ server 127.0.0.1:8000 weight=3;
+ server 127.0.0.1:8001;
+ server 127.0.0.1:8002;
+ server 127.0.0.1:8003;
+ }
+ 	server {
+ 	listen 80;
+	 server_name www.domain.com;
+ 	location / {
+ 		proxy_pass http://myproject;
+ 		}
+ 	}
+}
+</code></pre>
+<h3 id="正向代理">正向代理</h3>
+<pre><code class="language-shell">http{
+    server{
+        listen 8888;
+        location / {
+            resolver 8.8.8.8;
+            proxy_pass	http://$http_host$request_uri;
+        }
+    }
+}
+</code></pre>
+<h3 id="http服务器ssl">HTTP服务器（SSL）</h3>
+<p><a href="http://nginx.org/en/docs/http/configuring_https_servers.html">官方说明</a></p>
+<pre><code class="language-shell">http {
+  server {
+    listen	443;
+    server_name	localhost;
+    ssl	on;
+    ssl_certificate      /usr/local/nginx/conf/cert.pem;
+    ssl_certificate_key  /usr/local/nginx/conf/cert.key;
+  }
+}
+</code></pre>
+<h3 id="文件服务器">文件服务器</h3>
+<pre><code class="language-shell">http{
+    server{
+        listen 80;
+        server_name localhost;
+        root /usr/share/nginx/html/;
+    }
+}
+</code></pre>
+<h3 id="缓存服务器">缓存服务器</h3>
+<pre><code>http{
+	upstream myproject {
+        server 192.168.1.112:8001;
+        server 192.168.1.112:8002;
+        server 192.168.1.112:8003;
+    	}
+
+	proxy_buffering on;
+	proxy_cache_valid any 10m;
+	proxy_cache_path /data/cache levels=1:2 keys_zone=my_cache:10m max_size=1000m inactive=600m;
+	proxy_temp_path /data/temp;
+	proxy_buffer_size 4k;
+	proxy_buffers 100 8k;
+
+	server {
+    	listen       80;
+    	server_name  localhost jeson.t.imooc.io; 
+    	location / {
+        	proxy_cache my_cache;  #开启缓存
+       		proxy_pass http://myproject;
+            proxy_cache_key $host$uri$is_args$args; #定义缓存的key
+    }
+}
+</code></pre>
+<h2 id="nginx模块">Nginx模块</h2>
+<h3 id="http模块">HTTP模块</h3>
+<ul>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_core_module.html">ngx_http_core_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_access_module.html">ngx_http_access_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_addition_module.html">ngx_http_addition_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_api_module.html">ngx_http_api_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_auth_basic_module.html">ngx_http_auth_basic_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_auth_jwt_module.html">ngx_http_auth_jwt_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_auth_request_module.html">ngx_http_auth_request_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_autoindex_module.html">ngx_http_autoindex_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_browser_module.html">ngx_http_browser_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_charset_module.html">ngx_http_charset_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_dav_module.html">ngx_http_dav_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_empty_gif_module.html">ngx_http_empty_gif_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_f4f_module.html">ngx_http_f4f_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html">ngx_http_fastcgi_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_flv_module.html">ngx_http_flv_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_geo_module.html">ngx_http_geo_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_geoip_module.html">ngx_http_geoip_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_grpc_module.html">ngx_http_grpc_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_gunzip_module.html">ngx_http_gunzip_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_gzip_module.html">ngx_http_gzip_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_gzip_static_module.html">ngx_http_gzip_static_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_headers_module.html">ngx_http_headers_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_hls_module.html">ngx_http_hls_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_image_filter_module.html">ngx_http_image_filter_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_index_module.html">ngx_http_index_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_js_module.html">ngx_http_js_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_keyval_module.html">ngx_http_keyval_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_limit_conn_module.html">ngx_http_limit_conn_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_limit_req_module.html">ngx_http_limit_req_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_log_module.html">ngx_http_log_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_map_module.html">ngx_http_map_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_memcached_module.html">ngx_http_memcached_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_mirror_module.html">ngx_http_mirror_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_mp4_module.html">ngx_http_mp4_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_perl_module.html">ngx_http_perl_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_proxy_module.html">ngx_http_proxy_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_random_index_module.html">ngx_http_random_index_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_realip_module.html">ngx_http_realip_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_referer_module.html">ngx_http_referer_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_rewrite_module.html">ngx_http_rewrite_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_scgi_module.html">ngx_http_scgi_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_secure_link_module.html">ngx_http_secure_link_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_session_log_module.html">ngx_http_session_log_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_slice_module.html">ngx_http_slice_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_spdy_module.html">ngx_http_spdy_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_split_clients_module.html">ngx_http_split_clients_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_ssi_module.html">ngx_http_ssi_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_ssl_module.html">ngx_http_ssl_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_status_module.html">ngx_http_status_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_stub_status_module.html">ngx_http_stub_status_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_sub_module.html">ngx_http_sub_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_upstream_module.html">ngx_http_upstream_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_upstream_conf_module.html">ngx_http_upstream_conf_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_upstream_hc_module.html">ngx_http_upstream_hc_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_userid_module.html">ngx_http_userid_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_uwsgi_module.html">ngx_http_uwsgi_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_v2_module.html">ngx_http_v2_module</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_xslt_module.html">ngx_http_xslt_module</a></li>
+</ul>
+<h3 id="邮箱模块">邮箱模块</h3>
+<ul>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_core_module.html">ngx_mail_core_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_auth_http_module.html">ngx_mail_auth_http_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_proxy_module.html">ngx_mail_proxy_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_ssl_module.html">ngx_mail_ssl_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_imap_module.html">ngx_mail_imap_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_pop3_module.html">ngx_mail_pop3_module</a></li>
+<li><a href="http://nginx.org/en/docs/mail/ngx_mail_smtp_module.html">ngx_mail_smtp_module</a></li>
+</ul>
+<h3 id="strean模块">Strean模块</h3>
+<ul>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_core_module.html">ngx_stream_core_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_access_module.html">ngx_stream_access_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_geo_module.html">ngx_stream_geo_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_geoip_module.html">ngx_stream_geoip_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_js_module.html">ngx_stream_js_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_keyval_module.html">ngx_stream_keyval_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_limit_conn_module.html">ngx_stream_limit_conn_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_log_module.html">ngx_stream_log_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_map_module.html">ngx_stream_map_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_proxy_module.html">ngx_stream_proxy_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_realip_module.html">ngx_stream_realip_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_return_module.html">ngx_stream_return_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_split_clients_module.html">ngx_stream_split_clients_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_ssl_module.html">ngx_stream_ssl_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_ssl_preread_module.html">ngx_stream_ssl_preread_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_upstream_module.html">ngx_stream_upstream_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_upstream_hc_module.html">ngx_stream_upstream_hc_module</a></li>
+<li><a href="http://nginx.org/en/docs/stream/ngx_stream_zone_sync_module.html">ngx_stream_zone_sync_module</a></li>
+</ul>
+<h2 id="slb实例">SLB实例</h2>
+<h3 id="产品架构">产品架构</h3>
+<h4 id="基础架构说明">基础架构说明</h4>
+<p>阿里云当前提供四层和七层的负载均衡服务。</p>
+<ul>
+<li>四层采用开源软件LVS（Linux Virtual Server）+ keepalived的方式实现负载均衡，并根据云计算需求对其进行了个性化定制。</li>
+<li>七层采用Tengine实现负载均衡。Tengine是由淘宝网发起的Web服务器项目，它在Nginx的基础上，针对有大访问量的网站需求，添加了很多高级功能和特性。<br>
+<a href="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4092/1566871290938_zh-CN.png"><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4092/1566871290938_zh-CN.png" alt="Tengine" loading="lazy"></a></li>
+</ul>
+<p>如下图所示，各个地域的四层负载均衡实际上是由多台LVS机器部署成一个LVS集群来运行的。采用集群部署模式极大地保证了异常情况下负载均衡服务的可用性、稳定性与可扩展性。</p>
+<figure data-type="image" tabindex="1"><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4092/1566871290939_zh-CN.png" alt="LVS" loading="lazy"></figure>
+<p>LVS集群内的每台LVS都会进行会话，通过组播报文同步到该集群内的其它LVS机器上，从而实现LVS集群内各台机器间的会话同步。如下图所示，当客户端向服务端传输三个数据包后，在LVS1上建立的会话A开始同步到其它LVS机器上。图中实线表示现有的连接，图中虚线表示当LVS1出现故障或进行维护时，这部分流量会走到一台可以正常运行的机器LVS2上。因而负载均衡集群支持热升级，并且在机器故障和集群维护时最大程度对用户透明，不影响用户业务。</p>
+<p><strong>说明</strong> 对于连接未建立（三次握手未完成），或者已建立连接但未触发会话同步机制，热升级不保证连接不中断，需要依靠客户端重新发起连接。</p>
+<figure data-type="image" tabindex="2"><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4092/1566871290941_zh-CN.png" alt="LVS" loading="lazy"></figure>
+<h4 id="入网流量路径">入网流量路径</h4>
+<p>对于入网流量，负载均衡会根据用户在控制台或API上配置的转发策略，对来自前端的访问请求进行转发和处理，数据流转如<a href="https://help.aliyun.com/document_detail/27544.html?spm=a2c4g.11186623.6.546.3bdf54931Vjryc#d7e30">图 1</a>所示。</p>
+<p>图 1. 入网流量路径<br>
+<a href="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4114/15668712912333_zh-CN.png"><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4114/15668712912333_zh-CN.png" alt="img" loading="lazy"></a></p>
+<ol>
+<li>TCP/UDP协议和HTTP/HTTPS协议的流量都需要经过LVS集群进行转发。</li>
+<li>LVS集群内的每一台节点服务器均匀地分配海量访问请求，并且每一台节点服务器之间都有会话同步策略，以保证高可用。
+<ul>
+<li>如果相应的负载均衡实例服务端口使用的是四层协议（TCP或UDP），那么LVS集群内每个节点都会根据负载均衡实例负载均衡策略，将其承载的服务请求按策略直接分发到后端ECS服务器。</li>
+<li>如果相应的负载均衡实例服务端口使用的是七层HTTP协议，那么LVS集群内每个节点会先将其承载的服务请求均分到Tengine集群，Tengine集群内的每个节点再根据负载均衡策略，将服务请求按策略最终分发到后端ECS服务器。</li>
+<li>如果相应的负载均衡实例服务端口使用的是七层HTTPS协议，与上述HTTP处理过程类似，差别是在按策略将服务请求最终分发到后端ECS服务器前，先调用Key Server进行证书验证及数据包加解密等前置操作。</li>
+</ul>
+</li>
+</ol>
+<h4 id="出网流量路径">出网流量路径</h4>
+<p>负载均衡SLB和后端ECS之间是通过内网进行通信的。</p>
+<ul>
+<li>
+<p>如果ECS仅仅处理来自负载均衡的请求，可以不购买公网带宽（ECS公网IP/弹性公网IP/NAT网关等）。</p>
+<p><strong>说明</strong> 早期创建的一些ECS上直接分配了公网IP（ifconfig中可见接口上分配的公网ip地址），此类ECS如果仅通过SLB对外提供服务，即便在公网接口（网卡）上看到有流量统计，也不会产生ECS的公网费用。</p>
+</li>
+<li>
+<p>如果需要直接通过后端ECS对外提供服务，或后端ECS有访问外网的需求， 那么需要相应的配置或购买ECS公网IP/弹性公网IP/NAT网关等服务。</p>
+</li>
+</ul>
+<p>ECS的公网流量访问路径如<a href="https://help.aliyun.com/document_detail/27544.html?spm=a2c4g.11186623.6.546.3bdf54931Vjryc#d7e90">图 2</a>所示。</p>
+<p>图 2. 出网流量路径<br>
+<a href="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4114/15668712912335_zh-CN.png"><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4114/15668712912335_zh-CN.png" alt="img" loading="lazy"></a></p>
+<p>总体原则：流量从哪里进来，就从哪里出去。</p>
+<ol>
+<li>通过负载均衡进入的流量在负载均衡SLB上限速/计费，仅收取出方向流量费用，入方向流量不收取（在未来可能会改变），SLB到ECS之间是阿里云内网通信，不收取流量费用。</li>
+<li>来自弹性公网IP/NAT网关的流量，分别在弹性公网IP/NAT网关上进行限速/计费，如果在购买ECS时选择了公网带宽，限速/计费点在ECS上。</li>
+<li>负载均衡SLB仅提供被动访问公网的能力，即后端ECS只能在收到通过负载均衡SLB转发来的公网的请求时，才能访问公网回应该请求，如后端ECS希望主动发起公网访问，则需要配置/购买ECS公网带宽、弹性公网IP或NAT网关来实现。</li>
+<li>ECS公网带宽（购买ECS时配置）、弹性公网IP、NAT网关均可以实现ECS的双向公网访问（访问或被访问），但没有流量分发和负载均衡的能力。</li>
+</ol>
+<h3 id="快速入门">快速入门</h3>
+<video id="video" controls="" preload="none" poster="">
+ <source id="mp4" src="https://cloud.video.taobao.com/play/u/3171458687/p/1/e/6/t/1/50265550292.mp4" type="video/mp4">
+</video>
+<p>​</p>
+
+							</div>
+							<div class="wow zoomIn vt-post-tags">
+								
+								<a href="https://mzqk.github.io/tag/j2Ca_XOy9/" rel="tag">教程</a>
+								
+							</div>
+							<nav class="navigation3 post-navigation3" role="navigation">
+
+								<div class="nav-links3">
+									
+									<div class="wow zoomIn nav-previous3"><a href="https://mzqk.github.io/post/oracle-an-zhuang/"
+											rel="prev"> Oracle 安装</a></div>
+									
+									
+									<div class="wow zoomIn nav-next3"><a href="https://mzqk.github.io/post/kubeadm-an-zhuang-k8s/"
+											rel="next"> kubeadm安装k8s</a></div>
+									
+								</div>
+							</nav>
+							<div class="wow zoomIn author-info" style="visibility: visible; animation-name: zoomIn;">
+								<div class="author-avatar pull-left"><img
+										src="https://mzqk.github.io/images/avatar.png"></div>
+								
+								<div class="author-description">
+									<div class="author-title">
+										<div class="author-link" rel="author">MZZZ</div>
+									</div>
+									
+									
+						</div>
+					</article>
+					<div id="marlin_lite_about_widget-2" class="wow zoomIn widget marlin_lite_about_widget"
+						data-wow-delay="0.1s">
+
+						
+						<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='https://mzqk.github.io/media/scripts/Valine.min.js'></script>
+<!-- <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script> -->
+
+
+
+<div class="comment"></div>
+<script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV, 
+            el: '.comment',
+            lang: 'zh-cn',
+            visitor: true,
+            
+            
+            emoticon_list: ["吐.png","喷血.png","狂汗.png","不说话.png","汗.png","坐等.png","献花.png","不高兴.png","中刀.png","害羞.png","皱眉.png","小眼睛.png","中指.png","尴尬.png","瞅你.png","想一想.png","中枪.png","得意.png","肿包.png","扇耳光.png","亲亲.png","惊喜.png","脸红.png","无所谓.png","便便.png","愤怒.png","蜡烛.png","献黄瓜.png","内伤.png","投降.png","观察.png","看不见.png","击掌.png","抠鼻.png","邪恶.png","看热闹.png","口水.png","抽烟.png","锁眉.png","装大款.png","吐舌.png","无奈.png","长草.png","赞一个.png","呲牙.png","无语.png","阴暗.png","不出所料.png","咽气.png","期待.png","高兴.png","吐血倒地.png","哭泣.png","欢呼.png","黑线.png","喜极而泣.png","喷水.png","深思.png","鼓掌.png","暗地观察.png"],
+            	
+            	
+            
+        });
+    </script> 
+
+
+					</div>
+				</div>
+				<div class="tocc col l3 hide-on-med-and-down">
+
+    <div class="toc-widget">
+
+        <div class="toc-title"></div>
+
+        <div id="toc-content">
+
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.5.0/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '.entry-summary',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('.entry-summary').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+    });
+
+    $(function () {
+        var bt;
+        bt = $('.toc-widget');
+        if ($(document).width() > 480) {
+            $(window).scroll(function () {
+                var st;
+                st = $(window).scrollTop();
+                if (st > 450) {
+                    return bt.css('display', 'block');
+                } else {
+                    return bt.css('display', 'none');
+                }
+            })
+        }
+    });
+</script>
+			</div>
+		</div>
+		<footer id="colophon" class="site-footer">
+	<div class="container">
+		<div class="copyright">
+			
+			<b>Crafted with 💔 by <a href="https://chiperman.github.io/about/" target="_blank">chiperman</a></b>
+			<br>
+			<b>Eleven forever.</b>
+			<br>
+			<span class="runtime">
+				「我」已经运行了<script type="text/javascript">
+					var urodz = new Date("05/07/2018");
+					var now = new Date();
+					var ile = now.getTime() - urodz.getTime();
+					var dni = Math.floor(ile / (1000 * 60 * 60 * 24));
+					document.write(+dni)
+				</script>天
+				<br>
+			</span>
+			<b>Theme: </b>
+			<a href="https://github.com/chiperman/gridea-theme-xiaox" target="_blank" title="Pan">
+				<span><b>Pan - XiaoX</b></span>
+			</a>
+			<b>. Powered by </b>
+			<a href="https://gridea.dev/" target="_blank" title="Gridea">
+				<span><b>Gridea</b></span>
+			</a>
+		</div>
+	</div><!-- .container -->
+</footer><!-- #colophon -->
+	</div>
+
+	<script src="https://cdn.bootcss.com/fitvids/1.2.0/jquery.fitvids.min.js"></script>
+
+<script
+  src="https://cdn.jsdelivr.net/gh/MZqk/mzqk.github.io/media/scripts/marlin-scripts.js">
+</script>
+
+<script src="//tokinx.github.io/lately/lately.min.js"></script>
+<script>
+  jQuery(document).ready(function () {
+    $.lately({
+      'target': '.lately-a,.lately-b,.lately-c'
+    })
+  });
+</script>
+<style type="text/css">
+  /* 一键到顶部 */
+  a.back_to_top {
+    text-decoration: none;
+    position: fixed;
+    bottom: 65px;
+    right: 30px;
+    background: #f0f0f0;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    line-height: 36px;
+    font-size: 18px;
+    text-align: center;
+    transition-duration: .5s;
+    transition-propety: background-color;
+    display: none;
+  }
+
+  a.back_to_top span {
+    color: #888;
+  }
+
+  a.back_to_top:hover {
+    cursor: pointer;
+    background: #dfdfdf;
+  }
+
+  a.back_to_top:hover span {
+    color: #555;
+  }
+
+  @media print,
+  screen and (max-width: 580px) {
+    .back_to_top {
+      display: none !important;
+    }
+  }
+
+  /* 一键到底部 */
+
+  a.down_to_bottom {
+    text-decoration: none;
+    position: fixed;
+    bottom: 15px;
+    right: 30px;
+    background: #f0f0f0;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    line-height: 36px;
+    font-size: 18px;
+    text-align: center;
+    transition-duration: .5s;
+    transition-propety: background-color;
+    display: none;
+  }
+
+  a.down_to_bottom span {
+    color: #888;
+  }
+
+  a.down_to_bottom:hover {
+    cursor: pointer;
+    background: #dfdfdf;
+  }
+
+  a.down_to_bottom:hover span {
+    color: #555;
+  }
+
+  @media print,
+  screen and (max-width: 580px) {
+    .down_to_bottom {
+      display: none !important;
+    }
+  }
+</style>
+
+
+<a id="back_to_top" href="#" class="back_to_top"><span><i class="iconfont icon-xiangshang"></i></span>
+</a>
+
+<a id="down_to_bottom" href="#" class="down_to_bottom"><span><i class="iconfont icon-xiangxia"></i></span>
+</a>
+
+<script src="//instant.page/3.0.0" type="module" defer
+  integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+<script>
+  function getScrollTop() {
+    var scrollTop = 0,
+      bodyScrollTop = 0,
+      documentScrollTop = 0;
+    if (document.body) {
+      bodyScrollTop = document.body.scrollTop;
+    }
+    if (document.documentElement) {
+      documentScrollTop = document.documentElement.scrollTop;
+    }
+    scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+    return scrollTop;
+  };
+
+  function getScrollHeight() {
+    var scrollHeight = 0,
+      bodyScrollHeight = 0,
+      documentScrollHeight = 0;
+    if (document.body) {
+      bSH = document.body.scrollHeight;
+    }
+    if (document.documentElement) {
+      dSH = document.documentElement.scrollHeight;
+    }
+    scrollHeight = (bSH - dSH > 0) ? bSH : dSH;
+    return scrollHeight;
+  };
+
+  function getWindowHeight() {
+    var windowHeight = 0;
+    if (document.compatMode == "CSS1Compat") {
+      windowHeight = document.documentElement.clientHeight;
+    } else {
+      windowHeight = document.body.clientHeight;
+    }
+    return windowHeight;
+  };
+
+  $(document).ready((function (_this) {
+    return function () {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function () {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block');
+          } else {
+            return bt.css('display', 'none');
+          }
+        });
+        return bt.click(function () {
+          $('body,html').animate({
+            scrollTop: 0
+          }, 800);
+          return false;
+        });
+      }
+    };
+  })(this));
+
+  $(document).ready((function (_this) {
+    return function () {
+      var bt;
+      bt = $('#down_to_bottom');
+      if ($(document).width() > 480) {
+        $(window).scroll(function () {
+          var st;
+          st = $(window).scrollTop();
+          if (getScrollTop() + getWindowHeight() == getScrollHeight()) {
+            return bt.css('display', 'none');
+          } else {
+            return bt.css('display', 'block');
+          }
+        });
+        return bt.click(function () {
+          $('body,html').animate({
+            scrollTop: $('body,html')[0].scrollHeight
+          }, 800);
+          return false;
+        });
+      }
+    };
+  })(this));
+</script>
+	<script data-no-instant>
+		(function ($) {
+			$.extend({
+				adamsOverload: function () {
+					$('.navigation:eq(0)').remove();
+					$("").attr("rel", "external");
+					$("a[rel='external'],a[rel='external nofollow']").attr("target", "_blank");
+					$("a.vi").attr("rel", "");
+					$.viewImage({
+						'target': 'img',
+						'exclude': '.vsmile-icons img,.gallery img',
+						'delay': 300
+					});
+					$.lately({
+						'target': '.commentmetadata a,.infos time,.post-list time'
+					});
+					prettyPrint();
+
+					$('ul.links li a').each(function () {
+						if ($(this).parent().find('.bg').length == 0) {
+							$(this).parent().append(
+								'<!---<div class="bg" style="background-image:url(https://c3.glgoo.top/s2/favicons?domain=' +
+								$(this).attr("href") + ')"></div>--->')
+						}
+					});
+				}
+			});
+		})(jQuery);
+		jQuery.adamsOverload();
+	</script>
+
+</body>
+
+</html>
