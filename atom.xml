@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mzqk.github.io</id>
     <title>MZZZ</title>
-    <updated>2020-07-07T01:47:10.158Z</updated>
+    <updated>2020-07-08T02:20:20.186Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mzqk.github.io"/>
     <link rel="self" href="https://mzqk.github.io/atom.xml"/>
@@ -10,198 +10,6 @@
     <logo>https://mzqk.github.io/images/avatar.png</logo>
     <icon>https://mzqk.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, MZZZ</rights>
-    <entry>
-        <title type="html"><![CDATA[用 Docker 部署 Seafile 服务]]></title>
-        <id>https://mzqk.github.io/post/yong-docker-bu-shu-seafile-fu-wu/</id>
-        <link href="https://mzqk.github.io/post/yong-docker-bu-shu-seafile-fu-wu/">
-        </link>
-        <updated>2020-06-17T01:44:39.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="用-docker-部署-seafile-服务">用 Docker 部署 Seafile 服务</h1>
-<h2 id="快速开始">快速开始</h2>
-<h3 id="安装-docker-compose">安装 docker-compose</h3>
-<p>因为 Seafile v7.x.x 容器是通过 docker-compose 命令运行的，所以您应该先在服务器上安装该命令。</p>
-<pre><code class="language-bash"># for CentOS
-yum install docker-compose -y
-
-# for Ubuntu
-apt-get install docker-compose -y
-
-</code></pre>
-<h3 id="下载并修改-docker-composeyml">下载并修改 docker-compose.yml</h3>
-<p>下载 <a href="https://docs.seafile.com/d/cb1d3f97106847abbf31/files/?p=/docker/pro-edition/docker-compose.yml">docker-compose.yml</a> 示例文件到您的服务器上，然后根据您的实际环境修改该文件。尤其是以下几项配置：</p>
-<ul>
-<li>MySQL root 用户的密码 (MYSQL_ROOT_PASSWORD and DB_ROOT_PASSWD)</li>
-<li>持久化存储 MySQL 数据的 volumes 目录 (volumes)</li>
-<li>持久化存储 Seafile 数据的 volumes 目录 (volumes)</li>
-<li>持久化存储 Elasticsearch 索引数据的 volumes 目录 (volumes)</li>
-</ul>
-<h3 id="启动-seafile-服务">启动 Seafile 服务</h3>
-<p>执行以下命令启动 Seafile 服务</p>
-<pre><code class="language-bash">docker-compose up -d
-
-</code></pre>
-<p>需要等待几分钟，等容器首次启动时的初始化操作完成后，您就可以在浏览器上访问<code>http://seafile.example.com</code> 来打开 Seafile 主页。</p>
-<p>**注意：您应该在 **<code>docker-compose.yml</code><strong>文件所在的目下执行以上命令。</strong></p>
-<h3 id="安装授权文件seafile-licensetxt">安装授权文件(seafile-license.txt)</h3>
-<p>如果您已经向 Seafile 软件商购买了专业版的授权文件<code>seafile-license.txt</code>，您只需要将该授权文件拷贝至 Seafile 数据持久化目录中的<code>seafile/</code>目录下，然后重启docker容器，即可完成授权文件的安装。 假如，Seafile 数据持久化目录为<code>/opt/seafile-data</code>，那么，在您的宿主机上执行以下操作：</p>
-<pre><code>cp /path/to/seafile-license.txt /opt/seafile-data/seafile/
-
-</code></pre>
-<p>然后重启这个容器：</p>
-<pre><code>docker-compose restart
-
-</code></pre>
-<h2 id="更多配置项">更多配置项</h2>
-<h3 id="自定义管理员用户名和密码">自定义管理员用户名和密码</h3>
-<p>默认的管理员账号是 <code>me@example.com</code> 并且该账号的密码是 <code>asecret</code>，您可以在 <code>docker-compose.yml</code> 中配置不同的用户名和密码，为此您需要做如下配置：</p>
-<pre><code>seafile:
-    ...
-
-    environment:
-        ...
-        - SEAFILE_ADMIN_EMAIL=me@example.com
-        - SEAFILE_ADMIN_PASSWORD=a_very_secret_password
-        ...
-
-</code></pre>
-<h3 id="使用-lets-encrypt-ssl-证书">使用 Let's encrypt SSL 证书</h3>
-<p>如果您把 <code>SEAFILE_SERVER_LETSENCRYPT</code> 设置为 <code>true</code>，该容器将会自动为您申请一个 letsencrypt 机构颁发的 SSL 证书，并开启 https 访问，为此您需要做如下配置：</p>
-<pre><code>seafile:
-    ...
-    ports:
-        - &quot;80:80&quot;
-        - &quot;443:443&quot;
-    ...
-    environment:
-        ...
-        - SEAFILE_SERVER_LETSENCRYPT=true
-        - SEAFILE_SERVER_HOSTNAME=seafile.example.com
-        ...
-
-</code></pre>
-<p>如果您想要使用自己的 SSL 证书，而且如果用来持久化存储 Seafile 数据的目录为 <code>/opt/seafile-data</code>，您可以做如下处理：</p>
-<ul>
-<li>创建 <code>/opt/seafile-data/ssl</code> 目录，然后拷贝您的证书文件和密钥文件到ssl目录下。</li>
-<li>假设您的站点名称是 <code>seafile.example.com</code>，那么您的证书名称必须就是 <code>seafile.example.com.crt</code>，密钥文件名称就必须是 <code>seafile.example.com.key</code>。</li>
-</ul>
-<h3 id="修改-seafile-服务的配置">修改 Seafile 服务的配置</h3>
-<p>Seafile 的配置文件存放在 <code>shared/seafile/conf</code> 目录下，您可以根据<a href="https://manual-cn.seafile.com/">Seafile 手册</a>的指导来修改这些配置项。</p>
-<p>一旦修改了配置文件，您需要重启服务以使其生效：</p>
-<pre><code class="language-bash">docker-compose restart
-
-</code></pre>
-<h3 id="查找日志">查找日志</h3>
-<p>Seafile 容器中 Seafile 服务本身的日志文件存放在 <code>/shared/logs/seafile</code> 目录下，或者您可以在宿主机上 Seafile 容器的卷目录中找到这些日志，例如：<code>/opt/seafile-data/logs/seafile</code></p>
-<p>同样 Seafile 容器的系统日志存放在 <code>/shared/logs/var-log</code> 目录下，或者宿主机目录 <code>/opt/seafile-data/logs/var-log</code>。</p>
-<h3 id="增加一个新的管理员">增加一个新的管理员</h3>
-<p>确保各容器正常运行，然后执行以下命令：</p>
-<pre><code class="language-bash">docker exec -it seafile /opt/seafile/seafile-server-latest/reset-admin.sh
-
-</code></pre>
-<p>根据提示输入用户名和密码，您现在有了一个新的管理帐户。</p>
-<h2 id="seafile-目录结构">Seafile 目录结构</h2>
-<h3 id="shared"><code>/shared</code></h3>
-<p>共享卷的挂载点,您可以选择在容器外部存储某些持久性信息.在这个项目中，我们会在外部保存各种日志文件和上传数据。 这使您可以轻松重建容器而不会丢失重要信息。</p>
-<ul>
-<li>/shared/seafile: Seafile 服务的配置文件以及数据文件</li>
-<li>/shared/logs: 日志目录
-<ul>
-<li>/shared/logs/var-log: 我们将容器内的<code>/var/log</code>链接到本目录。您可以在<code>/shared/logs/var-log/nginx/</code>中找到 nginx 的日志文件</li>
-<li>/shared/logs/seafile: Seafile 服务运行产生的日志文件目录。比如您可以在 <code>/shared/logs/seafile/seafile.log</code> 文件中看到 seaf-server 的日志</li>
-</ul>
-</li>
-<li>/shared/ssl: 存放证书的目录，默认不存在</li>
-</ul>
-<h3 id="升级-seafile-服务">升级 Seafile 服务</h3>
-<p>如果要升级 Seafile 服务到最新版本：</p>
-<pre><code class="language-sh">docker pull docker.seafile.top/seafileltd/seafile-pro-mc:latest
-docker-compose down
-docker-compose up -d
-
-</code></pre>
-<h2 id="备份和恢复">备份和恢复</h2>
-<h3 id="目录结构">目录结构</h3>
-<p>我们假设您的 seafile 数据卷路径是 <code>/opt/seafile-data</code>，并且您想将备份数据存放到 <code>/opt/seafile-backup</code> 目录下。</p>
-<p>您可以创建一个类似以下 <code>/opt/seafile-backup</code> 的目录结构：</p>
-<pre><code class="language-struct">/opt/seafile-backup
----- databases/  用来存放 MySQL 容器的备份数据
----- data/  用来存放 Seafile 容器的备份数据
-
-</code></pre>
-<p>要备份的数据文件：</p>
-<pre><code class="language-struct">/opt/seafile-data/seafile/conf  # configuration files
-/opt/seafile-data/seafile/seafile-data # data of seafile
-/opt/seafile-data/seafile/seahub-data # data of seahub
-
-</code></pre>
-<h3 id="备份数据">备份数据</h3>
-<p>步骤：</p>
-<ol>
-<li>备份 MySQL 数据库数据；</li>
-<li>备份 Seafile 数据目录；</li>
-</ol>
-<ul>
-<li>
-<p>备份数据库：</p>
-<pre><code class="language-bash"># 建议每次将数据库备份到一个单独的文件中。至少在一周内不要覆盖旧的数据库备份。
-cd /opt/seafile-backup/databases
-docker exec -it seafile-mysql mysqldump  -uroot --opt ccnet_db &gt; ccnet_db.sql
-docker exec -it seafile-mysql mysqldump  -uroot --opt seafile_db &gt; seafile_db.sql
-docker exec -it seafile-mysql mysqldump  -uroot --opt seahub_db &gt; seahub_db.sql
-
-</code></pre>
-</li>
-<li>
-<p>备份 Seafile 资料库数据：</p>
-<ul>
-<li>
-<p>直接复制整个数据目录</p>
-<pre><code class="language-bash">cp -R /opt/seafile-data/seafile /opt/seafile-backup/data/
-cd /opt/seafile-backup/data &amp;&amp; rm -rf ccnet
-
-</code></pre>
-</li>
-<li>
-<p>使用 rsync 执行增量备份</p>
-<pre><code class="language-bash">rsync -az /opt/seafile-data/seafile /opt/seafile-backup/data/
-cd /opt/seafile-backup/data &amp;&amp; rm -rf ccnet
-
-</code></pre>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="恢复数据">恢复数据</h3>
-<ul>
-<li>
-<p>恢复数据库：</p>
-<pre><code class="language-bash">docker cp /opt/seafile-backup/databases/ccnet_db.sql seafile-mysql:/tmp/ccnet_db.sql
-docker cp /opt/seafile-backup/databases/seafile_db.sql seafile-mysql:/tmp/seafile_db.sql
-docker cp /opt/seafile-backup/databases/seahub_db.sql seafile-mysql:/tmp/seahub_db.sql
-
-docker exec -it seafile-mysql /bin/sh -c &quot;mysql -uroot ccnet_db &lt; /tmp/ccnet_db.sql&quot;
-docker exec -it seafile-mysql /bin/sh -c &quot;mysql -uroot seafile_db &lt; /tmp/seafile_db.sql&quot;
-docker exec -it seafile-mysql /bin/sh -c &quot;mysql -uroot seahub_db &lt; /tmp/seahub_db.sql&quot;
-
-</code></pre>
-</li>
-<li>
-<p>恢复 seafile 数据：</p>
-<pre><code class="language-bash">cp -R /opt/seafile-backup/data/* /opt/seafile-data/seafile/
-
-</code></pre>
-</li>
-</ul>
-<h2 id="垃圾回收">垃圾回收</h2>
-<p>在 seafile 中，当文件被删除时，组成这些文件的块数据不会立即删除，因为可能有其他文件也会引用这些块数据(用于去重功能的实现)。为了真正删除无用的块数据，还需要额外运行&quot;<a href="https://manual-cn.seafile.com/maintain/seafile_gc.html">GC</a>&quot;程序。GC 会自动检测到哪些数据块不再被任何文件所引用，并清除它们。</p>
-<p>GC 脚本被放在docker容器的 <code>/scripts</code> 目录下。执行 GC 的方法很简单：<code>docker exec seafile /scripts/gc.sh</code>。对于社区版来说，该程序会暂停 Seafile 服务，但这是一个相对较快的程序，一旦程序运行完成，Seafile 服务也会自动重新启动。而专业版提供了在线运行 GC 的功能，不会暂停 Seafile 服务。</p>
-<h2 id="问题排查">问题排查</h2>
-<p>您可以运行 <code>docker exec</code> 之类的docker命令来查找错误。</p>
-<pre><code class="language-sh">docker exec -it seafile /bin/bash
-
-</code></pre>
-]]></content>
-    </entry>
     <entry>
         <title type="html"><![CDATA[Oracle 安装]]></title>
         <id>https://mzqk.github.io/post/oracle-an-zhuang/</id>
@@ -882,6 +690,198 @@ location /xxxx {
  <source id="mp4" src="https://cloud.video.taobao.com/play/u/3171458687/p/1/e/6/t/1/50265550292.mp4" type="video/mp4">
 </video>
 <p>​</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[用 Docker 部署 Seafile 服务]]></title>
+        <id>https://mzqk.github.io/post/yong-docker-bu-shu-seafile-fu-wu/</id>
+        <link href="https://mzqk.github.io/post/yong-docker-bu-shu-seafile-fu-wu/">
+        </link>
+        <updated>2019-06-17T01:44:39.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="用-docker-部署-seafile-服务">用 Docker 部署 Seafile 服务</h1>
+<h2 id="快速开始">快速开始</h2>
+<h3 id="安装-docker-compose">安装 docker-compose</h3>
+<p>因为 Seafile v7.x.x 容器是通过 docker-compose 命令运行的，所以您应该先在服务器上安装该命令。</p>
+<pre><code class="language-bash"># for CentOS
+yum install docker-compose -y
+
+# for Ubuntu
+apt-get install docker-compose -y
+
+</code></pre>
+<h3 id="下载并修改-docker-composeyml">下载并修改 docker-compose.yml</h3>
+<p>下载 <a href="https://docs.seafile.com/d/cb1d3f97106847abbf31/files/?p=/docker/pro-edition/docker-compose.yml">docker-compose.yml</a> 示例文件到您的服务器上，然后根据您的实际环境修改该文件。尤其是以下几项配置：</p>
+<ul>
+<li>MySQL root 用户的密码 (MYSQL_ROOT_PASSWORD and DB_ROOT_PASSWD)</li>
+<li>持久化存储 MySQL 数据的 volumes 目录 (volumes)</li>
+<li>持久化存储 Seafile 数据的 volumes 目录 (volumes)</li>
+<li>持久化存储 Elasticsearch 索引数据的 volumes 目录 (volumes)</li>
+</ul>
+<h3 id="启动-seafile-服务">启动 Seafile 服务</h3>
+<p>执行以下命令启动 Seafile 服务</p>
+<pre><code class="language-bash">docker-compose up -d
+
+</code></pre>
+<p>需要等待几分钟，等容器首次启动时的初始化操作完成后，您就可以在浏览器上访问<code>http://seafile.example.com</code> 来打开 Seafile 主页。</p>
+<p>**注意：您应该在 **<code>docker-compose.yml</code><strong>文件所在的目下执行以上命令。</strong></p>
+<h3 id="安装授权文件seafile-licensetxt">安装授权文件(seafile-license.txt)</h3>
+<p>如果您已经向 Seafile 软件商购买了专业版的授权文件<code>seafile-license.txt</code>，您只需要将该授权文件拷贝至 Seafile 数据持久化目录中的<code>seafile/</code>目录下，然后重启docker容器，即可完成授权文件的安装。 假如，Seafile 数据持久化目录为<code>/opt/seafile-data</code>，那么，在您的宿主机上执行以下操作：</p>
+<pre><code>cp /path/to/seafile-license.txt /opt/seafile-data/seafile/
+
+</code></pre>
+<p>然后重启这个容器：</p>
+<pre><code>docker-compose restart
+
+</code></pre>
+<h2 id="更多配置项">更多配置项</h2>
+<h3 id="自定义管理员用户名和密码">自定义管理员用户名和密码</h3>
+<p>默认的管理员账号是 <code>me@example.com</code> 并且该账号的密码是 <code>asecret</code>，您可以在 <code>docker-compose.yml</code> 中配置不同的用户名和密码，为此您需要做如下配置：</p>
+<pre><code>seafile:
+    ...
+
+    environment:
+        ...
+        - SEAFILE_ADMIN_EMAIL=me@example.com
+        - SEAFILE_ADMIN_PASSWORD=a_very_secret_password
+        ...
+
+</code></pre>
+<h3 id="使用-lets-encrypt-ssl-证书">使用 Let's encrypt SSL 证书</h3>
+<p>如果您把 <code>SEAFILE_SERVER_LETSENCRYPT</code> 设置为 <code>true</code>，该容器将会自动为您申请一个 letsencrypt 机构颁发的 SSL 证书，并开启 https 访问，为此您需要做如下配置：</p>
+<pre><code>seafile:
+    ...
+    ports:
+        - &quot;80:80&quot;
+        - &quot;443:443&quot;
+    ...
+    environment:
+        ...
+        - SEAFILE_SERVER_LETSENCRYPT=true
+        - SEAFILE_SERVER_HOSTNAME=seafile.example.com
+        ...
+
+</code></pre>
+<p>如果您想要使用自己的 SSL 证书，而且如果用来持久化存储 Seafile 数据的目录为 <code>/opt/seafile-data</code>，您可以做如下处理：</p>
+<ul>
+<li>创建 <code>/opt/seafile-data/ssl</code> 目录，然后拷贝您的证书文件和密钥文件到ssl目录下。</li>
+<li>假设您的站点名称是 <code>seafile.example.com</code>，那么您的证书名称必须就是 <code>seafile.example.com.crt</code>，密钥文件名称就必须是 <code>seafile.example.com.key</code>。</li>
+</ul>
+<h3 id="修改-seafile-服务的配置">修改 Seafile 服务的配置</h3>
+<p>Seafile 的配置文件存放在 <code>shared/seafile/conf</code> 目录下，您可以根据<a href="https://manual-cn.seafile.com/">Seafile 手册</a>的指导来修改这些配置项。</p>
+<p>一旦修改了配置文件，您需要重启服务以使其生效：</p>
+<pre><code class="language-bash">docker-compose restart
+
+</code></pre>
+<h3 id="查找日志">查找日志</h3>
+<p>Seafile 容器中 Seafile 服务本身的日志文件存放在 <code>/shared/logs/seafile</code> 目录下，或者您可以在宿主机上 Seafile 容器的卷目录中找到这些日志，例如：<code>/opt/seafile-data/logs/seafile</code></p>
+<p>同样 Seafile 容器的系统日志存放在 <code>/shared/logs/var-log</code> 目录下，或者宿主机目录 <code>/opt/seafile-data/logs/var-log</code>。</p>
+<h3 id="增加一个新的管理员">增加一个新的管理员</h3>
+<p>确保各容器正常运行，然后执行以下命令：</p>
+<pre><code class="language-bash">docker exec -it seafile /opt/seafile/seafile-server-latest/reset-admin.sh
+
+</code></pre>
+<p>根据提示输入用户名和密码，您现在有了一个新的管理帐户。</p>
+<h2 id="seafile-目录结构">Seafile 目录结构</h2>
+<h3 id="shared"><code>/shared</code></h3>
+<p>共享卷的挂载点,您可以选择在容器外部存储某些持久性信息.在这个项目中，我们会在外部保存各种日志文件和上传数据。 这使您可以轻松重建容器而不会丢失重要信息。</p>
+<ul>
+<li>/shared/seafile: Seafile 服务的配置文件以及数据文件</li>
+<li>/shared/logs: 日志目录
+<ul>
+<li>/shared/logs/var-log: 我们将容器内的<code>/var/log</code>链接到本目录。您可以在<code>/shared/logs/var-log/nginx/</code>中找到 nginx 的日志文件</li>
+<li>/shared/logs/seafile: Seafile 服务运行产生的日志文件目录。比如您可以在 <code>/shared/logs/seafile/seafile.log</code> 文件中看到 seaf-server 的日志</li>
+</ul>
+</li>
+<li>/shared/ssl: 存放证书的目录，默认不存在</li>
+</ul>
+<h3 id="升级-seafile-服务">升级 Seafile 服务</h3>
+<p>如果要升级 Seafile 服务到最新版本：</p>
+<pre><code class="language-sh">docker pull docker.seafile.top/seafileltd/seafile-pro-mc:latest
+docker-compose down
+docker-compose up -d
+
+</code></pre>
+<h2 id="备份和恢复">备份和恢复</h2>
+<h3 id="目录结构">目录结构</h3>
+<p>我们假设您的 seafile 数据卷路径是 <code>/opt/seafile-data</code>，并且您想将备份数据存放到 <code>/opt/seafile-backup</code> 目录下。</p>
+<p>您可以创建一个类似以下 <code>/opt/seafile-backup</code> 的目录结构：</p>
+<pre><code class="language-struct">/opt/seafile-backup
+---- databases/  用来存放 MySQL 容器的备份数据
+---- data/  用来存放 Seafile 容器的备份数据
+
+</code></pre>
+<p>要备份的数据文件：</p>
+<pre><code class="language-struct">/opt/seafile-data/seafile/conf  # configuration files
+/opt/seafile-data/seafile/seafile-data # data of seafile
+/opt/seafile-data/seafile/seahub-data # data of seahub
+
+</code></pre>
+<h3 id="备份数据">备份数据</h3>
+<p>步骤：</p>
+<ol>
+<li>备份 MySQL 数据库数据；</li>
+<li>备份 Seafile 数据目录；</li>
+</ol>
+<ul>
+<li>
+<p>备份数据库：</p>
+<pre><code class="language-bash"># 建议每次将数据库备份到一个单独的文件中。至少在一周内不要覆盖旧的数据库备份。
+cd /opt/seafile-backup/databases
+docker exec -it seafile-mysql mysqldump  -uroot --opt ccnet_db &gt; ccnet_db.sql
+docker exec -it seafile-mysql mysqldump  -uroot --opt seafile_db &gt; seafile_db.sql
+docker exec -it seafile-mysql mysqldump  -uroot --opt seahub_db &gt; seahub_db.sql
+
+</code></pre>
+</li>
+<li>
+<p>备份 Seafile 资料库数据：</p>
+<ul>
+<li>
+<p>直接复制整个数据目录</p>
+<pre><code class="language-bash">cp -R /opt/seafile-data/seafile /opt/seafile-backup/data/
+cd /opt/seafile-backup/data &amp;&amp; rm -rf ccnet
+
+</code></pre>
+</li>
+<li>
+<p>使用 rsync 执行增量备份</p>
+<pre><code class="language-bash">rsync -az /opt/seafile-data/seafile /opt/seafile-backup/data/
+cd /opt/seafile-backup/data &amp;&amp; rm -rf ccnet
+
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="恢复数据">恢复数据</h3>
+<ul>
+<li>
+<p>恢复数据库：</p>
+<pre><code class="language-bash">docker cp /opt/seafile-backup/databases/ccnet_db.sql seafile-mysql:/tmp/ccnet_db.sql
+docker cp /opt/seafile-backup/databases/seafile_db.sql seafile-mysql:/tmp/seafile_db.sql
+docker cp /opt/seafile-backup/databases/seahub_db.sql seafile-mysql:/tmp/seahub_db.sql
+
+docker exec -it seafile-mysql /bin/sh -c &quot;mysql -uroot ccnet_db &lt; /tmp/ccnet_db.sql&quot;
+docker exec -it seafile-mysql /bin/sh -c &quot;mysql -uroot seafile_db &lt; /tmp/seafile_db.sql&quot;
+docker exec -it seafile-mysql /bin/sh -c &quot;mysql -uroot seahub_db &lt; /tmp/seahub_db.sql&quot;
+
+</code></pre>
+</li>
+<li>
+<p>恢复 seafile 数据：</p>
+<pre><code class="language-bash">cp -R /opt/seafile-backup/data/* /opt/seafile-data/seafile/
+
+</code></pre>
+</li>
+</ul>
+<h2 id="垃圾回收">垃圾回收</h2>
+<p>在 seafile 中，当文件被删除时，组成这些文件的块数据不会立即删除，因为可能有其他文件也会引用这些块数据(用于去重功能的实现)。为了真正删除无用的块数据，还需要额外运行&quot;<a href="https://manual-cn.seafile.com/maintain/seafile_gc.html">GC</a>&quot;程序。GC 会自动检测到哪些数据块不再被任何文件所引用，并清除它们。</p>
+<p>GC 脚本被放在docker容器的 <code>/scripts</code> 目录下。执行 GC 的方法很简单：<code>docker exec seafile /scripts/gc.sh</code>。对于社区版来说，该程序会暂停 Seafile 服务，但这是一个相对较快的程序，一旦程序运行完成，Seafile 服务也会自动重新启动。而专业版提供了在线运行 GC 的功能，不会暂停 Seafile 服务。</p>
+<h2 id="问题排查">问题排查</h2>
+<p>您可以运行 <code>docker exec</code> 之类的docker命令来查找错误。</p>
+<pre><code class="language-sh">docker exec -it seafile /bin/bash
+
+</code></pre>
 ]]></content>
     </entry>
     <entry>
