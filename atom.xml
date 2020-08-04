@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mzqk.github.io</id>
     <title>MZZZ</title>
-    <updated>2020-07-08T02:20:59.695Z</updated>
+    <updated>2020-08-04T06:19:51.570Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mzqk.github.io"/>
     <link rel="self" href="https://mzqk.github.io/atom.xml"/>
@@ -10,6 +10,74 @@
     <logo>https://mzqk.github.io/images/avatar.png</logo>
     <icon>https://mzqk.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, MZZZ</rights>
+    <entry>
+        <title type="html"><![CDATA[Tomcat 启用 SSL]]></title>
+        <id>https://mzqk.github.io/post/tomcat-qi-yong-ssl/</id>
+        <link href="https://mzqk.github.io/post/tomcat-qi-yong-ssl/">
+        </link>
+        <updated>2020-08-04T05:54:58.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="申请证书">申请证书</h1>
+<ol>
+<li>申请域名</li>
+<li>绑定域名</li>
+<li>证书申请</li>
+<li>下载证书</li>
+</ol>
+<h1 id="配置-tomcat">配置 Tomcat</h1>
+<h2 id="启用ssl">启用SSL</h2>
+<blockquote>
+<p>conf/server.xml</p>
+</blockquote>
+<pre><code>&lt;Connector  port=&quot;8443&quot;
+protocol=&quot;HTTP/1.1&quot;
+  port=&quot;8443&quot; SSLEnabled=&quot;true&quot;
+  maxThreads=&quot;150&quot; scheme=&quot;https&quot; secure=&quot;true&quot;
+  clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot; /&gt;
+</code></pre>
+<p>修改为</p>
+<pre><code>&lt;Connector port=&quot;443&quot;   
+    protocol=&quot;HTTP/1.1&quot;
+    SSLEnabled=&quot;true&quot;
+    scheme=&quot;https&quot;
+    secure=&quot;true&quot;
+    keystoreFile=&quot;cert/domain name.pfx&quot; 
+    keystoreType=&quot;PKCS12&quot;
+    keystorePass=&quot;证书密码&quot;  #请替换为密码文件pfx-password.txt中的内容。
+    clientAuth=&quot;false&quot;
+    SSLProtocol=&quot;TLSv1+TLSv1.1+TLSv1.2&quot;
+    ciphers=&quot;TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256&quot;/&gt;
+</code></pre>
+<h2 id="自动跳转至-https">自动跳转至 HTTPS</h2>
+<blockquote>
+<p>conf/web.xml</p>
+</blockquote>
+<pre><code>&lt;login-config&gt;  
+    &lt;!-- Authorization setting for SSL --&gt;  
+    &lt;auth-method&gt;CLIENT-CERT&lt;/auth-method&gt;  
+    &lt;realm-name&gt;Client Cert Users-only Area&lt;/realm-name&gt;  
+&lt;/login-config&gt;  
+&lt;security-constraint&gt;  
+    &lt;!-- Authorization setting for SSL --&gt;  
+    &lt;web-resource-collection &gt;  
+        &lt;web-resource-name &gt;SSL&lt;/web-resource-name&gt;  
+        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;  
+    &lt;/web-resource-collection&gt;  
+    &lt;user-data-constraint&gt;  
+        &lt;transport-guarantee&gt;CONFIDENTIAL&lt;/transport-guarantee&gt;  
+    &lt;/user-data-constraint&gt;  
+&lt;/security-constraint&gt;
+</code></pre>
+<h3 id="禁止ip访问">禁止IP访问</h3>
+<blockquote>
+<p>conf/server.xml</p>
+</blockquote>
+<pre><code>    &lt;Engine name=&quot;Catalina&quot; defaultHost=&quot;www.baidu.com&quot;&gt; #域名地址
+      &lt;Host name=&quot;www.baidu.com&quot;  appBase=&quot;webapps&quot;
+            unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;
+
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Oracle 安装]]></title>
         <id>https://mzqk.github.io/post/oracle-an-zhuang/</id>
@@ -518,7 +586,7 @@ location /xxxx {
     }
 }
 </code></pre>
-<h3 id="缓存服务器">缓存服务器</h3>
+<h3 id="负载均衡-2">负载均衡</h3>
 <pre><code>http{
 	upstream myproject {
         server 192.168.1.112:8001;
@@ -1918,79 +1986,6 @@ ssserver -c /etc/shadowsocks.json -d start
 </ul>
 <h2 id="下载相应客户端">下载相应客户端</h2>
 <p><a href="https://github.com/shadowsocks">https://github.com/shadowsocks</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[RHCSA 基本考纲]]></title>
-        <id>https://mzqk.github.io/post/rhcsa-ji-ben-kao-gang/</id>
-        <link href="https://mzqk.github.io/post/rhcsa-ji-ben-kao-gang/">
-        </link>
-        <updated>2017-11-14T07:51:25.000Z</updated>
-        <content type="html"><![CDATA[<p>1.修改root密码<br>
-重启进入grub按e编辑<br>
-添加rd.break console=stty0<br>
-或者修改rw init=/sysroot/bin<br>
-进入修复模式<br>
-挂载根系统<br>
-mount -o remount.rw /sysroot<br>
-切换根目录<br>
-chroot /sysroot<br>
-修改root密码passwd<br>
-重建SELinux安全策略<br>
-touch /.autorelabel<br>
-退出重启<br>
-2.修改本机网络信息<br>
-修改主机名<br>
-/etc/sysconfig/network<br>
-HOSTNAME信息<br>
-/etc/sysconfig/network<br>
-localhost信息<br>
-或<br>
-hostnamectl  set-hostname  example.hostname<br>
-修改静态网卡信息<br>
-/etc/sysconfig/network-scripts/ifcfg-eth0<br>
-BOOTPROTO=static<br>
-DNS1=<br>
-IPADDR=<br>
-NETMASK=<br>
-GETWAY=<br>
-或<br>
-nm-connection-editor图形化界面<br>
-nmcli  connection  up  &quot;System eth0&quot;<br>
-3.搭建默认软件仓库<br>
-yum-config-manager --add  http://example.com<br>
-修改 /etc/yum.repos.d/example.repo<br>
-关闭KEY检查gpgcheck=0<br>
-yum clean all<br>
-yum repolist<br>
-4.创建账户<br>
-创建用户组<br>
-groupadd adminuser<br>
-创建用户<br>
-useradd -G admin1  adminuser<br>
-创建用户不赋予shell交互<br>
-useradd -s /sbin/nologin admin2<br>
-设置用户密码<br>
-passwd admin1<br>
-5.配置文件权限<br>
-6.创建定时任务<br>
-开启cron服务</p>
-<p>给admin1用户编辑一个任务<br>
-crontab -e -u admin1<br>
-7.创建共享目录<br>
-创建目录<br>
-mkdir /home/admin<br>
-给予用户组adminuser目录所有权<br>
-chown  :adminuser  /home/admin<br>
-赋予组内用户可读、可写和可执行权限，其他用户无权限<br>
-chmod 770 /home/admin<br>
-8.安装升级内核<br>
-下载内核<br>
-wget http://kernel.com/download/kernel.rpm<br>
-安装rpm包<br>
-rpm -ivh kernel.rpm<br>
-重启后确认内核版本<br>
-uname -r</p>
 ]]></content>
     </entry>
 </feed>
