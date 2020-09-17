@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mzqk.github.io</id>
     <title>MZZZ</title>
-    <updated>2020-08-04T07:43:10.953Z</updated>
+    <updated>2020-09-17T07:14:31.682Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mzqk.github.io"/>
     <link rel="self" href="https://mzqk.github.io/atom.xml"/>
@@ -36,17 +36,15 @@ protocol=&quot;HTTP/1.1&quot;
   clientAuth=&quot;false&quot; sslProtocol=&quot;TLS&quot; /&gt;
 </code></pre>
 <p>修改为</p>
-<pre><code>&lt;Connector port=&quot;443&quot;   
-    protocol=&quot;HTTP/1.1&quot;
-    SSLEnabled=&quot;true&quot;
-    scheme=&quot;https&quot;
-    secure=&quot;true&quot;
-    keystoreFile=&quot;cert/domain name.pfx&quot; 
-    keystoreType=&quot;PKCS12&quot;
-    keystorePass=&quot;证书密码&quot;  #请替换为密码文件pfx-password.txt中的内容。
-    clientAuth=&quot;false&quot;
-    SSLProtocol=&quot;TLSv1+TLSv1.1+TLSv1.2&quot;
-    ciphers=&quot;TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256&quot;/&gt;
+<pre><code>&lt;Connector port=&quot;443&quot; protocol=&quot;org.apache.coyote.http11.Http11NioProtocol&quot;
+               maxThreads=&quot;150&quot; SSLEnabled=&quot;true&quot;&gt;
+        &lt;SSLHostConfig&gt;
+            &lt;Certificate certificateKeystoreFile=&quot;conf/www.zhehangpiaowu.cn.pfx&quot;#请替换为pfx文件。
+                         certificateKeystorePassword=&quot;0sXWUh0i&quot;#请替换为密码文件pfx-password.txt中的内容。
+                          certificateKeystoreType=&quot;PKCS12&quot; /&gt;
+        &lt;/SSLHostConfig&gt;
+    &lt;/Connector&gt;
+
 </code></pre>
 <h3 id="自动跳转至-https">自动跳转至 HTTPS</h3>
 <blockquote>
