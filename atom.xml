@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mzqk.github.io</id>
     <title>MZZZ</title>
-    <updated>2020-09-17T07:14:31.682Z</updated>
+    <updated>2020-09-17T09:29:07.016Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mzqk.github.io"/>
     <link rel="self" href="https://mzqk.github.io/atom.xml"/>
@@ -10,6 +10,250 @@
     <logo>https://mzqk.github.io/images/avatar.png</logo>
     <icon>https://mzqk.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, MZZZ</rights>
+    <entry>
+        <title type="html"><![CDATA[Ansible使用入门]]></title>
+        <id>https://mzqk.github.io/post/ansible-shi-yong-ru-men/</id>
+        <link href="https://mzqk.github.io/post/ansible-shi-yong-ru-men/">
+        </link>
+        <updated>2020-09-17T07:35:11.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="ansible基础使用">Ansible基础使用</h1>
+<h2 id="准备工作">准备工作</h2>
+<h3 id="ssh免密登录">ssh免密登录</h3>
+<ol>
+<li>生成本地公私钥</li>
+<li>上传私钥至被控服务器</li>
+<li>验证登录</li>
+</ol>
+<pre><code class="language-bash">ssh-keygen
+ssh-copy-id -i ~/.ssh/id_rsa.pub remote_username@server_ip_address
+ssh remote_username@server_ip_address
+</code></pre>
+<h3 id="添加被控服务器信息">添加被控服务器信息</h3>
+<pre><code class="language-bash">echo &quot;first.example.org&quot; &gt;&gt; /etc/ansible/hosts
+</code></pre>
+<h2 id="ad-hoc-commands">Ad-Hoc Commands</h2>
+<p><strong>Ad-Hoc Commands 可以翻译为简短地指令。</strong></p>
+<pre><code class="language-bash">$ ansible all -m ping
+server1 | SUCCESS =&gt; {
+    &quot;changed&quot;: false,
+    &quot;ping&quot;: &quot;pong&quot;
+}
+</code></pre>
+<pre><code class="language-bash">$ ansible all -m command -a &quot;echo Hello World&quot;
+server1 | SUCCESS | rc=0 &gt;&gt;
+Hello World
+</code></pre>
+<h3 id="常用模块">常用模块</h3>
+<ul>
+<li>ping</li>
+<li>setup</li>
+<li>command</li>
+<li>shell</li>
+<li>cron</li>
+<li>user、group</li>
+<li>cpoy</li>
+<li>file</li>
+<li>yum、apt</li>
+<li>service</li>
+<li>script</li>
+</ul>
+<h2 id="playbooks">Playbooks</h2>
+<p><strong>Playbooks 是 Ansible 的脚本 。</strong></p>
+<pre><code class="language-bash">$ vi hello_world.yml
+---
+- name: say 'hello world'
+  hosts: all
+  tasks:
+
+    - name: echo 'hello world'
+      command: echo 'hello world'
+      register: result
+
+    - name: print stdout
+      debug:
+        msg: &quot;&quot;
+</code></pre>
+<pre><code class="language-bash">$ ansible-playbook hello_world.yml
+
+PLAY [say 'hello world'] *******************************************************
+
+TASK [setup] *******************************************************************
+ok: [server1]
+
+TASK [echo 'hello world'] ******************************************************
+changed: [server1]
+
+TASK [print stdout] ************************************************************
+ok: [server1] =&gt; {
+    &quot;msg&quot;: &quot;hello world&quot;
+}
+
+PLAY RECAP *********************************************************************
+server1                    : ok=3    changed=1    unreachable=0    failed=0
+</code></pre>
+<h2 id="roles">Roles</h2>
+<p><strong>Roles 可以降低 Playbooks 的复杂性，更可以增加 Playbooks 的可用性。</strong></p>
+<pre><code class="language-bash">$ tree .
+.
+└── example_role
+    ├── README.md     # 说明文件
+    ├── defaults
+    │   └── main.yml  # 可被覆写的变数。
+    ├── files         # 需复制到 Managed node 的档案。
+    ├── handlers
+    │   └── main.yml  # 主要的 handler。
+    ├── meta
+    │   └── main.yml
+    ├── tasks
+    │   └── main.yml  # 主要的 task。
+    ├── templates     # 集中存放 Jinja2 模板的目录。
+    ├── tests
+    │   ├── inventory
+    │   └── test.yml
+    └── vars
+        └── main.yml  # 不该被覆写的变数。
+
+9 directories, 8 files
+</code></pre>
+<h2 id="常用配置">常用配置</h2>
+<h3 id="inventory文件">Inventory文件</h3>
+<p><strong>Ansible 可同时操作属于一个组的多台主机,组和主机之间的关系通过 inventory 文件配置. 默认的文件路径为 /etc/ansible/hosts</strong></p>
+<h3 id="ansiblecfg">ansible.cfg</h3>
+<p><strong>Ansible主要功能配置文件，默认的文件路径为/etc/ansible/ansible.cfg</strong></p>
+<ul>
+<li>inventory<br>
+这个是默认库文件位置,脚本,或者存放可通信主机的目录:</li>
+</ul>
+<blockquote>
+<p>inventory = /etc/ansible/hosts</p>
+</blockquote>
+<ul>
+<li>library<br>
+这个是Ansible默认搜寻模块的位置:</li>
+</ul>
+<blockquote>
+<p>library = /usr/share/ansible</p>
+</blockquote>
+<ul>
+<li>remote_tmp<br>
+Ansible 通过远程传输模块到远程主机,然后远程执行,执行后在清理现场.在有些场景下,你也许想使用默认路径希望像更换补丁一样使用, 这时候你可以使用这个选项.:</li>
+</ul>
+<blockquote>
+<p>remote_tmp = $HOME/.ansible/tmp<br>
+<em>默认路径是在用户家目录下属的目录.Ansible 会在这个目录中使用一个随机的文件夹名称.</em></p>
+</blockquote>
+<ul>
+<li>forks<br>
+这个选项设置在与主机通信时的默认并行进程数.如果你有很多的主机, 高数值将会使得跨主机行为变快.默认值比较保守:</li>
+</ul>
+<blockquote>
+<p>forks=5</p>
+</blockquote>
+<ul>
+<li>poll_interval<br>
+对于Ansible中的异步任务, 这个是设置定义,当具体的poll interval 没有定义时,多少时间回查一下这些任务的状态, 默认值是一个折中选择15秒钟.这个时间是个回查频率和任务完成叫回频率和当任务完成时的回转频率的这种:</li>
+</ul>
+<blockquote>
+<p>poll_interval=15</p>
+</blockquote>
+<ul>
+<li>sudo_user<br>
+这个是sudo使用的默认用户,如果<code>–sudo-user</code> 没有特指或者’sudo_user’ 在Ansible playbooks中没有特指,在大多数的逻辑中 默认为: ‘root’</li>
+</ul>
+<blockquote>
+<p>sudo_user=root</p>
+</blockquote>
+<ul>
+<li>ask_sudo_pass<br>
+类似 ask_pass,用来控制Ansible playbook 在执行sudo之前是否询问sudo密码.默认为no:</li>
+</ul>
+<blockquote>
+<p>ask_sudo_pass=True<br>
+<em>如果用户使用的系统平台开启了sudo 密码的话,应该开绿这一参数</em></p>
+</blockquote>
+<ul>
+<li>ask_pass<br>
+这个可以控制,Ansible 剧本playbook 是否会自动默认弹出弹出密码.默认为no::</li>
+</ul>
+<blockquote>
+<p>ask_pass=True<br>
+<em>如果使用SSH 密钥匙做身份认证.可能需要修改这一参数</em></p>
+</blockquote>
+<ul>
+<li>remote_port<br>
+这个设置是你系统默认的远程SSH端口,如果不指定,默认为22号端口:</li>
+</ul>
+<blockquote>
+<p>remote_port = 22</p>
+</blockquote>
+<ul>
+<li>roles_path<br>
+roles 路径指的是’roles/’下的额外目录,用于playbook搜索Ansible roles.比如, 如果我们有个用于common roles源代码控制仓库和一个不同的 playbooks仓库,你也许会建立一个惯例去在 /opt/mysite/roles 里面查找roles.:</li>
+</ul>
+<blockquote>
+<p>roles_path = /opt/mysite/roles<br>
+<em>Roles将会在playbook目录中开始搜索.如果role没有找到,这个参数指定了其它可能的搜索路径.</em></p>
+</blockquote>
+<ul>
+<li>timeout<br>
+这个是默认SSH连接尝试超时时间:</li>
+</ul>
+<blockquote>
+<p>timeout = 10</p>
+</blockquote>
+<ul>
+<li>remote_user<br>
+这是个ansible使用/usr/bin/ansible-playbook链接的默认用户名. 注意如果不指定,/usr/bin/ansible默认使用当前用户名称:</li>
+</ul>
+<blockquote>
+<p>remote_user = root</p>
+</blockquote>
+<ul>
+<li>log_path<br>
+如果出现在ansible.cfg文件中.Ansible 将会在选定的位置登陆执行信息.请留意用户运行的Ansible对于logfile有权限:</li>
+</ul>
+<blockquote>
+<p>log_path=/var/log/ansible.log<br>
+<em>这个特性不是默认开启的.如果不设置,ansible将会吧模块加载纪录在系统日志系统中.不包含用密码.</em></p>
+</blockquote>
+<ul>
+<li>module_name<br>
+这个是/usr/bin/ansible的默认模块名（-m）. 默认是’command’模块. 之前提到过,command模块不支持shell变量,管道,配额. 所以也许你希望把这个参数改为’shell’:</li>
+</ul>
+<blockquote>
+<p>module_name = command</p>
+</blockquote>
+<ul>
+<li>executable<br>
+这个选项可以在sudo环境下产生一个shell交互接口. 用户只在/bin/bash的或者sudo限制的一些场景中需要修改.大部分情况下不需要修改:</li>
+</ul>
+<blockquote>
+<p>executable = /bin/bash</p>
+</blockquote>
+<ul>
+<li>private_key_file<br>
+如果你是用pem密钥文件而不是SSH 客户端或秘密啊认证的话,你可以设置这里的默认值,来避免每一次提醒设置密钥文件位置<code>–ansible-private-keyfile</code>:</li>
+</ul>
+<blockquote>
+<p>private_key_file=/path/to/file.pem</p>
+</blockquote>
+<ul>
+<li>display_skipped_hosts<br>
+如果设置为<code>False</code>,ansible 将不会显示任何跳过任务的状态.默认选项是现实跳过任务的状态::</li>
+</ul>
+<blockquote>
+<p>display_skipped_hosts=True</p>
+</blockquote>
+<ul>
+<li>system_warnings<br>
+允许禁用系统运行ansible相关的潜在问题警告（不包括操作主机）:</li>
+</ul>
+<blockquote>
+<p>system_warnings = True<br>
+*这个包括第三方库或者一些需要解决问题的警告.</p>
+</blockquote>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Tomcat 启用 SSL]]></title>
         <id>https://mzqk.github.io/post/tomcat-qi-yong-ssl/</id>
@@ -1899,92 +2143,6 @@ WantedBy=multi-user.target
 <p>|<br>
 and<br>
 or</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[搭建 SS 服务器]]></title>
-        <id>https://mzqk.github.io/post/da-jian-ss-fu-wu-qi/</id>
-        <link href="https://mzqk.github.io/post/da-jian-ss-fu-wu-qi/">
-        </link>
-        <updated>2018-02-16T07:52:05.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="搭建ss服务器">搭建ss服务器</h1>
-<h2 id="选择vps">选择VPS</h2>
-<h3 id="vultr">Vultr</h3>
-<p><em>本人目前正在使用</em></p>
-<blockquote>
-<p><a href="https://www.vultr.com/?ref=7333360">Vultr</a>全球最大的游戏主机提供商之一，使用它的原因主要是它是按小时计费的,价格也便宜。目前2.5美元每月的已经售完，5美元的每个月也有1T流量。</p>
-</blockquote>
-<p><a href="https://www.vultr.com/?ref=7333360"><img src="https://www.vultr.com/media/banner_2.png" width="468" height="60"></a></p>
-<h3 id="bandwagonhos">BandwagonHos</h3>
-<blockquote>
-<p><a href="http://bwg.yiqimaila.com/bwg/buy.html">BandwagonHost</a>俗称<em>搬瓦工</em>,性价比很高。这种服务就是只拿来给新手学习Linux，我觉得也是很划得来。</p>
-</blockquote>
-<h3 id="阿里云">阿里云</h3>
-<blockquote>
-<p>阿里云的产品在国内可以说是最好的云主机厂商之一。优点是相比外国的服务肯定要稳定些，但有一点不好就是建的网站无论大小都需要备案。</p>
-</blockquote>
-<h2 id="选择服务器节点">选择服务器节点</h2>
-<blockquote>
-<p>这里需要申明在国外购买的服务分配给的IP有一定可能会被墙掉，特别是我在Vultr上建的几个东京的站点无一能远程上（可能是人品问题）。</p>
-</blockquote>
-<blockquote>
-<p>网络这方面大家可以自己ping通下，一般延时在200ms左右就能流畅使用。</p>
-</blockquote>
-<h2 id="选择操作系统">选择操作系统</h2>
-<blockquote>
-<p>这里没什么好说的，建议选择Centos或Debian。这两个操作系统对今后的学习linux是很有好处的。</p>
-</blockquote>
-<h2 id="搭建shadowsocks">搭建Shadowsocks</h2>
-<p><strong>这处便是本文关键</strong></p>
-<h3 id="连接服务器">连接服务器</h3>
-<p>Windows用户建议下载<a href="https://www.netsarang.com/download/main.html">Xshell</a><br>
-、MAC下可直接ssh连接。</p>
-<h3 id="下载shadowsocks">下载Shadowsocks</h3>
-<pre><code class="language-bash">#安装python2.7及以上版本，
-yum install m2crypto python-setuptools
-easy_install pip
-pip install shadowsocks
-</code></pre>
-<p>配置</p>
-<pre><code class="language-js">/etc/shadowsocks.json   
-    
-{
-  &quot;server&quot;: &quot;192.0.0.1&quot;,
-  &quot;server_port&quot;:8388,
-  &quot;local_address&quot;: &quot;127.0.0.1&quot;,
-  &quot;local_port&quot;:1080,
-  &quot;password&quot;: &quot;12345678&quot;,
-  &quot;timeout&quot;:300,
-  &quot;method&quot;: &quot;aes-256-cfb&quot;
-}
-#也可配置多端口(记住要检查相应端口是否开启)
-</code></pre>
-<p>具体配置</p>
-<pre><code class="language-bash">yum install git 
-git clone https://github.com/shadowsocks/shadowsocks.git
-</code></pre>
-<h3 id="运行服务">运行服务</h3>
-<pre><code class="language-bash">#检查防火墙信息
-firewall-cmd --query-port=443/tcp 
-firewall-cmd --zone=public --add-port=443/tcp --permanent 
-firewall-cmd --reload
-#开启ss服务
-ssserver -c /etc/shadowsocks.json -d start
-</code></pre>
-<h3 id="简易防护">简易防护</h3>
-<blockquote>
-<p>搭建云主机最重要的隐患就是恶意的网络攻击和厂商的抽风，搭建自行搜索保护服务器的方法（如关闭服务器的root远程登录），然后注意的就是利用网站的服务或则其他功能进行备份。</p>
-</blockquote>
-<h2 id="加速">加速</h2>
-<p>两种加速代码均代理在github上，可在项目中查看详细信息。</p>
-<ul>
-<li>锐速<br>
-<a href="https://github.com/91yun/serverspeeder">https://github.com/91yun/serverspeeder</a></li>
-<li>BBR<br>
-<a href="https://github.com/teddysun/across">https://github.com/teddysun/across</a></li>
-</ul>
-<h2 id="下载相应客户端">下载相应客户端</h2>
-<p><a href="https://github.com/shadowsocks">https://github.com/shadowsocks</a></p>
 ]]></content>
     </entry>
 </feed>
