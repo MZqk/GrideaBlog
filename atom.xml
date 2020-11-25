@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mzqk.github.io</id>
     <title>MZZZ</title>
-    <updated>2020-09-17T09:29:07.016Z</updated>
+    <updated>2020-11-25T09:37:52.350Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mzqk.github.io"/>
     <link rel="self" href="https://mzqk.github.io/atom.xml"/>
@@ -10,6 +10,117 @@
     <logo>https://mzqk.github.io/images/avatar.png</logo>
     <icon>https://mzqk.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, MZZZ</rights>
+    <entry>
+        <title type="html"><![CDATA[Linux 离线安装应用]]></title>
+        <id>https://mzqk.github.io/post/linux-chi-xian-an-zhuang-ying-yong/</id>
+        <link href="https://mzqk.github.io/post/linux-chi-xian-an-zhuang-ying-yong/">
+        </link>
+        <updated>2020-11-25T07:29:40.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="linux安装应用">Linux安装应用</h1>
+<h2 id="包安装">包安装</h2>
+<h3 id="国内常用源库">国内常用源库</h3>
+<blockquote>
+<p>以下为国内常用源，可根据区域不同自行选择速度最快的源。若是在线安装，可参照网站指南配置，这里就不赘述了。</p>
+</blockquote>
+<ul>
+<li><a href="https://developer.aliyun.com/mirror/">阿里云官方镜像站</a></li>
+<li><a href="https://mirrors.cloud.tencent.com/">腾讯云软件源</a></li>
+<li><a href="https://mirrors.huaweicloud.com/">华为开源镜像站</a></li>
+<li><a href="%5Bhttp://mirrors.163.com/">网易开源镜像站</a></li>
+<li><a href="http://mirror.hust.edu.cn/">华中科技大学开源镜像站</a></li>
+<li><a href="http://mirrors.zju.edu.cn/">浙江大学开源镜像站</a></li>
+<li><a href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a></li>
+<li><a href="http://mirrors.cqu.edu.cn/">重庆大学开源软件镜像站</a></li>
+</ul>
+<h3 id="常用软件管理机制">常用软件管理机制</h3>
+<ul>
+<li>DPKG Debian类发行版包管理，格式为xxx.deb</li>
+<li>RPM Cento类发行版包管理，格式为xxx.rpm</li>
+<li>SRPM Centos类发行版未编译包，格式为xxx.src.rpm</li>
+<li>APT Debian类发行版在线包管理</li>
+<li>YUM Centos类发行版在线包管理</li>
+<li>Snap Ubuntu应用包管理</li>
+<li>Opkg Opensource嵌入式包管理，常见为Openwrt路由系统软件包工具，格式为xxx.ipk</li>
+<li>DNF Fedora类发行版在线包管理</li>
+<li>Pacman Archlinux类发行版在线包管理</li>
+</ul>
+<h3 id="常见软件源cpu架构">常见软件源CPU架构</h3>
+<blockquote>
+<p>各类发行版的CPU架构不同，可基本按照大类根据服务器的CPU去软件源路径目录进入。</p>
+<p>注：noarch代表没有硬件等级上的限制，不缺分服务器系统都可安装，但存在部分依赖包关联不到的问题。</p>
+</blockquote>
+<ul>
+<li>ARM系处理器：arm64、aarch64、armv6h、armv7h、armhf 、armel</li>
+<li>X86系处理器：i386、i586、i686、amd64 、x86_64</li>
+<li>MIPS处理器：mips64el、mips、mips64e、mipsel</li>
+<li>PowerPC处理器：ppc64le</li>
+</ul>
+<h3 id="实践">实践</h3>
+<blockquote>
+<p>以下以服务器在无外网的情况下安装nginx为例</p>
+</blockquote>
+<ol>
+<li>查看服务器版本</li>
+</ol>
+<pre><code class="language-bash"># cat /proc/version
+Linux version 3.10.0-514.26.2.el7.x86_64 (builder@kbuilder.dev.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-11) (GCC) ) #1 SMP Tue Jul 4 15:04:05 UTC 2017
+</code></pre>
+<p>这里查到CPU架构为x86_64、操作系统为ed Hat 4.8.5-11（这里查到的版本为Red Hat 4.8.5-11对应官方开发进度为Centos7.8，也可使用<code>cat /etc/redhat-release</code> 查看红帽的社区版本）、使用的包管理工具为RPM</p>
+<ol start="2">
+<li>下载相应Nginx离线包</li>
+</ol>
+<p>进入nginx<a href="http://nginx.org/en/download.html">官网</a>根据安装文档http://nginx.org/en/linux_packages.html找到源库http://nginx.org/packages，对应<strong>Centos7</strong>操作系统版本<strong>x86_64</strong>位找到安装包http://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.16.1-1.el7.ngx.x86_64.rpm</p>
+<ol start="3">
+<li>使用相应包管理工具安装Nginx</li>
+</ol>
+<pre><code class="language-bash"># rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm 
+warning: nginx-1.16.1-1.el7.ngx.x86_64.rpm: Header V4 RSA/SHA1 Signature, key ID 7bd9bf62: NOKEY
+error: Failed dependencies:
+	libc.so.6(GLIBC_2.14)(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	libc.so.6(GLIBC_2.17)(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	libcrypto.so.10(OPENSSL_1.0.2)(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	libcrypto.so.10(libcrypto.so.10)(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	libpcre.so.1()(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	libssl.so.10(libssl.so.10)(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	openssl &gt;= 1.0.2 is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	systemd is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+
+</code></pre>
+<p>这里安装报错需要处理依赖程序，可根据提示中的信息去搜索指定版本依赖文件，如无报错则安装成功。依赖包可能存在与Centos源中，也可能存在<a href="http://nginx.org/packages">Nginx软件源</a>中。</p>
+<ol start="4">
+<li>进入相应镜像库下载所需要的依赖包</li>
+</ol>
+<p>登录<a href="https://developer.aliyun.com/mirror/">阿里云镜像站</a>进入centos页面点击<a href="https://mirrors.aliyun.com/centos">下载地址</a>，根据上面查到的服务器版本进入相应目录搜索包https://mirrors.aliyun.com/centos/7/os/x86_64/Packages/或https://mirrors.aliyun.com/centos/7/extras/x86_64/Packages/</p>
+<p>也可以直接搜索相应包下载https://developer.aliyun.com/packageSearch</p>
+<ol start="5">
+<li>安装所有依赖包</li>
+</ol>
+<pre><code class="language-bash"># rpm -ivh *
+</code></pre>
+<p>若出现安装顺序问题，可按提示顺序一个个单独安装</p>
+<h2 id="源码安装">源码安装</h2>
+<h2 id="自建源在线安装">自建源在线安装</h2>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Oracle数据库迁移]]></title>
+        <id>https://mzqk.github.io/post/oracle-shu-ju-ku-qian-yi/</id>
+        <link href="https://mzqk.github.io/post/oracle-shu-ju-ku-qian-yi/">
+        </link>
+        <updated>2020-09-26T06:30:10.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="数据库迁移">数据库迁移</h1>
+<h2 id="备份数据">备份数据</h2>
+<pre><code class="language-sql">expdp system/system@192.168.1.1/orcl directory=DATA_PUMP_DIR dumpfile=expdpfulldb.dmp logfile=expdp.log full=y
+</code></pre>
+<h2 id="导出表空间">导出表空间</h2>
+<pre><code class="language-sql">select 'create tablespace '||tablespace_name|| ' datafile '||'''/data/oracle/oradata/msczj/'||tablespace_name||'.dbf'''||' size '|| round(bytes / (1024 * 1024), 0)||'M;' total from dba_data_files
+</code></pre>
+<h2 id="导入数据">导入数据</h2>
+<pre><code class="language-sql">impdp system/system directory=DATA_PUMP_DIR dumpfile=expdpfulldb.dmp logfile=impdp.log schemas=(业务表用户，多个使用逗号分隔)
+</code></pre>
+<h2 id="设置定时备份任务">设置定时备份任务</h2>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Ansible使用入门]]></title>
         <id>https://mzqk.github.io/post/ansible-shi-yong-ru-men/</id>
@@ -2020,129 +2131,6 @@ WantedBy=multi-user.target
 <h4 id="第四个规则-2">第四个规则</h4>
 <p>)确定作者已经解决了哪些问题，还有哪些是未解决的 。在未解决的问题中，确定哪些是作者认为自己无法解决的问题。</p>
 <h2 id="主题阅读层次">主题阅读层次</h2>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[时间管理-如何充分利用你的24小时]]></title>
-        <id>https://mzqk.github.io/post/shi-jian-guan-li-ru-he-chong-fen-li-yong-ni-de-24-xiao-shi/</id>
-        <link href="https://mzqk.github.io/post/shi-jian-guan-li-ru-he-chong-fen-li-yong-ni-de-24-xiao-shi/">
-        </link>
-        <updated>2018-10-29T07:36:44.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="时间管理-如何充分利用你的24小时">时间管理-如何充分利用你的24小时</h1>
-<h2 id="你目前如何利用时间">你目前如何利用时间</h2>
-<h3 id="意识">意识</h3>
-<h4 id="了解你是如何使用时间的">了解你是如何使用时间的</h4>
-<p>检查自己的时间花销（时间日志、时间分类统计），意识到哪里的时间用的过多</p>
-<h4 id="确定目标建立行动路线图">确定目标建立行动路线图</h4>
-<p>规划时间，确定目标（短期目标、长期目标）</p>
-<pre><code>把你的任务写在工作清单上，把你的目标写在使命描述中。
-任务：至最近某个时间你必须完成的一件杂务、差事或工作。
-</code></pre>
-<h4 id="正确选择">正确选择</h4>
-<pre><code>在当下的满足与牺牲之间进行选择——你可以规划你的人生。而如果你不做出选择，你就只能任由其他力量主宰你的人生。
-</code></pre>
-<h2 id="使你的时间发挥最大的效用">使你的时间发挥最大的效用</h2>
-<h3 id="认识时间是有限的">认识时间是有限的</h3>
-<h3 id="合理匹配时间和精力">合理匹配时间和精力</h3>
-<h3 id="利用空隙时间">利用空隙时间</h3>
-<h3 id="有效的时间管理减少时间浪费">有效的时间管理减少时间浪费</h3>
-<h4 id="迅速决策">迅速决策</h4>
-<h4 id="快速阅读">快速阅读</h4>
-<h4 id="提高记忆力">提高记忆力</h4>
-<h3 id="克服拖延">克服拖延</h3>
-<pre><code>你不是你的思想。相反，你是在更高层次聆听你的思想。因此，你可以控制头脑中那些消极思想。
-你可以采取的唯一脏鞥女奥的一个步骤是学会不认同自己的思想。有时你可以心中的某些想法一笑了之，把它们当做少不更事的小孩子荒诞不经的恶作剧。——《当下的力量》
-当你把一种思想想象为一个物体时，你就可以控制它。你就可以一把拖延的想法驱逐出你的头脑，就像你将一只行为不端的猫赶出家门一样。——《思考与致富》
-</code></pre>
-<h3 id="化繁为简物品和思想">化繁为简（物品和思想）</h3>
-<pre><code>《尽管去做：无压力工作的艺术》——大卫-艾伦
-</code></pre>
-<h3 id="充分计划">充分计划</h3>
-<p>每一个小时的计划抵得上五个小时的执行</p>
-<h4 id="分批处理">分批处理</h4>
-<p>想办法多件事放在一起去完成，而不是单独去完成每一件事，以此来节约你的时间。</p>
-<h4 id="充分准备">充分准备</h4>
-<p>通过提前进行思考和做好准备，你就可能减少为完成摆在你面前的任何任务所要付出的额努力。</p>
-<h4 id="制作任务清单">制作任务清单</h4>
-<h4 id="确定优先次序四象限">确定优先次序（四象限）</h4>
-<pre><code>《高效能人士的七个习惯》——斯蒂芬-柯维
-吃青蛙的原则是：如果你必须吃掉两只青蛙，那么，你要先吃较丑的那一只。——《吃掉那只青蛙》
-</code></pre>
-<h4 id="高效率">高效率</h4>
-<p>假装忙碌使你没有时间进行自我反思</p>
-<h4 id="二八定律">二八定律</h4>
-<p>一些活动会比另一些活动带来更大的回报；因此，要把大部分精力投入到那些真正能够给你带来“最大效益”的项目上去。</p>
-<h4 id="专注">专注</h4>
-<p>不要同时处理多个任务，那是自欺欺人</p>
-<p>后记<br>
-学会迅速丢弃且不内疚<br>
-立刻对事务做出决策<br>
-分类储存内容<br>
-指定时间回复<br>
-戴数显秒针的手表<br>
-随时记录心中想法<br>
-快速阅读<br>
-避免重复造轮子<br>
-限定时间完成任务<br>
-向前看抛弃过去</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Xpath 基础使用]]></title>
-        <id>https://mzqk.github.io/post/xpath-ji-chu-shi-yong/</id>
-        <link href="https://mzqk.github.io/post/xpath-ji-chu-shi-yong/">
-        </link>
-        <updated>2018-03-20T07:53:24.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="xpath">XPath</h1>
-<h2 id="xpath语法">XPath语法</h2>
-<h3 id="绝对路径">绝对路径</h3>
-<blockquote>
-<p>/html/body/tag</p>
-</blockquote>
-<p>/: 从根节点开始下选取</p>
-<h3 id="相对路径">相对路径</h3>
-<blockquote>
-<p>//tag[@attibute='value']/tag</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>用法</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>.</td>
-<td>选取当前节点</td>
-</tr>
-<tr>
-<td>..</td>
-<td>选取当前节点的父节点</td>
-</tr>
-<tr>
-<td>@</td>
-<td>选取属性</td>
-</tr>
-<tr>
-<td>[*]</td>
-<td>选取节点下标</td>
-</tr>
-<tr>
-<td>text()</td>
-<td>选取文字</td>
-</tr>
-</tbody>
-</table>
-<h2 id="xpath轴">XPath轴</h2>
-<p>contains关键字</p>
-<p>startwith关键字<br>
-查找父节点<br>
-查找平级节点</p>
-<h2 id="xpath运算符">XPath运算符</h2>
-<p>|<br>
-and<br>
-or</p>
 ]]></content>
     </entry>
 </feed>

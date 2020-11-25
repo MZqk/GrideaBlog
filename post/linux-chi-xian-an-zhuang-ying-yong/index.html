@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-<title>简单监控windows服务批处理脚本 | MZZZ</title>
+<title>Linux 离线安装应用 | MZZZ</title>
 
 <link rel="stylesheet" href="https://mzqk.github.io/styles/main.css">
 <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Noto+Sans+SC:300|Montserrat&display=swap"
@@ -48,7 +48,7 @@
 			<div class="site-branding">
 				<h1 class="site-title">
 					<div class="post-title-name">
-						<a href="https://mzqk.github.io" rel="home">简单监控windows服务批处理脚本</a>
+						<a href="https://mzqk.github.io" rel="home">Linux 离线安装应用</a>
 					</div>
 				</h1>
 				<h2 class="site-description">这世界总有些人做着美梦逆来顺受</h2>
@@ -142,13 +142,13 @@
 							<div class="entry-meta">
 								<div class="entry-info">
 									<time>
-										2017-10-30
+										2020-11-25
 									</time>
 									<span>
-										1 min read
+										5 min read
 									</span>
 									<!-- id 将作为查询条件 -->
-									<span id="/jian-dan-jian-kong-windows-fu-wu-pi-chu-li-jiao-ben/" class="leancloud_visitors"  data-flag-title="简单监控windows服务批处理脚本">
+									<span id="/linux-chi-xian-an-zhuang-ying-yong/" class="leancloud_visitors"  data-flag-title="Linux 离线安装应用">
 										<span class="leancloud-visitors-count"></span>次阅读
 									</span>
 									<span class="isTop">
@@ -164,37 +164,95 @@
 								</div>
 							</div>
 							<div class="wow zoomIn entry-summary song">
-								<pre><code class="language-bat">@echo off
-rem 定义循环间隔时间和监测的服务：
-set secs=6000
-set srvname=&quot;Redis&quot;
- 
-echo.
-echo ========================================
-echo ==         查询计算机服务的状态，     ==
-echo ==     每间隔%secs%秒种进行一次查询，     ==
-echo ==     如发现其停止，则立即启动。     ==
-echo ========================================
-echo.
-echo 此脚本监测的服务是：%srvname%
-echo.
- 
-if %srvname%. == . goto end
- 
-:chkit
-set svrst=0
-for /F &quot;tokens=1* delims= &quot; %%a in ('net start') do if /I &quot;%%a %%b&quot; == %srvname% set svrst=1
-if %svrst% == 0 net start %srvname%
-set svrst=
-rem 下面的命令用于延时，否则可能会导致cpu单个核心满载。
-ping -n %secs% 127.0.0.1 &gt; nul
-goto chkit
- 
-:end
+								<h1 id="linux安装应用">Linux安装应用</h1>
+<h2 id="包安装">包安装</h2>
+<h3 id="国内常用源库">国内常用源库</h3>
+<blockquote>
+<p>以下为国内常用源，可根据区域不同自行选择速度最快的源。若是在线安装，可参照网站指南配置，这里就不赘述了。</p>
+</blockquote>
+<ul>
+<li><a href="https://developer.aliyun.com/mirror/">阿里云官方镜像站</a></li>
+<li><a href="https://mirrors.cloud.tencent.com/">腾讯云软件源</a></li>
+<li><a href="https://mirrors.huaweicloud.com/">华为开源镜像站</a></li>
+<li><a href="%5Bhttp://mirrors.163.com/">网易开源镜像站</a></li>
+<li><a href="http://mirror.hust.edu.cn/">华中科技大学开源镜像站</a></li>
+<li><a href="http://mirrors.zju.edu.cn/">浙江大学开源镜像站</a></li>
+<li><a href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a></li>
+<li><a href="http://mirrors.cqu.edu.cn/">重庆大学开源软件镜像站</a></li>
+</ul>
+<h3 id="常用软件管理机制">常用软件管理机制</h3>
+<ul>
+<li>DPKG Debian类发行版包管理，格式为xxx.deb</li>
+<li>RPM Cento类发行版包管理，格式为xxx.rpm</li>
+<li>SRPM Centos类发行版未编译包，格式为xxx.src.rpm</li>
+<li>APT Debian类发行版在线包管理</li>
+<li>YUM Centos类发行版在线包管理</li>
+<li>Snap Ubuntu应用包管理</li>
+<li>Opkg Opensource嵌入式包管理，常见为Openwrt路由系统软件包工具，格式为xxx.ipk</li>
+<li>DNF Fedora类发行版在线包管理</li>
+<li>Pacman Archlinux类发行版在线包管理</li>
+</ul>
+<h3 id="常见软件源cpu架构">常见软件源CPU架构</h3>
+<blockquote>
+<p>各类发行版的CPU架构不同，可基本按照大类根据服务器的CPU去软件源路径目录进入。</p>
+<p>注：noarch代表没有硬件等级上的限制，不缺分服务器系统都可安装，但存在部分依赖包关联不到的问题。</p>
+</blockquote>
+<ul>
+<li>ARM系处理器：arm64、aarch64、armv6h、armv7h、armhf 、armel</li>
+<li>X86系处理器：i386、i586、i686、amd64 、x86_64</li>
+<li>MIPS处理器：mips64el、mips、mips64e、mipsel</li>
+<li>PowerPC处理器：ppc64le</li>
+</ul>
+<h3 id="实践">实践</h3>
+<blockquote>
+<p>以下以服务器在无外网的情况下安装nginx为例</p>
+</blockquote>
+<ol>
+<li>查看服务器版本</li>
+</ol>
+<pre><code class="language-bash"># cat /proc/version
+Linux version 3.10.0-514.26.2.el7.x86_64 (builder@kbuilder.dev.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-11) (GCC) ) #1 SMP Tue Jul 4 15:04:05 UTC 2017
 </code></pre>
+<p>这里查到CPU架构为x86_64、操作系统为ed Hat 4.8.5-11（这里查到的版本为Red Hat 4.8.5-11对应官方开发进度为Centos7.8，也可使用<code>cat /etc/redhat-release</code> 查看红帽的社区版本）、使用的包管理工具为RPM</p>
+<ol start="2">
+<li>下载相应Nginx离线包</li>
+</ol>
+<p>进入nginx<a href="http://nginx.org/en/download.html">官网</a>根据安装文档http://nginx.org/en/linux_packages.html找到源库http://nginx.org/packages，对应<strong>Centos7</strong>操作系统版本<strong>x86_64</strong>位找到安装包http://nginx.org/packages/centos/7/x86_64/RPMS/nginx-1.16.1-1.el7.ngx.x86_64.rpm</p>
+<ol start="3">
+<li>使用相应包管理工具安装Nginx</li>
+</ol>
+<pre><code class="language-bash"># rpm -ivh nginx-1.16.1-1.el7.ngx.x86_64.rpm 
+warning: nginx-1.16.1-1.el7.ngx.x86_64.rpm: Header V4 RSA/SHA1 Signature, key ID 7bd9bf62: NOKEY
+error: Failed dependencies:
+	libc.so.6(GLIBC_2.14)(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	libc.so.6(GLIBC_2.17)(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	libcrypto.so.10(OPENSSL_1.0.2)(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	libcrypto.so.10(libcrypto.so.10)(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	libpcre.so.1()(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	libssl.so.10(libssl.so.10)(64bit) is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	openssl &gt;= 1.0.2 is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+	systemd is needed by nginx-1:1.16.1-1.el7.ngx.x86_64
+
+</code></pre>
+<p>这里安装报错需要处理依赖程序，可根据提示中的信息去搜索指定版本依赖文件，如无报错则安装成功。依赖包可能存在与Centos源中，也可能存在<a href="http://nginx.org/packages">Nginx软件源</a>中。</p>
+<ol start="4">
+<li>进入相应镜像库下载所需要的依赖包</li>
+</ol>
+<p>登录<a href="https://developer.aliyun.com/mirror/">阿里云镜像站</a>进入centos页面点击<a href="https://mirrors.aliyun.com/centos">下载地址</a>，根据上面查到的服务器版本进入相应目录搜索包https://mirrors.aliyun.com/centos/7/os/x86_64/Packages/或https://mirrors.aliyun.com/centos/7/extras/x86_64/Packages/</p>
+<p>也可以直接搜索相应包下载https://developer.aliyun.com/packageSearch</p>
+<ol start="5">
+<li>安装所有依赖包</li>
+</ol>
+<pre><code class="language-bash"># rpm -ivh *
+</code></pre>
+<p>若出现安装顺序问题，可按提示顺序一个个单独安装</p>
+<h2 id="源码安装">源码安装</h2>
+<h2 id="自建源在线安装">自建源在线安装</h2>
 
 							</div>
 							<div class="wow zoomIn vt-post-tags">
+								
+								<a href="https://mzqk.github.io/tag/TBUMTnH7e/" rel="tag">Linux</a>
 								
 								<a href="https://mzqk.github.io/tag/j2Ca_XOy9/" rel="tag">教程</a>
 								
@@ -203,12 +261,9 @@ goto chkit
 
 								<div class="nav-links3">
 									
-									<div class="wow zoomIn nav-previous3"><a href="https://mzqk.github.io/post/rhcsa-ji-ben-kao-gang/"
-											rel="prev"> RHCSA 基本考纲</a></div>
 									
-									
-									<div class="wow zoomIn nav-next3"><a href="https://mzqk.github.io/post/linux-wen-jian-wu-fa-shan-chu-chu-li/"
-											rel="next"> linux文件无法删除处理</a></div>
+									<div class="wow zoomIn nav-next3"><a href="https://mzqk.github.io/post/oracle-shu-ju-ku-qian-yi/"
+											rel="next"> Oracle数据库迁移</a></div>
 									
 								</div>
 							</nav>

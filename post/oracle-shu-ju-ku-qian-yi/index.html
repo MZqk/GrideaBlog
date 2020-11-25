@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-<title>简单监控windows服务批处理脚本 | MZZZ</title>
+<title>Oracle数据库迁移 | MZZZ</title>
 
 <link rel="stylesheet" href="https://mzqk.github.io/styles/main.css">
 <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Noto+Sans+SC:300|Montserrat&display=swap"
@@ -48,7 +48,7 @@
 			<div class="site-branding">
 				<h1 class="site-title">
 					<div class="post-title-name">
-						<a href="https://mzqk.github.io" rel="home">简单监控windows服务批处理脚本</a>
+						<a href="https://mzqk.github.io" rel="home">Oracle数据库迁移</a>
 					</div>
 				</h1>
 				<h2 class="site-description">这世界总有些人做着美梦逆来顺受</h2>
@@ -142,13 +142,13 @@
 							<div class="entry-meta">
 								<div class="entry-info">
 									<time>
-										2017-10-30
+										2020-09-26
 									</time>
 									<span>
 										1 min read
 									</span>
 									<!-- id 将作为查询条件 -->
-									<span id="/jian-dan-jian-kong-windows-fu-wu-pi-chu-li-jiao-ben/" class="leancloud_visitors"  data-flag-title="简单监控windows服务批处理脚本">
+									<span id="/oracle-shu-ju-ku-qian-yi/" class="leancloud_visitors"  data-flag-title="Oracle数据库迁移">
 										<span class="leancloud-visitors-count"></span>次阅读
 									</span>
 									<span class="isTop">
@@ -164,51 +164,32 @@
 								</div>
 							</div>
 							<div class="wow zoomIn entry-summary song">
-								<pre><code class="language-bat">@echo off
-rem 定义循环间隔时间和监测的服务：
-set secs=6000
-set srvname=&quot;Redis&quot;
- 
-echo.
-echo ========================================
-echo ==         查询计算机服务的状态，     ==
-echo ==     每间隔%secs%秒种进行一次查询，     ==
-echo ==     如发现其停止，则立即启动。     ==
-echo ========================================
-echo.
-echo 此脚本监测的服务是：%srvname%
-echo.
- 
-if %srvname%. == . goto end
- 
-:chkit
-set svrst=0
-for /F &quot;tokens=1* delims= &quot; %%a in ('net start') do if /I &quot;%%a %%b&quot; == %srvname% set svrst=1
-if %svrst% == 0 net start %srvname%
-set svrst=
-rem 下面的命令用于延时，否则可能会导致cpu单个核心满载。
-ping -n %secs% 127.0.0.1 &gt; nul
-goto chkit
- 
-:end
+								<h1 id="数据库迁移">数据库迁移</h1>
+<h2 id="备份数据">备份数据</h2>
+<pre><code class="language-sql">expdp system/system@192.168.1.1/orcl directory=DATA_PUMP_DIR dumpfile=expdpfulldb.dmp logfile=expdp.log full=y
 </code></pre>
+<h2 id="导出表空间">导出表空间</h2>
+<pre><code class="language-sql">select 'create tablespace '||tablespace_name|| ' datafile '||'''/data/oracle/oradata/msczj/'||tablespace_name||'.dbf'''||' size '|| round(bytes / (1024 * 1024), 0)||'M;' total from dba_data_files
+</code></pre>
+<h2 id="导入数据">导入数据</h2>
+<pre><code class="language-sql">impdp system/system directory=DATA_PUMP_DIR dumpfile=expdpfulldb.dmp logfile=impdp.log schemas=(业务表用户，多个使用逗号分隔)
+</code></pre>
+<h2 id="设置定时备份任务">设置定时备份任务</h2>
 
 							</div>
 							<div class="wow zoomIn vt-post-tags">
-								
-								<a href="https://mzqk.github.io/tag/j2Ca_XOy9/" rel="tag">教程</a>
 								
 							</div>
 							<nav class="navigation3 post-navigation3" role="navigation">
 
 								<div class="nav-links3">
 									
-									<div class="wow zoomIn nav-previous3"><a href="https://mzqk.github.io/post/rhcsa-ji-ben-kao-gang/"
-											rel="prev"> RHCSA 基本考纲</a></div>
+									<div class="wow zoomIn nav-previous3"><a href="https://mzqk.github.io/post/linux-chi-xian-an-zhuang-ying-yong/"
+											rel="prev"> Linux 离线安装应用</a></div>
 									
 									
-									<div class="wow zoomIn nav-next3"><a href="https://mzqk.github.io/post/linux-wen-jian-wu-fa-shan-chu-chu-li/"
-											rel="next"> linux文件无法删除处理</a></div>
+									<div class="wow zoomIn nav-next3"><a href="https://mzqk.github.io/post/ansible-shi-yong-ru-men/"
+											rel="next"> Ansible使用入门</a></div>
 									
 								</div>
 							</nav>
