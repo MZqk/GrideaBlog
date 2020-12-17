@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<link rel="apple-touch-icon"
+  href="https://cdn.jsdelivr.net/gh/chiperman/Blog-photos/./img/iocn/aojep-i6dt9.49j3g5o9xbg.png">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta HTTP-EQUIV="expires" CONTENT="0">
+<meta name="apple-mobile-web-app-title" content="XiaoX 博客">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<title>Oracle日常运维 | MZZZ</title>
+
+<link rel="stylesheet" href="https://mzqk.github.io/styles/main.css">
+<link href="https://fonts.googleapis.com/css?family=Dancing+Script|Noto+Sans+SC:300|Montserrat&display=swap"
+  rel="stylesheet">
+<link href="https://at.alicdn.com/t/font_1306644_jwtuc2zzbrd.css" rel="stylesheet" />
+<!-- 下面是我自己的iconfont -->
+<link href="https://at.alicdn.com/t/font_1651848_9ur7s2zwgll.css" rel="stylesheet" />
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<script type='text/javascript' src='https://mzqk.github.io/media/scripts/script.js'></script>
+<link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet" />
+<script src="https://cdn.bootcss.com/wow/1.1.2/wow.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.8/highlight.min.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+<script>
+  wow = new WOW({
+    boxClass: 'wow',
+    animateClass: 'animated',
+    offset: 0,
+    mobile: true,
+    live: true
+  });
+  wow.init();
+</script>
+
+</head>
+
+<body class="post-template-default single single-post postid-70 single-format-standard">
+	<div id="wrapper">
+				<header id="header" class="site-header" >
+			<div class="site-branding">
+				<h1 class="site-title">
+					<div class="post-title-name">
+						<a href="https://mzqk.github.io" rel="home">Oracle日常运维</a>
+					</div>
+				</h1>
+				<h2 class="site-description">这世界总有些人做着美梦逆来顺受</h2>
+			</div>
+			<nav id="nav-wrapper">
+				<div class="container">
+					<div class="nav-toggle">
+						<div class="bars">
+							<div class="bar"></div>
+							<div class="bar"></div>
+							<div class="bar"></div>
+						</div>
+					</div>
+					<div class="clear"></div>
+					<ul id="" class="dove">
+						
+
+						<li>
+
+							<a href="/"> 首页</a></li>
+
+						
+
+						<li>
+
+							<a href="/archives"> 归档</a></li>
+
+						
+
+						<li>
+
+							<a href="/post/about"> 关于</a></li>
+
+						
+
+					</ul>
+					</li>
+
+					</ul>
+				</div>
+			</nav>
+
+			<div class="jingge">
+				
+				
+				
+				
+				
+				
+				<a href="https://github.com/MZqk" target="_blank"><i class="iconfont icon-github"></i></a>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				<a href="tencent://message/?uin=961504168&amp;Site=&amp;Menu=yes" target="_blank"><i class="iconfont icon-qq"></i></a>
+				
+				
+				
+				<a href="https://weibo.com/532267456?is_all=1" target="_blank"><i class="iconfont icon-weibo"></i></a>
+				
+				
+				
+				
+			</div>
+			<form id="gridea-search-form" data-update="1608169546178" action="/search/index.html">
+				<div class="search-box">
+					<input class="search-txt" name="q" placeholder="Type to search" />
+					<a class="search-btn">
+						<i class="iconfont icon-search1" action="/search/index.html"></i>
+					</a>
+				</div>
+			</form>
+		</header>
+		<div id="content" class="container">
+			<div class="row">
+				<div class="col-md-8 site-main">
+					<article id="post-70"
+						class="post-70 post type-post status-publish format-standard hentry category-5 tag-10 tag-9 tag-11">
+						<div class="entry-content">
+							<div class="entry-meta">
+								<div class="entry-info">
+									<time>
+										2020-12-17
+									</time>
+									<span>
+										13 min read
+									</span>
+									<!-- id 将作为查询条件 -->
+									<span id="/oracle-ri-chang-yun-wei/" class="leancloud_visitors"  data-flag-title="Oracle日常运维">
+										<span class="leancloud-visitors-count"></span>次阅读
+									</span>
+									<span class="isTop">
+										<script type="text/javascript">
+											var isTop;
+											isTop = false;
+											if (isTop == true) {
+												// document.write("<i class="iconfont icon-icon-test"></i>")
+												document.write("<span>⭐ Top</span>");
+											}
+										  </script>
+									</span>
+								</div>
+							</div>
+							<div class="wow zoomIn entry-summary song">
+								<h2 id="oracle-常用运维命令整理">Oracle 常用运维命令整理</h2>
+<h3 id="一-oracle建库与删库命令">一、oracle建库与删库命令</h3>
+<p>（1）oracle11g建库(一般习惯配置gdbname与sid名一样，sys密码与system密码一样，以方便记忆)</p>
+<pre><code>[oracledb@ ~]$ dbca -silent -createDatabase -templateName /u01/oracle/product/11.2.0/dbhome_1/assistants/dbca/templates/General_Purpose.dbc -gdbname GDBNAME -sid SIDNAME -characterSet AL32UTF8 -NATIONALCHARACTERSET UTF8 -sysPassword SYSPASSWORD -systemPassword SYSTEMPASSWORD -TOTALMEMORY 2048
+</code></pre>
+<p>删库方法一：</p>
+<pre><code>[oracledb@ ~]$ dbca -silent -deleteDatabase -sourceDB  SIDNAME -sysDBAUserName sys -sysDBAPassword SYSPASSWORD
+</code></pre>
+<p>删除库方法二：</p>
+<pre><code>#步骤1：配置回应文件：
+[oracledb@ ~]$ cat /u01/oracle/response/dbca.rsp
+OPERATION_TYPE = &quot;deleteDatabase&quot;
+SOURCEDB = &quot;SIDNAME&quot;
+SYSDBAUSERNAME = &quot;sys&quot;SYSDBA
+PASSWORD = &quot;SYSPASSWORD&quot;
+
+#步骤2：执行回应文件删库：
+[oracledb@ ~]$ dbca -silent -responseFile /u01/oracle/response/dbca.rsp
+</code></pre>
+<p>（2）oracle12c  建库</p>
+<pre><code>[oracledb@ ~]$ dbca -silent -createDatabase -templateName /u01/oracle/product/orahome/assistants/dbca/templates/General_Purpose.dbc  -gdbname GDBNAME -sid SIDNAME -characterSet AL32UTF8 -NATIONALCHARACTERSET UTF8 -sysPassword SYSPASSWORD -systemPassword SYSTEMPASSWORD -TOTALMEMORY 2048
+#删库命令同上，注意运行删库命令之后，需要手动删除遗留的目录
+</code></pre>
+<p>（3）删除一般会自动删除以下路径或文件中的库信息</p>
+<pre><code>A：/u01/oracle/admin/SIDNAME
+B：cat /etc/oratab
+C：/u01/oracle/oradata/SIDNAME
+</code></pre>
+<p>以下路径需要手动清理</p>
+<pre><code>D：/u01/oracle/cfgtoollogs/dbca/SIDNAME
+E：/u01/oracle/diag/rdbms/SIDNAME
+F：/u01/oracle/product/11.2.0/dbhome_1/dbs/hc_SIDNAME.dat
+</code></pre>
+<h3 id="二-创建库对应的账号密码">二、创建库对应的账号密码</h3>
+<p>1、切换SID</p>
+<pre><code>[oracledb@ ~]$ export ORACLE_SID=SIDNAME
+</code></pre>
+<p>2、切换字符集</p>
+<pre><code>#查看oracle数据库的字符集
+SQL&gt; select userenv('language') from dual;
+
+#查看oracle数据库的编码
+SQL&gt; select * from nls_database_parameters where parameter ='NLS_CHARACTERSET';
+[oracledb@ ~]$ set NLS_LANG=AMERICAN_AMERICA.AL32UTF8     #windows_os
+[oracledb@ ~]$ export NLS_LANG=AMERICAN_AMERICA.AL32UTF8  #linux_os
+</code></pre>
+<p>3、创建库对应的用户信息</p>
+<pre><code>SQL&gt; create temporary tablespace SIDNAME_temp tempfile '/u01/oracle/oradata/SIDNAME/SIDNAME_temp.dbf 'size 64m autoextend on next 64m maxsize unlimited extent management local;
+
+SQL&gt; create tablespace SIDNAME_data logging datafile '/u01/oracle/oradata/SIDNAME/SIDNAME_data.dbf' size 64m autoextend on next 64m maxsize 2048m extent management local;
+
+SQL&gt; create user USERNAME identified by USERPASSWORD default tablespace SIDNAME_data temporary tablespace SIDNAME_temp;
+
+SQL&gt; grant connect,resource to USERNAME;
+SQL&gt; grant create view to USERNAME;
+SQL&gt; grant unlimited tablespace to USERNAME;
+
+SQL&gt; grant create public synonym to USERNAME;
+SQL&gt; grant drop public synonym to USERNAME;
+
+SQL&gt; create or replace directory dir_dump  as '/u01/oracle/backup';
+SQL&gt; grant read,write on directory dir_dump to USERNAME;
+
+SQL&gt; ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
+</code></pre>
+<p>—根据实例环境修改processes与sessions参数值(需要重启oracle数据库)</p>
+<pre><code>SQL&gt; alter system set processes=1000 scope=spfile;  SQL&gt; alter system set sessions=1105 scope=spfile; 
+</code></pre>
+<p>知识点：</p>
+<ul>
+<li>oracle11g：sessions值的定义应该大于或者定于1.1processes+5，如果小于1.1processes+5，则oracle在启动时自动将该参数设置为1.1processes+5。这主要是考虑到后台进程发起的session和大约10%的递归session。</li>
+<li>oracle12c：1.1processes+22</li>
+</ul>
+<pre><code>##查询当前oracle的并发连接数：
+SQL&gt; select count(*) from v$session where status='ACTIVE';
+#查看不同用户的连接数：
+SQL&gt; select username,count(username) from v$session where username is not null group by username;
+#查看所有用户：
+select * from all_users;
+#当前的连接数
+select count(*) from v$process;
+#数据库允许的最大连接数
+select value from v$parameter where name = 'processes';
+</code></pre>
+<h3 id="三-数据库的还原与备份命令">三、数据库的还原与备份命令</h3>
+<p>查看expdp导出备份存储路径：</p>
+<pre><code>sql&gt; select * from dba_directories;
+</code></pre>
+<p>1、针对整个库备份与还原操作</p>
+<p>（1）、数据库的备份(注意有时SIDNAME与SCHEMASNAME不一致，要注意使用时区分，一般配置一样的名称，方便记忆的同时，也方便运维。parallel参数根据服务器内存等配置情况添加合理的数值。)</p>
+<pre><code>#备份：
+[oracledb@ ~]$  expdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME dumpfile=SIDNAME`date +%Y%m%d`.dmp directory=dir_dump parallel=2
+12
+</code></pre>
+<p>（2）、还原</p>
+<p>情况1、原始库与目标库实例名不同（注意有些环境的数据表空间名不是SIDNAME_data，使用时注意核实）</p>
+<pre><code>#格式：
+[oracledb@ ~]$ impdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME DUMPFILE=XXXX.dmp  DIRECTORY=dir_dump remap_schema=源SCHEMASNAME:目标SCHEMASNAME remap_tablespace=源_data:目标_data
+</code></pre>
+<p>情况2：源库与目标库实例名相同</p>
+<pre><code>#格式：
+[oracledb@ ~]$ impdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME DUMPFILE=XXXX.dmp  DIRECTORY=dir_dump EXCLUDE=STATISTICS
+</code></pre>
+<p>知识扩展：使用EXCLUDE=STATISTICS还原时排除统计，可以使用如下命令完成统计</p>
+<pre><code>#命令如下：
+SQL&gt; exec dbms_stats.gather_schema_stats(ownname=&gt;'SIDNAME',estimate_percent=&gt;10,degree=&gt;8,cascade=&gt;true,granularity=&gt;'ALL');
+</code></pre>
+<p>2、针对单表备份与还原操作</p>
+<p>（1）、备份单表</p>
+<pre><code>格式：
+[oracledb@ ~]$ expdp USERNAME/USERPASSWORD@SIDNAME dumpfile=tablenameXXXX.dmp DIRECTORY=dir_dump tables=TABLENAME
+</code></pre>
+<p>（2）、还原单表</p>
+<pre><code>#格式：
+[oracledb@ ~]$ impdp USERNAME/USERPASSWORD@SIDNAME dumpfile=tablenameXXXX.dmp DIRECTORY=dir_dump TABLES=TABLENAME TABLE_EXISTS_ACTION=REPLACE
+</code></pre>
+<p>扩展：table_exists_action参数说明</p>
+<pre><code>使用imp进行数据导入时，若表已经存在，要先drop掉表，再进行导入。
+而使用impdp完成数据库导入时，若表已经存在，有四种的处理方式：
+参数(1) skip：默认操作
+参数(2) replace：先drop表，然后创建表，最后插入数据
+参数(3) append：在原来数据的基础上增加数据
+参数(4) truncate：先truncate，然后再插入数据
+</code></pre>
+<p>（3）备份多张表</p>
+<pre><code>#格式：
+[oracledb@ ~]$ expdp USERNAME/USERPASSWORD@SIDNAME dumpfile=tablenameXXXX.dmp DIRECTORY=dir_dump TABLES=源TABLENAME1,源TABLENAME2,.....
+</code></pre>
+<p>（4）还原多张表</p>
+<pre><code>#格式：
+[oracledb@ ~]$ impdp USERNAME/USERPASSWORD@SIDNAME dumpfile=tablenameXXXX.dmp DIRECTORY=dir_dump remap_table=源TABLENAME1:目标TABLENAME11 TABLE_EXISTS_ACTION=REPLACE
+[oracledb@ ~]$ impdp USERNAME/USERPASSWORD@SIDNAME dumpfile=tablenameXXXX.dmp DIRECTORY=dir_dump remap_table=源TABLENAME2:目标TABLENAME22 TABLE_EXISTS_ACTION=REPLACE
+</code></pre>
+<p>3、扩展知识</p>
+<p>1）扩展1：</p>
+<p>情况1、高版本往低版本导出还原时，如12往11还原时，在12c执行导出时，添加低版本的版本号version=11.1.0.2.0</p>
+<pre><code>#格式：
+[oracledb@ ~]$ expdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME dumpfile=XXX.dmp DIRECTORY=dir_dump version=11.1.0.2.0
+</code></pre>
+<p>情况2、低版本往高版本还原时，高版本一般兼容低版本，目前个人运维工作中11往12还原没遇到什么问题。</p>
+<p>2）扩展2：</p>
+<p>（1）、按指定大小备份，如每份5G大小（parallel是多线程处理，线程数要小于生成文件个数，线程要小于 cpu 线程数）</p>
+<pre><code>#备份格式
+[oracledb@ ~]$ expdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME DIRECTORY=dir_dump dumpfile=XXX_%U.dmp logfile=expdpXXX.log filesize=5G parallel=16
+</code></pre>
+<p>（2）、多个备份文件还原：</p>
+<pre><code>#还原格式
+[oracledb@ ~]$ impdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME DIRECTORY=dir_dump dumpfile=XXX_%U.dmp logfile=impdpXXX.log parallel=16
+</code></pre>
+<p>3）扩展3导出过滤不导出某张表：</p>
+<pre><code>#格式
+[oracledb@ ~]$ expdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME DIRECTORY=dir_dump dumpfile=XXX.dmp  exclude=TABLE:\&quot;IN \'TABLENAME\'\&quot; 
+</code></pre>
+<p>4）扩展4不同库还原时不改变数据结构使用truncate参数：</p>
+<pre><code>#格式
+[oracledb@ ~]$ impdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME DIRECTORY=dir_dump dumpfile=XXX.dmp remap_schema=源SCHEMASNAME:目标SCHEMASNAME remap_tablespace=源_data:目标_data TABLE_EXISTS_ACTION=truncate
+</code></pre>
+<p>5）扩展5导出备份时保留表，清除表数据(query参数)：</p>
+<pre><code>#格式
+[oracledb@ ~]$ expdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME DIRECTORY=dir_dump dumpfile=XXX.dmp logfile=expdpXXX.log  query=TABLENAME1:'&quot; where 1=2&quot;',TABLENAME2:'&quot; where 1=2&quot;',........
+</code></pre>
+<p>6）扩展6导出备份时保留表，清除表数据，同时过滤某两张表</p>
+<pre><code>#格式
+[oracledb@ ~]$ expdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME DIRECTORY=dir_dump dumpfile=XXX.dmp logfile=expdpXXX.log  query=TABLENAME1:'&quot; where 1=2&quot;',TABLENAME2:'&quot; where 1=2&quot;' exclude=TABLE:\&quot;IN \'TABLENAME1\'\'TABLENAME2\'\&quot;
+</code></pre>
+<p>7）扩展7仅统计数据库各表数据，但不导出，参数estimate_only=y</p>
+<pre><code>#格式[oracledb@ ~]$ expdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME DIRECTORY=dir_dump estimate_only=y
+</code></pre>
+<p>8）扩展8导入单表到某临时表：</p>
+<pre><code>#格式（涉及统计与索引时添加参数EXCLUDE=STATISTICS EXCLUDE=INDEX）
+—sql实现从这张表复制到另一张临时表
+
+SQL&gt; CREATE TABLE 目标TABLENAME  AS (SELECT * FROM 源TABLENAME);
+—清空表中的数据
+
+SQL&gt; delete  from 目标TABLENAME;
+[oracledb@ ~]$ impdp USERNAME/USERPASSWORD@SIDNAME DIRECTORY=dir_dump DUMPFILE=tablenameXXX.dmp remap_table=源TABLENAME:目标TABLENAME TABLE_EXISTS_ACTION=REPLACE EXCLUDE=STATISTICS EXCLUDE=INDEX
+ [oracledb@ ~]$ expdp USERNAME/USERPASSWORD@SIDNAME schemas=SCHEMASNAME ESTIMATE_ONLY=y NOLOGFILE=y FULL=y
+</code></pre>
+<p>9）扩展9个别sql脚本内容很长，使用PLSQL Developer工具执行时会一直卡住无响应时除使用PLSQL Developer工具的在命令窗口中执行外，也可以使用shell终端执行</p>
+<pre><code>#格式
+[oracle@localhost ~]$ export ORACLE_SID=SIDNAME
+[oracle@localhost ~]$ sqlplus  / as sysdba
+sql&gt; conn USERNAME/USERPASSWORD@SIDNAME
+sql&gt; @/u01/oracle/backup/XXX.sql
+</code></pre>
+<p>10）扩展10如何正确终止expdp与impdp任务，操作步骤如下：</p>
+<pre><code>步骤1、查看视图dba_datapump_jobs
+
+select job_name,state from dba_datapump_jobs;
+步骤2、正确停止expdp导出任务使用stop_job
+
+expdp USERNAME/USERPASSWORD@SIDNAME attach=SYS_EXPORT_SCHEMA_02
+步骤3、停止任务
+
+Export&gt; stop_job=immediate 
+Are you sure you wish to stop this job ([yes]/no): yes  
+步骤4、查看系统中的备份job状态
+
+select owner_name,job_name ,state from dba_datapump_jobs;
+</code></pre>
+<p>扩展：下列命令在交互模式下有效：</p>
+<pre><code>HELP： 总结交互命令。
+KILL_JOB： 分离和删除作业。
+PARALLEL： 更改当前作业的活动 worker 的数目。
+PARALLEL=.2
+START_JOB： 启动/恢复当前作业。
+START_JOB=SKIP_CURRENT 在开始作业之前将跳过作业停止时执行的任意操作。
+STATUS ：在默认值（0）将显示可用时的新状态的情况下，要监视的频率（以秒计）作业状态。
+STATUS[=interval]
+STOP_JOB： 顺序关闭执行的作业并退出客户机。
+STOP_JOB=IMMEDIATE 将立即关闭数据泵作业。
+</code></pre>
+<p>11）扩展11</p>
+<pre><code>#查看DB中的NLS_CHARACTERSET的值
+SQL&gt; select * from v$nls_parameters  where parameter='NLS_CHARACTERSET'; 
+SQL&gt; select * from nls_database_parameters t where t.parameter='NLS_CHARACTERSET';
+</code></pre>
+<p>12）扩展12关于exp、imp、expdp、impdp</p>
+<pre><code>(1)、exp和imp是客户端工具程序，它们既可以在客户端使用，也可以在服务端使用。
+(2)、expdp和impdp是服务端的工具程序，他们只能在oracle服务端使用，不能在客户端使用。
+(3)、imp只适用于exp导出的文件，不适用于expdp导出文件；impdp只适用于expdp导出的文件，而不适用于exp导出文件。
+(4)、对于10g以上的服务器，使用exp通常不能导出0行数据的空表，而此时必须使用expdp导出。
+</code></pre>
+<p>13）扩展13oracle用户密码有@符号时，expdp与sqlplus连接方式及使用rar压缩备份的文件</p>
+<pre><code>@echo off
+rem ---- dmp backup directory, same as dump dir
+set backup_dir=e:\app\oracle\backup
+rem ---- today, day for dmp file remaining
+set day=%date:~0,4%%date:~5,2%%date:~8,2%
+set remain_day=7
+
+rem --- delete files before 7 days
+forfiles /p &quot;%backup_dir%&quot; /d -%remain_day%  /c &quot;cmd /c del /f @path&quot;
+
+rem --- export oracle data to dmp file
+expdp 用户名/\&quot;xxx@yyy\&quot;@orcl directory=dir_dump dumpfile=用户名_%day%.dmp logfile=用户名_%day%.log schemas=用户名 parallel=4 compression=ALL
+rem --- sqlplus conn
+sqlplus 用户名/&quot;&quot;&quot;xxx@yyy&quot;&quot;&quot;@orcl
+
+rem ---- if compress the dumpfile and delete source dumpfile, unmark rem
+
+set rar=&quot;C:\Program Files (x86)\WinRAR\WinRAR.exe&quot;
+
+%rar% a -df %backup_dir%\用户名_%day%.rar %backup_dir%\用户名_%day%.dmp %backup_dir%\用户名_%day%.log
+</code></pre>
+<h3 id="四-清理还原时出错清用户表空间">四、清理（还原时出错，清用户表空间）</h3>
+<p>1、删除数据表空间：</p>
+<pre><code>#执行语句：
+[oracledb@ ~]$ sqlplus / as sysdbaSQL&gt; drop tablespace mepro_data including contents and datafiles cascade constraint;
+</code></pre>
+<p>2、删除临时表空间：</p>
+<pre><code>#执行语句：
+SQL&gt; drop tablespace mepro_temp including contents and datafiles cascade constraints;
+</code></pre>
+<p>3、删除用户：</p>
+<pre><code>#执行语句：
+SQL&gt; drop user srmhdld cascade;
+</code></pre>
+<p>4、报用户正在连接，无法删除的解决方法</p>
+<pre><code>---方法1：重启并迅速执行drop user语句（个人推荐）
+SQL&gt; shutdown immediate;
+SQL&gt; startup
+
+---方法2：删除正在连接的session（连接的session连接着很多时，清理耗时，没有方法1快速）
+#查询用户会话
+SQL&gt; select username,serial#,sid,program,machine,status from v$session where username='USERNAME' AND STATUS='ACTIVE';;
+SQL&gt; select saddr,sid,serial#,paddr,username,status from v$session where username is not null;
+
+---删除相关用户会话
+SQL&gt; alter system kill session 'serial#, sid';
+</code></pre>
+<p><em>文章转自：</em><a href="https://mp.weixin.qq.com/s/j2dYPUtX5gRwSXq7SRYa_g">运维派</a></p>
+
+							</div>
+							<div class="wow zoomIn vt-post-tags">
+								
+								<a href="https://mzqk.github.io/tag/QRj9CSsCm/" rel="tag">网络收集</a>
+								
+							</div>
+							<nav class="navigation3 post-navigation3" role="navigation">
+
+								<div class="nav-links3">
+									
+									
+									<div class="wow zoomIn nav-next3"><a href="https://mzqk.github.io/post/linux-chi-xian-an-zhuang-ying-yong/"
+											rel="next"> Linux 离线安装应用</a></div>
+									
+								</div>
+							</nav>
+							<div class="wow zoomIn author-info" style="visibility: visible; animation-name: zoomIn;">
+								<div class="author-avatar pull-left"><img
+										src="https://mzqk.github.io/images/avatar.png"></div>
+								
+								<div class="author-description">
+									<div class="author-title">
+										<div class="author-link" rel="author">MZZZ</div>
+									</div>
+									
+									
+						</div>
+					</article>
+					<div id="marlin_lite_about_widget-2" class="wow zoomIn widget marlin_lite_about_widget"
+						data-wow-delay="0.1s">
+
+						
+						<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='https://mzqk.github.io/media/scripts/Valine.min.js'></script>
+<!-- <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script> -->
+
+
+
+<div class="comment"></div>
+<script>
+        new Valine({
+            // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
+            av: AV, 
+            el: '.comment',
+            lang: 'zh-cn',
+            visitor: true,
+            
+            
+            emoticon_list: ["吐.png","喷血.png","狂汗.png","不说话.png","汗.png","坐等.png","献花.png","不高兴.png","中刀.png","害羞.png","皱眉.png","小眼睛.png","中指.png","尴尬.png","瞅你.png","想一想.png","中枪.png","得意.png","肿包.png","扇耳光.png","亲亲.png","惊喜.png","脸红.png","无所谓.png","便便.png","愤怒.png","蜡烛.png","献黄瓜.png","内伤.png","投降.png","观察.png","看不见.png","击掌.png","抠鼻.png","邪恶.png","看热闹.png","口水.png","抽烟.png","锁眉.png","装大款.png","吐舌.png","无奈.png","长草.png","赞一个.png","呲牙.png","无语.png","阴暗.png","不出所料.png","咽气.png","期待.png","高兴.png","吐血倒地.png","哭泣.png","欢呼.png","黑线.png","喜极而泣.png","喷水.png","深思.png","鼓掌.png","暗地观察.png"],
+            	
+            	
+            
+        });
+    </script> 
+
+
+					</div>
+				</div>
+				<div class="tocc col l3 hide-on-med-and-down">
+
+    <div class="toc-widget">
+
+        <div class="toc-title"></div>
+
+        <div id="toc-content">
+
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.5.0/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '.entry-summary',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('.entry-summary').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+    });
+
+    $(function () {
+        var bt;
+        bt = $('.toc-widget');
+        if ($(document).width() > 480) {
+            $(window).scroll(function () {
+                var st;
+                st = $(window).scrollTop();
+                if (st > 450) {
+                    return bt.css('display', 'block');
+                } else {
+                    return bt.css('display', 'none');
+                }
+            })
+        }
+    });
+</script>
+			</div>
+		</div>
+		<footer id="colophon" class="site-footer">
+	<div class="container">
+		<div class="copyright">
+			
+			<b>Crafted with 💔 by <a href="https://chiperman.github.io/about/" target="_blank">chiperman</a></b>
+			<br>
+			<b>Eleven forever.</b>
+			<br>
+			<span class="runtime">
+				「我」已经运行了<script type="text/javascript">
+					var urodz = new Date("05/07/2018");
+					var now = new Date();
+					var ile = now.getTime() - urodz.getTime();
+					var dni = Math.floor(ile / (1000 * 60 * 60 * 24));
+					document.write(+dni)
+				</script>天
+				<br>
+			</span>
+			<b>Theme: </b>
+			<a href="https://github.com/chiperman/gridea-theme-xiaox" target="_blank" title="Pan">
+				<span><b>Pan - XiaoX</b></span>
+			</a>
+			<b>. Powered by </b>
+			<a href="https://gridea.dev/" target="_blank" title="Gridea">
+				<span><b>Gridea</b></span>
+			</a>
+		</div>
+	</div><!-- .container -->
+</footer><!-- #colophon -->
+	</div>
+
+	<script src="https://cdn.bootcss.com/fitvids/1.2.0/jquery.fitvids.min.js"></script>
+
+<script
+  src="https://cdn.jsdelivr.net/gh/MZqk/mzqk.github.io/media/scripts/marlin-scripts.js">
+</script>
+
+<script src="//tokinx.github.io/lately/lately.min.js"></script>
+<script>
+  jQuery(document).ready(function () {
+    $.lately({
+      'target': '.lately-a,.lately-b,.lately-c'
+    })
+  });
+</script>
+<style type="text/css">
+  /* 一键到顶部 */
+  a.back_to_top {
+    text-decoration: none;
+    position: fixed;
+    bottom: 65px;
+    right: 30px;
+    background: #f0f0f0;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    line-height: 36px;
+    font-size: 18px;
+    text-align: center;
+    transition-duration: .5s;
+    transition-propety: background-color;
+    display: none;
+  }
+
+  a.back_to_top span {
+    color: #888;
+  }
+
+  a.back_to_top:hover {
+    cursor: pointer;
+    background: #dfdfdf;
+  }
+
+  a.back_to_top:hover span {
+    color: #555;
+  }
+
+  @media print,
+  screen and (max-width: 580px) {
+    .back_to_top {
+      display: none !important;
+    }
+  }
+
+  /* 一键到底部 */
+
+  a.down_to_bottom {
+    text-decoration: none;
+    position: fixed;
+    bottom: 15px;
+    right: 30px;
+    background: #f0f0f0;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    line-height: 36px;
+    font-size: 18px;
+    text-align: center;
+    transition-duration: .5s;
+    transition-propety: background-color;
+    display: none;
+  }
+
+  a.down_to_bottom span {
+    color: #888;
+  }
+
+  a.down_to_bottom:hover {
+    cursor: pointer;
+    background: #dfdfdf;
+  }
+
+  a.down_to_bottom:hover span {
+    color: #555;
+  }
+
+  @media print,
+  screen and (max-width: 580px) {
+    .down_to_bottom {
+      display: none !important;
+    }
+  }
+</style>
+
+
+<a id="back_to_top" href="#" class="back_to_top"><span><i class="iconfont icon-xiangshang"></i></span>
+</a>
+
+<a id="down_to_bottom" href="#" class="down_to_bottom"><span><i class="iconfont icon-xiangxia"></i></span>
+</a>
+
+<script src="//instant.page/3.0.0" type="module" defer
+  integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+<script>
+  function getScrollTop() {
+    var scrollTop = 0,
+      bodyScrollTop = 0,
+      documentScrollTop = 0;
+    if (document.body) {
+      bodyScrollTop = document.body.scrollTop;
+    }
+    if (document.documentElement) {
+      documentScrollTop = document.documentElement.scrollTop;
+    }
+    scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+    return scrollTop;
+  };
+
+  function getScrollHeight() {
+    var scrollHeight = 0,
+      bodyScrollHeight = 0,
+      documentScrollHeight = 0;
+    if (document.body) {
+      bSH = document.body.scrollHeight;
+    }
+    if (document.documentElement) {
+      dSH = document.documentElement.scrollHeight;
+    }
+    scrollHeight = (bSH - dSH > 0) ? bSH : dSH;
+    return scrollHeight;
+  };
+
+  function getWindowHeight() {
+    var windowHeight = 0;
+    if (document.compatMode == "CSS1Compat") {
+      windowHeight = document.documentElement.clientHeight;
+    } else {
+      windowHeight = document.body.clientHeight;
+    }
+    return windowHeight;
+  };
+
+  $(document).ready((function (_this) {
+    return function () {
+      var bt;
+      bt = $('#back_to_top');
+      if ($(document).width() > 480) {
+        $(window).scroll(function () {
+          var st;
+          st = $(window).scrollTop();
+          if (st > 30) {
+            return bt.css('display', 'block');
+          } else {
+            return bt.css('display', 'none');
+          }
+        });
+        return bt.click(function () {
+          $('body,html').animate({
+            scrollTop: 0
+          }, 800);
+          return false;
+        });
+      }
+    };
+  })(this));
+
+  $(document).ready((function (_this) {
+    return function () {
+      var bt;
+      bt = $('#down_to_bottom');
+      if ($(document).width() > 480) {
+        $(window).scroll(function () {
+          var st;
+          st = $(window).scrollTop();
+          if (getScrollTop() + getWindowHeight() == getScrollHeight()) {
+            return bt.css('display', 'none');
+          } else {
+            return bt.css('display', 'block');
+          }
+        });
+        return bt.click(function () {
+          $('body,html').animate({
+            scrollTop: $('body,html')[0].scrollHeight
+          }, 800);
+          return false;
+        });
+      }
+    };
+  })(this));
+</script>
+	<script data-no-instant>
+		(function ($) {
+			$.extend({
+				adamsOverload: function () {
+					$('.navigation:eq(0)').remove();
+					$("").attr("rel", "external");
+					$("a[rel='external'],a[rel='external nofollow']").attr("target", "_blank");
+					$("a.vi").attr("rel", "");
+					$.viewImage({
+						'target': 'img',
+						'exclude': '.vsmile-icons img,.gallery img',
+						'delay': 300
+					});
+					$.lately({
+						'target': '.commentmetadata a,.infos time,.post-list time'
+					});
+					prettyPrint();
+
+					$('ul.links li a').each(function () {
+						if ($(this).parent().find('.bg').length == 0) {
+							$(this).parent().append(
+								'<!---<div class="bg" style="background-image:url(https://c3.glgoo.top/s2/favicons?domain=' +
+								$(this).attr("href") + ')"></div>--->')
+						}
+					});
+				}
+			});
+		})(jQuery);
+		jQuery.adamsOverload();
+	</script>
+
+</body>
+
+</html>

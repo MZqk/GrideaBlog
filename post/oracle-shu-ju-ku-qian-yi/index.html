@@ -124,7 +124,7 @@
 				
 				
 			</div>
-			<form id="gridea-search-form" data-update="1606297066260" action="/search/index.html">
+			<form id="gridea-search-form" data-update="1608169546178" action="/search/index.html">
 				<div class="search-box">
 					<input class="search-txt" name="q" placeholder="Type to search" />
 					<a class="search-btn">
@@ -166,13 +166,17 @@
 							<div class="wow zoomIn entry-summary song">
 								<h1 id="数据库迁移">数据库迁移</h1>
 <h2 id="备份数据">备份数据</h2>
-<pre><code class="language-sql">expdp system/system@192.168.1.1/orcl directory=DATA_PUMP_DIR dumpfile=expdpfulldb.dmp logfile=expdp.log full=y
+<pre><code class="language-bash"># 远程导出数据
+expdp system/system@192.168.1.1/orcl directory=DATA_PUMP_DIR dumpfile=expdpfulldb.dmp logfile=expdp.log full=y
+# 本地导出数据
+exp sys/password file=e:\fulldb.dmp log=e:\fulldb_exp.log full=y
 </code></pre>
-<h2 id="导出表空间">导出表空间</h2>
-<pre><code class="language-sql">select 'create tablespace '||tablespace_name|| ' datafile '||'''/data/oracle/oradata/msczj/'||tablespace_name||'.dbf'''||' size '|| round(bytes / (1024 * 1024), 0)||'M;' total from dba_data_files
+<h2 id="创建表空间">创建表空间</h2>
+<pre><code class="language-sql">-- 系统相关表空间自行去除，若有后增的两个以上表空间则再次手动建立
+SELECT 'create tablespace ' || NAME || ' datafile ' || '''/home/oracle/app/oracle/oradata/ora92i/' || NAME || '.dbf''' || ' size ' || '1024M auto extends on;'  FROM v$TABLESPACE
 </code></pre>
 <h2 id="导入数据">导入数据</h2>
-<pre><code class="language-sql">impdp system/system directory=DATA_PUMP_DIR dumpfile=expdpfulldb.dmp logfile=impdp.log schemas=(业务表用户，多个使用逗号分隔)
+<pre><code class="language-bash">impdp system/system directory=DATA_PUMP_DIR dumpfile=expdpfulldb.dmp logfile=impdp.log schemas=(业务表用户，多个使用逗号分隔)
 </code></pre>
 <h2 id="设置定时备份任务">设置定时备份任务</h2>
 
