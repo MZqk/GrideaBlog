@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-<title>关于 | MZZZ</title>
+<title>Kubernetes基础概念 | MZZZ</title>
 
 <link rel="stylesheet" href="https://mzqk.github.io/styles/main.css">
 <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Noto+Sans+SC:300|Montserrat&display=swap"
@@ -48,7 +48,7 @@
 			<div class="site-branding">
 				<h1 class="site-title">
 					<div class="post-title-name">
-						<a href="https://mzqk.github.io" rel="home">关于</a>
+						<a href="https://mzqk.github.io" rel="home">Kubernetes基础概念</a>
 					</div>
 				</h1>
 				<h2 class="site-description">这世界总有些人做着美梦逆来顺受</h2>
@@ -142,13 +142,13 @@
 							<div class="entry-meta">
 								<div class="entry-info">
 									<time>
-										2019-01-25
+										2020-10-22
 									</time>
 									<span>
-										1 min read
+										3 min read
 									</span>
 									<!-- id 将作为查询条件 -->
-									<span id="/about/" class="leancloud_visitors"  data-flag-title="关于">
+									<span id="/kubernetes-ji-chu-gai-nian/" class="leancloud_visitors"  data-flag-title="Kubernetes基础概念">
 										<span class="leancloud-visitors-count"></span>次阅读
 									</span>
 									<span class="isTop">
@@ -164,22 +164,82 @@
 								</div>
 							</div>
 							<div class="wow zoomIn entry-summary song">
-								<blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+								<h2 id="master">Master</h2>
+<h3 id="apiserver">Apiserver</h3>
+<h3 id="controller-manager">Controller Manager</h3>
+<h4 id="rc">RC</h4>
+<p>副本控制器，通过一条标签选择 pod</p>
+<h4 id="rs">RS</h4>
+<p>副本控制器进化版，可以通过一组标签选择 pod</p>
+<h4 id="deployment">Deployment</h4>
+<p>管理副本控制器，可以声明式升级</p>
+<p>deployment由replicaSet组成</p>
+<h4 id="daemonset">DaemonSet</h4>
+<p>每一个Node上都调度一个pod</p>
+<h4 id="statefulset">Statefulset</h4>
+<p>有状态部属pod</p>
+<h4 id="job">Job</h4>
+<p>启动一个批处理任务</p>
+<h4 id="cronjob">CronJob</h4>
+<p>定时启动一个批处理任务</p>
+<h3 id="etcd">Etcd</h3>
+<h3 id="schedule">Schedule</h3>
+<h2 id="node">Node</h2>
+<h3 id="kube-proxy">kube Proxy</h3>
+<h3 id="kubelet">Kubelet</h3>
+<h3 id="docker">Docker</h3>
+<h2 id="资源">资源</h2>
+<h3 id="pod">Pod</h3>
+<p>一个pod中包含一个或多个容器<br>
+pod中的容器不能跨节点</p>
+<p>pod和pod之间是在同一个共享网络（多个容器组构成）</p>
+<p>pod之间容器与容器共享网络和存储</p>
+<p>pod的生命周启pending、running、successed、failed、unknow</p>
+<p>pod中的pause可以判断业务容器的状态</p>
+<p>pod可以使用hostport配置蒋端口暴露到所在的节点服务器上</p>
+<h3 id="service">Service</h3>
+<p>server能创建一个虚拟集群IP作为多个pod个通讯，service不能直接被ping</p>
+<p>service访问pod实际是访问endpoints，endpoints由podid+暴露端口组成</p>
+<p>service使用clusterip时，访问pod默认轮询分配到pod上</p>
+<p>service使用clusterip且配置会话保持时，访问pod是基于clientip来分配到同一个pod上</p>
+<p>service使用headless时，访问service分配到的pod由程序自己决定</p>
+<p>service使用nodeport时，所有节点都能通过端口访问，若有负载均衡配置时可使用loadbalancer参数</p>
+<h3 id="ingress">Ingress</h3>
+<h3 id="label">label</h3>
+<h3 id="annotation">Annotation</h3>
+<h4 id="健康检查">健康检查</h4>
+<p>livenessProbe</p>
+<p>readlinessProbe</p>
+<h2 id="网络原理">网络原理</h2>
+<h3 id="kubernetes网络模型">Kubernetes网络模型</h3>
+<p>Kubernetes网络模型设计的一个基础原则是：每个Pod都拥有一个独立的IP地址，并假定所有Pod都在一个可以直接连通的、扁平的网络空间中。</p>
+<h3 id="docker网络模型">Docker网络模型</h3>
+<h3 id="kubernetes网络实现">Kubernetes网络实现</h3>
+<p>pod内容器之间通讯依赖同一个网络共享空间</p>
+<p>pod和pod之间单节点通讯依赖docker网络<br>
+pod和pod之间多节点通讯依赖kube_proxy(pod和node之间的关联,前提：docker网桥地址不同、pod容器组地址不同）</p>
+<h3 id="docker网络实现">Docker网络实现</h3>
+<p>doker默认使用网桥网络模式</p>
+<p>docker服务端启动会建立一个虚拟网桥docker0得到指定的子网，每启动一个容器便会建立一个虚拟以太网veth，veth一端连接docker0另一端连接容器中的使用linux网络命名空间创建的eth0，eth0的IP由docker0地址段中分配</p>
+<p>容器端口想要映射到服务上需使用NAT模式进行网路地址转换</p>
+<p>为了实现多主机间docker通讯简单便有了CNM网络模型</p>
 
 							</div>
 							<div class="wow zoomIn vt-post-tags">
+								
+								<a href="https://mzqk.github.io/tag/j2Ca_XOy9/" rel="tag">教程</a>
 								
 							</div>
 							<nav class="navigation3 post-navigation3" role="navigation">
 
 								<div class="nav-links3">
 									
+									<div class="wow zoomIn nav-previous3"><a href="https://mzqk.github.io/post/linux-chi-xian-an-zhuang-ying-yong/"
+											rel="prev"> Linux 离线安装应用</a></div>
+									
+									
+									<div class="wow zoomIn nav-next3"><a href="https://mzqk.github.io/post/oracle-shu-ju-ku-qian-yi/"
+											rel="next"> Oracle数据库迁移</a></div>
 									
 								</div>
 							</nav>

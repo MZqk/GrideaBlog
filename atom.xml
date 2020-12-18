@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://mzqk.github.io</id>
     <title>MZZZ</title>
-    <updated>2020-12-17T01:45:53.437Z</updated>
+    <updated>2020-12-18T01:14:14.090Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://mzqk.github.io"/>
     <link rel="self" href="https://mzqk.github.io/atom.xml"/>
@@ -384,6 +384,73 @@ error: Failed dependencies:
 ]]></content>
     </entry>
     <entry>
+        <title type="html"><![CDATA[Kubernetes基础概念]]></title>
+        <id>https://mzqk.github.io/post/kubernetes-ji-chu-gai-nian/</id>
+        <link href="https://mzqk.github.io/post/kubernetes-ji-chu-gai-nian/">
+        </link>
+        <updated>2020-10-22T02:01:30.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="master">Master</h2>
+<h3 id="apiserver">Apiserver</h3>
+<h3 id="controller-manager">Controller Manager</h3>
+<h4 id="rc">RC</h4>
+<p>副本控制器，通过一条标签选择 pod</p>
+<h4 id="rs">RS</h4>
+<p>副本控制器进化版，可以通过一组标签选择 pod</p>
+<h4 id="deployment">Deployment</h4>
+<p>管理副本控制器，可以声明式升级</p>
+<p>deployment由replicaSet组成</p>
+<h4 id="daemonset">DaemonSet</h4>
+<p>每一个Node上都调度一个pod</p>
+<h4 id="statefulset">Statefulset</h4>
+<p>有状态部属pod</p>
+<h4 id="job">Job</h4>
+<p>启动一个批处理任务</p>
+<h4 id="cronjob">CronJob</h4>
+<p>定时启动一个批处理任务</p>
+<h3 id="etcd">Etcd</h3>
+<h3 id="schedule">Schedule</h3>
+<h2 id="node">Node</h2>
+<h3 id="kube-proxy">kube Proxy</h3>
+<h3 id="kubelet">Kubelet</h3>
+<h3 id="docker">Docker</h3>
+<h2 id="资源">资源</h2>
+<h3 id="pod">Pod</h3>
+<p>一个pod中包含一个或多个容器<br>
+pod中的容器不能跨节点</p>
+<p>pod和pod之间是在同一个共享网络（多个容器组构成）</p>
+<p>pod之间容器与容器共享网络和存储</p>
+<p>pod的生命周启pending、running、successed、failed、unknow</p>
+<p>pod中的pause可以判断业务容器的状态</p>
+<p>pod可以使用hostport配置蒋端口暴露到所在的节点服务器上</p>
+<h3 id="service">Service</h3>
+<p>server能创建一个虚拟集群IP作为多个pod个通讯，service不能直接被ping</p>
+<p>service访问pod实际是访问endpoints，endpoints由podid+暴露端口组成</p>
+<p>service使用clusterip时，访问pod默认轮询分配到pod上</p>
+<p>service使用clusterip且配置会话保持时，访问pod是基于clientip来分配到同一个pod上</p>
+<p>service使用headless时，访问service分配到的pod由程序自己决定</p>
+<p>service使用nodeport时，所有节点都能通过端口访问，若有负载均衡配置时可使用loadbalancer参数</p>
+<h3 id="ingress">Ingress</h3>
+<h3 id="label">label</h3>
+<h3 id="annotation">Annotation</h3>
+<h4 id="健康检查">健康检查</h4>
+<p>livenessProbe</p>
+<p>readlinessProbe</p>
+<h2 id="网络原理">网络原理</h2>
+<h3 id="kubernetes网络模型">Kubernetes网络模型</h3>
+<p>Kubernetes网络模型设计的一个基础原则是：每个Pod都拥有一个独立的IP地址，并假定所有Pod都在一个可以直接连通的、扁平的网络空间中。</p>
+<h3 id="docker网络模型">Docker网络模型</h3>
+<h3 id="kubernetes网络实现">Kubernetes网络实现</h3>
+<p>pod内容器之间通讯依赖同一个网络共享空间</p>
+<p>pod和pod之间单节点通讯依赖docker网络<br>
+pod和pod之间多节点通讯依赖kube_proxy(pod和node之间的关联,前提：docker网桥地址不同、pod容器组地址不同）</p>
+<h3 id="docker网络实现">Docker网络实现</h3>
+<p>doker默认使用网桥网络模式</p>
+<p>docker服务端启动会建立一个虚拟网桥docker0得到指定的子网，每启动一个容器便会建立一个虚拟以太网veth，veth一端连接docker0另一端连接容器中的使用linux网络命名空间创建的eth0，eth0的IP由docker0地址段中分配</p>
+<p>容器端口想要映射到服务上需使用NAT模式进行网路地址转换</p>
+<p>为了实现多主机间docker通讯简单便有了CNM网络模型</p>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Oracle数据库迁移]]></title>
         <id>https://mzqk.github.io/post/oracle-shu-ju-ku-qian-yi/</id>
         <link href="https://mzqk.github.io/post/oracle-shu-ju-ku-qian-yi/">
@@ -648,6 +715,81 @@ roles 路径指的是’roles/’下的额外目录,用于playbook搜索Ansible 
 <p>system_warnings = True<br>
 *这个包括第三方库或者一些需要解决问题的警告.</p>
 </blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[钻石选购指南]]></title>
+        <id>https://mzqk.github.io/post/zuan-shi-xuan-gou-zhi-nan/</id>
+        <link href="https://mzqk.github.io/post/zuan-shi-xuan-gou-zhi-nan/">
+        </link>
+        <updated>2020-09-04T01:59:41.000Z</updated>
+        <content type="html"><![CDATA[<p><a href="https://www.zhihu.com/question/22911557">https://www.zhihu.com/question/22911557</a></p>
+<p>钻石4C由<a href="https://www.gia.edu/">GIA</a>创立的标准，包括：颜色(Color)、净度（Clarity)、切工(Cut)和克拉重量(Carat)。</p>
+<h2 id="重量">重量 ☆☆☆☆☆</h2>
+<p>10分=1克拉</p>
+<p>30分及以下无价值</p>
+<p><strong>31分至1克拉有回收价值但不保值</strong></p>
+<p>50分到70分相对平衡</p>
+<p>1克拉以上有收藏价值且有相对较高的回收价值</p>
+<h2 id="颜色">颜色 ☆☆☆☆☆</h2>
+<p>在白钻的价值体系中，越接近无色或说白色的钻石，价值越高</p>
+<p>颜色等级从D至Z，<strong>H为中间色</strong></p>
+<p>H色之后的都有肉眼可见的偏黄</p>
+<h2 id="净度">净度 ☆☆☆☆</h2>
+<p>净度分级（在10倍放大镜下观察，钻石内含物或表面特征）：</p>
+<p>FL（无瑕级）：没有任何内含物或表面瑕疵；</p>
+<p>IF（内无瑕级）：内部没有任何内含物，而表面有微不足道的瑕疵，可借由磨光去除；</p>
+<p><strong>VVS1 / VVS2（极轻微内含级）</strong>：钻石有极微细的瑕疵，即使专业鉴定师也很难看到；</p>
+<p><strong>VS1 / VS2（轻微内含级）</strong>：钻石含有不易察觉的微小瑕疵；</p>
+<p>SI1 / SI2（微内含级）：钻石有可见的瑕疵；</p>
+<p>I1 / I2 / I3（内含级）：瑕疵非常明显，肉眼观察亦可看见，并且影响钻石的坚固度、透明度和闪亮度</p>
+<p>瑕疵种类：</p>
+<p>Chip（破损/裂痕）：表面上的浅损口，特指在钻石切磨完成后才发生的损伤；</p>
+<p>Cavity（空洞）：钻石表面的晶体掉落或在切磨过程中所留下的坑洞；</p>
+<p>Bruise（擦伤）：向内部放射状的棉絮构造伤痕，一般伴随有裂纹区域；</p>
+<p>Abrasion（磨损）：刻面棱线上一系列极细微的小缺口</p>
+<p>Scratch（划痕）：表面细小白雾状线痕，多为钻石互相摩擦所致</p>
+<p><strong>Pinpoint（针点）</strong>：很小的晶体，10倍放大下看似小点，绝大多数针点为白色；</p>
+<p><strong>Cloud（云状物）</strong>：由紧聚的针点组成，聚集一起时呈雾白或粉状；</p>
+<p><strong>Feather（羽状物）</strong>：泛指钻石内的任何羽状纹路</p>
+<p><strong>Included crystal（晶状体）</strong>：包裹在钻石内部微小的矿物晶体</p>
+<p><strong>Needle（针状物）</strong>：钻石内部所含的细长晶体。多为白色，部分为暗色</p>
+<p><strong>Pit（白点）</strong>：在10倍放大镜下看似白点，实为非常细小的气孔。</p>
+<h2 id="切工">切工 ☆☆☆☆</h2>
+<p>以圆形钻石为例</p>
+<p>圆形钻石共有58个刻面（尖底也算一个刻面），包括：台面、风筝面、星刻面（又称三角面）、上腰面、下腰面、亭部主刻面、底小面（若底部为小尖则无此刻面）</p>
+<p>圆形钻石公有3个部分：冠面、腰围和底部</p>
+<p>切工的指标：</p>
+<p><strong>Cut Grade 切工</strong>：是否按照圆钻的既定比例范围进行切合</p>
+<p><strong>Polish 抛光</strong>：钻石刻面抛光纹是否明显，简单理解就是钻石表面的光滑度怎样</p>
+<p><strong>Symmetry对称性</strong>：整个钻石的圆度；冠部与亭部刻尖点是否对齐；刻面尖点是否尖锐；同种刻面大小是否一致；台面和腰部是否平行等</p>
+<p>指标的等级：</p>
+<p>**EXCELLENT（EX）完美：**几乎反射了所有进入的光线，约有3%的钻石能够达到；</p>
+<p><strong>VERY GOOD（VG）很好</strong>：反射出标准切工等级的光线，约有15%的钻石可以达到；</p>
+<p>GOOD（G）好：反射了大部分进入钻使内部的光，约有35%的钻石可以达到；</p>
+<p>FAIR（F）一般：也能反射光芒但表现一般，但较GOOD切工更差一些；</p>
+<p>POOR（P）差：所有切工标准都没有达到，意味着切工非常差；</p>
+<h2 id="其他">其他</h2>
+<h3 id="证书">证书 ☆☆☆☆</h3>
+<p>国际证书种类：</p>
+<p><strong>GIA</strong>（美国宝石学院出具）</p>
+<p><strong>HRD</strong>（比利时钻石高阶层会议联盟出具）</p>
+<p><strong>IGI</strong>（<a href="https://link.zhihu.com/?target=https%3A//baike.baidu.com/item/%25E5%259B%25BD%25E9%2599%2585%25E5%25AE%259D%25E7%259F%25B3%25E5%25AD%25A6%25E9%2599%25A2/8430558%2522%2520%255Ct%2520%2522https%3A//baike.baidu.com/item/_blank">国际宝石学院</a>出具，总部位于安特卫普）</p>
+<p>国内证书:</p>
+<p>NGTC（国检证书，由中国国家珠宝玉石质量监督检验管理中心出具，同时还有一些下属分支实验室出具的机构证书，如南京国检、深圳国检等，采用相同的检测标准）</p>
+<p>省检证书（由中国个省级珠宝检测中心出具，目的是便捷于各省的珠宝产品的检测，较常见的有：广东省检、江苏省建、浙江省检等等）</p>
+<h3 id="荧光">**荧光 **☆☆☆</h3>
+<p>荧光等级：</p>
+<p><strong>None 无荧光</strong></p>
+<p>Faint 微荧光</p>
+<p>Mediue 中荧光</p>
+<p>Strong 强硬光</p>
+<p>Very Strong 极强荧光</p>
+<h3 id="钻石腰码">钻石腰码 ☆☆☆☆</h3>
+<p>腰码为证书上相应身份数字</p>
+<h3 id="证书日期">证书日期 ☆☆</h3>
+<p>证书产品经加工到线下店成品至少需要2个月</p>
+<h3 id="戒托">戒托 ☆</h3>
 ]]></content>
     </entry>
     <entry>
@@ -1587,760 +1729,6 @@ docker exec -it seafile-mysql /bin/sh -c &quot;mysql -uroot seahub_db &lt; /tmp/
 <h2 id="问题排查">问题排查</h2>
 <p>您可以运行 <code>docker exec</code> 之类的docker命令来查找错误。</p>
 <pre><code class="language-sh">docker exec -it seafile /bin/bash
-
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[kubeadm安装k8s]]></title>
-        <id>https://mzqk.github.io/post/kubeadm-an-zhuang-k8s/</id>
-        <link href="https://mzqk.github.io/post/kubeadm-an-zhuang-k8s/">
-        </link>
-        <updated>2019-03-05T01:46:06.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="kubeadm安装k8s">kubeadm安装k8s</h1>
-<p>kubeadm是官方社区推出的一个用于快速部署kubernetes集群的工具。</p>
-<h2 id="准备环境">准备环境</h2>
-<pre><code>关闭防火墙：
-$ systemctl stop firewalld
-$ systemctl disable firewalld
-
-关闭selinux：
-$ sed -i 's/enforcing/disabled/' /etc/selinux/config 
-$ setenforce 0
-
-关闭swap：
-$ swapoff -a  $ 临时
-$ vim /etc/fstab  $ 永久
-
-添加主机名与IP对应关系（记得设置主机名）：
-$ cat /etc/hosts
-192.168.31.62 k8s-master
-192.168.31.62 k8s-node1
-192.168.31.63 k8s-node2
-
-将桥接的IPv4流量传递到iptables的链：
-$ cat &gt; /etc/sysctl.d/k8s.conf &lt;&lt; EOF
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-EOF
-$ sysctl --system
-</code></pre>
-<h2 id="所有节点安装dockerkubeadmkubelet">所有节点安装Docker/kubeadm/kubelet</h2>
-<ol>
-<li>安装Docker</li>
-</ol>
-<p>Kubernetes默认CRI（容器运行时）为Docker，因此先安装Docker。</p>
-<pre><code>$ wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo
-$ yum -y install docker-ce-18.06.1.ce-3.el7
-$ systemctl enable docker &amp;&amp; systemctl start docker
-$ docker --version
-Docker version 18.06.1-ce, build e68fc7a
-</code></pre>
-<ol start="2">
-<li>添加阿里云YUM软件源</li>
-</ol>
-<pre><code>$ cat &gt; /etc/yum.repos.d/kubernetes.repo &lt;&lt; EOF
-[kubernetes]
-name=Kubernetes
-baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
-EOF
-</code></pre>
-<ol start="3">
-<li>安装kubeadm，kubelet和kubectl</li>
-</ol>
-<p>由于版本更新频繁，这里指定版本号部署：</p>
-<pre><code>$ yum install -y kubelet-1.13.3 kubeadm-1.13.3 kubectl-1.13.3
-$ systemctl enable kubelet
-</code></pre>
-<h2 id="部署kubernetes-master">部署Kubernetes Master</h2>
-<pre><code>$ kubeadm init \
-  --apiserver-advertise-address=192.168.31.62 \
-  --image-repository registry.aliyuncs.com/google_containers \
-  --kubernetes-version v1.13.3 \
-  --service-cidr=10.1.0.0/16\
-  --pod-network-cidr=10.244.0.0/16
-</code></pre>
-<p>这个初始化过程需要几分钟，具体时间取决于你的网络。</p>
-<p>由于默认拉取镜像地址k8s.gcr.io国内无法访问，这里指定阿里云镜像仓库地址。</p>
-<p>使用kubectl工具：</p>
-<pre><code>mkdir -p $HOME/.kubesudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/configsudo chown $(id -u):$(id -g) $HOME/.kube/config
-$ kubectl get nodes
-</code></pre>
-<h2 id="安装pod网络插件cni">安装Pod网络插件（CNI）</h2>
-<pre><code>$ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/a70459be0084506e4ec919aa1c114638878db11b/Documentation/kube-flannel.yml
-</code></pre>
-<p>确保能够访问到quay.io这个registery。</p>
-<h2 id="加入kubernetes-node">加入Kubernetes Node</h2>
-<p>向集群添加新节点，执行在kubeadm init输出的kubeadm join命令：</p>
-<pre><code>$  kubeadm join 192.168.31.64:6443 --token l79g5t.6ov4jkddwqki1dxe --discovery-token-ca-cert-hash sha256:4f07f9068c543130461c9db368d62b4aabc22105451057f887defa35f47fa076
-</code></pre>
-<h2 id="测试kubernetes集群">测试kubernetes集群</h2>
-<p>在Kubernetes集群中创建一个pod，验证是否正常运行：</p>
-<pre><code>$ kubectl create deployment nginx --image=nginx
-$ kubectl expose deployment nginx --port=80 --type=NodePort
-$ kubectl get pod,svc
-</code></pre>
-<p>访问地址：http://NodeIP:Port</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[二进制部署 Kubernetes 集群]]></title>
-        <id>https://mzqk.github.io/post/er-jin-zhi-bu-shu-kubernetes-ji-qun/</id>
-        <link href="https://mzqk.github.io/post/er-jin-zhi-bu-shu-kubernetes-ji-qun/">
-        </link>
-        <updated>2019-03-05T01:43:26.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="二进制部署-kubernetes-集群">二进制部署 Kubernetes 集群</h1>
-<h2 id="安装etcd">安装Etcd</h2>
-<p>使用cfssl来生成自签证书，先下载cfssl工具：</p>
-<pre><code>wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
-wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
-wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64
-chmod +x cfssl_linux-amd64 cfssljson_linux-amd64 cfssl-certinfo_linux-amd64
-mv cfssl_linux-amd64 /usr/local/bin/cfssl
-mv cfssljson_linux-amd64 /usr/local/bin/cfssljson
-mv cfssl-certinfo_linux-amd64 /usr/bin/cfssl-certinfo
-</code></pre>
-<ol>
-<li>生成证书</li>
-</ol>
-<p>创建以下三个文件：</p>
-<pre><code># cat ca-config.json
-{
-  &quot;signing&quot;: {
-    &quot;default&quot;: {
-      &quot;expiry&quot;: &quot;87600h&quot;
-    },
-    &quot;profiles&quot;: {
-      &quot;www&quot;: {
-         &quot;expiry&quot;: &quot;87600h&quot;,
-         &quot;usages&quot;: [
-            &quot;signing&quot;,
-            &quot;key encipherment&quot;,
-            &quot;server auth&quot;,
-            &quot;client auth&quot;
-        ]
-      }
-    }
-  }
-}
-
-# cat ca-csr.json
-{
-    &quot;CN&quot;: &quot;etcd CA&quot;,
-    &quot;key&quot;: {
-        &quot;algo&quot;: &quot;rsa&quot;,
-        &quot;size&quot;: 2048
-    },
-    &quot;names&quot;: [
-        {
-            &quot;C&quot;: &quot;CN&quot;,
-            &quot;L&quot;: &quot;Beijing&quot;,
-            &quot;ST&quot;: &quot;Beijing&quot;
-        }
-    ]
-}
-
-# cat server-csr.json
-{
-    &quot;CN&quot;: &quot;etcd&quot;,
-    &quot;hosts&quot;: [
-    &quot;192.168.31.63&quot;,
-    &quot;192.168.31.65&quot;,
-    &quot;192.168.31.66&quot;
-    ],
-    &quot;key&quot;: {
-        &quot;algo&quot;: &quot;rsa&quot;,
-        &quot;size&quot;: 2048
-    },
-    &quot;names&quot;: [
-        {
-            &quot;C&quot;: &quot;CN&quot;,
-            &quot;L&quot;: &quot;BeiJing&quot;,
-            &quot;ST&quot;: &quot;BeiJing&quot;
-        }
-    ]
-}
-</code></pre>
-<p>生成证书：</p>
-<pre><code>cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
-cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=www server-csr.json | cfssljson -bare server
-# ls *pem
-ca-key.pem  ca.pem  server-key.pem  server.pem
-</code></pre>
-<ol start="2">
-<li>部属Etcd</li>
-</ol>
-<p>二进制包下载地址：https://github.com/coreos/etcd/releases/tag/v3.2.12</p>
-<p>创建etcd配置文件：</p>
-<pre><code># cat /opt/etcd/cfg/etcd   
-#[Member]
-ETCD_NAME=&quot;etcd01&quot;
-ETCD_DATA_DIR=&quot;/var/lib/etcd/default.etcd&quot;
-ETCD_LISTEN_PEER_URLS=&quot;https://192.168.31.63:2380&quot;
-ETCD_LISTEN_CLIENT_URLS=&quot;https://192.168.31.63:2379&quot;
-
-#[Clustering]
-ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;https://192.168.31.63:2380&quot;
-ETCD_ADVERTISE_CLIENT_URLS=&quot;https://192.168.31.63:2379&quot;
-ETCD_INITIAL_CLUSTER=&quot;etcd01=https://192.168.31.63:2380,etcd02=https://192.168.31.65:2380,etcd03=https://192.168.31.66:2380&quot;
-ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster&quot;
-ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;
-</code></pre>
-<ul>
-<li>ETCD_NAME 节点名称</li>
-<li>ETCD_DATA_DIR 数据目录</li>
-<li>ETCD_LISTEN_PEER_URLS 集群通信监听地址</li>
-<li>ETCD_LISTEN_CLIENT_URLS 客户端访问监听地址</li>
-<li>ETCD_INITIAL_ADVERTISE_PEER_URLS 集群通告地址</li>
-<li>ETCD_ADVERTISE_CLIENT_URLS 客户端通告地址</li>
-<li>ETCD_INITIAL_CLUSTER 集群节点地址</li>
-<li>ETCD_INITIAL_CLUSTER_TOKEN 集群Token</li>
-<li>ETCD_INITIAL_CLUSTER_STATE 加入集群的当前状态，new是新集群，existing表示加入已有集群</li>
-</ul>
-<p>systemd管理etcd：</p>
-<pre><code># cat /usr/lib/systemd/system/etcd.service 
-[Unit]
-Description=Etcd Server
-After=network.target
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-Type=notify
-EnvironmentFile=/opt/etcd/cfg/etcd
-ExecStart=/opt/etcd/bin/etcd \
---name=${ETCD_NAME} \
---data-dir=${ETCD_DATA_DIR} \
---listen-peer-urls=${ETCD_LISTEN_PEER_URLS} \
---listen-client-urls=${ETCD_LISTEN_CLIENT_URLS},http://127.0.0.1:2379 \
---advertise-client-urls=${ETCD_ADVERTISE_CLIENT_URLS} \
---initial-advertise-peer-urls=${ETCD_INITIAL_ADVERTISE_PEER_URLS} \
---initial-cluster=${ETCD_INITIAL_CLUSTER} \
---initial-cluster-token=${ETCD_INITIAL_CLUSTER_TOKEN} \
---initial-cluster-state=new \
---cert-file=/opt/etcd/ssl/server.pem \
---key-file=/opt/etcd/ssl/server-key.pem \
---peer-cert-file=/opt/etcd/ssl/server.pem \
---peer-key-file=/opt/etcd/ssl/server-key.pem \
---trusted-ca-file=/opt/etcd/ssl/ca.pem \
---peer-trusted-ca-file=/opt/etcd/ssl/ca.pem
-Restart=on-failure
-LimitNOFILE=65536
-
-[Install]
-WantedBy=multi-user.target
-</code></pre>
-<p>把刚才生成的证书拷贝到配置文件中的位置:</p>
-<pre><code>cp ca*pem server*pem /opt/etcd/ssl
-</code></pre>
-<p>启动并设置开启启动：</p>
-<pre><code># systemctl start etcd
-# systemctl enable etcd
-</code></pre>
-<p>都部署完成后，检查etcd集群状态：</p>
-<pre><code># /opt/etcd/bin/etcdctl \
---ca-file=ca.pem --cert-file=server.pem --key-file=server-key.pem \
---endpoints=&quot;https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379&quot; \
-cluster-health
-member 18218cfabd4e0dea is healthy: got healthy result from https://192.168.31.63:2379
-member 541c1c40994c939b is healthy: got healthy result from https://192.168.31.65:2379
-member a342ea2798d20705 is healthy: got healthy result from https://192.168.31.66:2379
-cluster is healthy
-</code></pre>
-<h2 id="在node安装docker">在Node安装Docker</h2>
-<pre><code># yum install -y yum-utils device-mapper-persistent-data lvm2
-# yum-config-manager \
-    --add-repo \
-    https://download.docker.com/linux/centos/docker-ce.repo
-# yum install docker-ce -y
-# curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://bc437cce.m.daocloud.io
-# systemctl start docker
-# systemctl enable docker
-</code></pre>
-<h2 id="部署flannel网络">部署Flannel网络</h2>
-<p>Falnnel要用etcd存储自身一个子网信息，所以要保证能成功连接Etcd，写入预定义子网段：</p>
-<pre><code># /opt/etcd/bin/etcdctl \
---ca-file=ca.pem --cert-file=server.pem --key-file=server-key.pem \
---endpoints=&quot;https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379&quot; \
-set /coreos.com/network/config  '{ &quot;Network&quot;: &quot;172.17.0.0/16&quot;, &quot;Backend&quot;: {&quot;Type&quot;: &quot;vxlan&quot;}}'
-</code></pre>
-<p>下载二进制包：</p>
-<pre><code># wget https://github.com/coreos/flannel/releases/download/v0.10.0/flannel-v0.10.0-linux-amd64.tar.gz
-# tar zxvf flannel-v0.9.1-linux-amd64.tar.gz
-# mv flanneld mk-docker-opts.sh /opt/kubernetes/bin
-</code></pre>
-<p>配置Flannel：</p>
-<pre><code># cat /opt/kubernetes/cfg/flanneld
-FLANNEL_OPTIONS=&quot;--etcd-endpoints=https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379 -etcd-cafile=/opt/etcd/ssl/ca.pem -etcd-certfile=/opt/etcd/ssl/server.pem -etcd-keyfile=/opt/etcd/ssl/server-key.pem&quot;
-</code></pre>
-<p>systemd管理Flannel：</p>
-<pre><code># cat /usr/lib/systemd/system/flanneld.service
-[Unit]
-Description=Flanneld overlay address etcd agent
-After=network-online.target network.target
-Before=docker.service
-
-[Service]
-Type=notify
-EnvironmentFile=/opt/kubernetes/cfg/flanneld
-ExecStart=/opt/kubernetes/bin/flanneld --ip-masq $FLANNEL_OPTIONS
-ExecStartPost=/opt/kubernetes/bin/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /run/flannel/subnet.env
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-</code></pre>
-<p>配置Docker启动指定子网段：</p>
-<pre><code># cat /usr/lib/systemd/system/docker.service 
-
-[Unit]
-Description=Docker Application Container Engine
-Documentation=https://docs.docker.com
-After=network-online.target firewalld.service
-Wants=network-online.target
-
-[Service]
-Type=notify
-EnvironmentFile=/run/flannel/subnet.env
-ExecStart=/usr/bin/dockerd $DOCKER_NETWORK_OPTIONS
-ExecReload=/bin/kill -s HUP $MAINPID
-LimitNOFILE=infinity
-LimitNPROC=infinity
-LimitCORE=infinity
-TimeoutStartSec=0
-Delegate=yes
-KillMode=process
-Restart=on-failure
-StartLimitBurst=3
-StartLimitInterval=60s
-
-[Install]
-WantedBy=multi-user.target
-</code></pre>
-<p>重启flannel和docker：</p>
-<pre><code># systemctl daemon-reload
-# systemctl start flanneld
-# systemctl enable flanneld
-# systemctl restart docker
-</code></pre>
-<p>检查是否生效：</p>
-<pre><code># ps -ef |grep docker
-root     20941     1  1 Jun28 ?        09:15:34 /usr/bin/dockerd --bip=172.17.34.1/24 --ip-masq=false --mtu=1450
-# ip addr
-3607: flannel.1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UNKNOWN 
-    link/ether 8a:2e:3d:09:dd:82 brd ff:ff:ff:ff:ff:ff
-    inet 172.17.34.0/32 scope global flannel.1
-       valid_lft forever preferred_lft forever
-3608: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP 
-    link/ether 02:42:31:8f:d3:02 brd ff:ff:ff:ff:ff:ff
-    inet 172.17.34.1/24 brd 172.17.34.255 scope global docker0
-       valid_lft forever preferred_lft forever
-    inet6 fe80::42:31ff:fe8f:d302/64 scope link 
-       valid_lft forever preferred_lft forever
-</code></pre>
-<p>确保docker0与flannel.1在同一网段,如果能通说明Flannel部署成功。</p>
-<h2 id="在master节点部署组件">在Master节点部署组件</h2>
-<p>在部署Kubernetes之前一定要确保etcd、flannel、docker是正常工作的，否则先解决问题再继续。</p>
-<ol>
-<li>生成证书</li>
-</ol>
-<p>创建CA证书：</p>
-<pre><code># cat ca-config.json
-{
-  &quot;signing&quot;: {
-    &quot;default&quot;: {
-      &quot;expiry&quot;: &quot;87600h&quot;
-    },
-    &quot;profiles&quot;: {
-      &quot;kubernetes&quot;: {
-         &quot;expiry&quot;: &quot;87600h&quot;,
-         &quot;usages&quot;: [
-            &quot;signing&quot;,
-            &quot;key encipherment&quot;,
-            &quot;server auth&quot;,
-            &quot;client auth&quot;
-        ]
-      }
-    }
-  }
-}
-
-# cat ca-csr.json
-{
-    &quot;CN&quot;: &quot;kubernetes&quot;,
-    &quot;key&quot;: {
-        &quot;algo&quot;: &quot;rsa&quot;,
-        &quot;size&quot;: 2048
-    },
-    &quot;names&quot;: [
-        {
-            &quot;C&quot;: &quot;CN&quot;,
-            &quot;L&quot;: &quot;Beijing&quot;,
-            &quot;ST&quot;: &quot;Beijing&quot;,
-            &quot;O&quot;: &quot;k8s&quot;,
-            &quot;OU&quot;: &quot;System&quot;
-        }
-    ]
-}
-
-# cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
-</code></pre>
-<p>生成apiserver证书：</p>
-<pre><code># cat server-csr.json
-{
-    &quot;CN&quot;: &quot;kubernetes&quot;,
-    &quot;hosts&quot;: [
-      &quot;10.0.0.1&quot;,
-      &quot;127.0.0.1&quot;,
-      &quot;192.168.31.63&quot;,
-      &quot;kubernetes&quot;,
-      &quot;kubernetes.default&quot;,
-      &quot;kubernetes.default.svc&quot;,
-      &quot;kubernetes.default.svc.cluster&quot;,
-      &quot;kubernetes.default.svc.cluster.local&quot;
-    ],
-    &quot;key&quot;: {
-        &quot;algo&quot;: &quot;rsa&quot;,
-        &quot;size&quot;: 2048
-    },
-    &quot;names&quot;: [
-        {
-            &quot;C&quot;: &quot;CN&quot;,
-            &quot;L&quot;: &quot;BeiJing&quot;,
-            &quot;ST&quot;: &quot;BeiJing&quot;,
-            &quot;O&quot;: &quot;k8s&quot;,
-            &quot;OU&quot;: &quot;System&quot;
-        }
-    ]
-}
-cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes server-csr.json | cfssljson -bare server
-</code></pre>
-<p>生成kube-proxy证书：</p>
-<pre><code># cat kube-proxy-csr.json
-{
-  &quot;CN&quot;: &quot;system:kube-proxy&quot;,
-  &quot;hosts&quot;: [],
-  &quot;key&quot;: {
-    &quot;algo&quot;: &quot;rsa&quot;,
-    &quot;size&quot;: 2048
-  },
-  &quot;names&quot;: [
-    {
-      &quot;C&quot;: &quot;CN&quot;,
-      &quot;L&quot;: &quot;BeiJing&quot;,
-      &quot;ST&quot;: &quot;BeiJing&quot;,
-      &quot;O&quot;: &quot;k8s&quot;,
-      &quot;OU&quot;: &quot;System&quot;
-    }
-  ]
-}
-
-# cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-proxy-csr.json | cfssljson -bare kube-proxy
-</code></pre>
-<p>最终生成以下证书文件：</p>
-<pre><code># ls *pem
-ca-key.pem  ca.pem  kube-proxy-key.pem  kube-proxy.pem  server-key.pem  server.pem
-</code></pre>
-<ol start="2">
-<li>部署apiserver组件</li>
-</ol>
-<p>下载二进制包：https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.12.md</p>
-<pre><code># mkdir /opt/kubernetes/{bin,cfg,ssl} -p
-# tar zxvf kubernetes-server-linux-amd64.tar.gz
-# cd kubernetes/server/bin
-# cp kube-apiserver kube-scheduler kube-controller-manager kubectl /opt/kubernetes/bin
-</code></pre>
-<p>创建token文件:</p>
-<pre><code># cat /opt/kubernetes/cfg/token.csv
-674c457d4dcf2eefe4920d7dbb6b0ddc,kubelet-bootstrap,10001,&quot;system:kubelet-bootstrap&quot;
-</code></pre>
-<p>创建apiserver配置文件：</p>
-<pre><code># cat /opt/kubernetes/cfg/kube-apiserver 
-
-KUBE_APISERVER_OPTS=&quot;--logtostderr=true \
---v=4 \
---etcd-servers=https://192.168.31.63:2379,https://192.168.31.65:2379,https://192.168.31.66:2379 \
---bind-address=192.168.31.63 \
---secure-port=6443 \
---advertise-address=192.168.31.63 \
---allow-privileged=true \
---service-cluster-ip-range=10.0.0.0/24 \
---enable-admission-plugins=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota,NodeRestriction \
---authorization-mode=RBAC,Node \
---enable-bootstrap-token-auth \
---token-auth-file=/opt/kubernetes/cfg/token.csv \
---service-node-port-range=30000-50000 \
---tls-cert-file=/opt/kubernetes/ssl/server.pem  \
---tls-private-key-file=/opt/kubernetes/ssl/server-key.pem \
---client-ca-file=/opt/kubernetes/ssl/ca.pem \
---service-account-key-file=/opt/kubernetes/ssl/ca-key.pem \
---etcd-cafile=/opt/etcd/ssl/ca.pem \
---etcd-certfile=/opt/etcd/ssl/server.pem \
---etcd-keyfile=/opt/etcd/ssl/server-key.pem&quot;
-</code></pre>
-<p>配置好前面生成的证书，确保能连接etcd。</p>
-<p>systemd管理apiserver：</p>
-<pre><code># cat /usr/lib/systemd/system/kube-apiserver.service 
-[Unit]
-Description=Kubernetes API Server
-Documentation=https://github.com/kubernetes/kubernetes
-
-[Service]
-EnvironmentFile=-/opt/kubernetes/cfg/kube-apiserver
-ExecStart=/opt/kubernetes/bin/kube-apiserver $KUBE_APISERVER_OPTS
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-</code></pre>
-<p>启动：</p>
-<pre><code># systemctl daemon-reload
-# systemctl enable kube-apiserver
-# systemctl restart kube-apiserver
-</code></pre>
-<ol start="3">
-<li>部署scheduler组件</li>
-</ol>
-<p>创建schduler配置文件：</p>
-<pre><code># cat /opt/kubernetes/cfg/kube-scheduler 
-
-KUBE_SCHEDULER_OPTS=&quot;--logtostderr=true \
---v=4 \
---master=127.0.0.1:8080 \
---leader-elect&quot;
-</code></pre>
-<p>systemd管理schduler组件：</p>
-<pre><code># cat /usr/lib/systemd/system/kube-scheduler.service 
-[Unit]
-Description=Kubernetes Scheduler
-Documentation=https://github.com/kubernetes/kubernetes
-
-[Service]
-EnvironmentFile=-/opt/kubernetes/cfg/kube-scheduler
-ExecStart=/opt/kubernetes/bin/kube-scheduler $KUBE_SCHEDULER_OPTS
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-</code></pre>
-<p>启动：</p>
-<pre><code># systemctl daemon-reload
-# systemctl enable kube-scheduler
-# systemctl restart kube-scheduler
-</code></pre>
-<ol start="4">
-<li>
-<h3 id="部署controller-manager组件">部署controller-manager组件</h3>
-</li>
-</ol>
-<p>创建controller-manager配置文件：</p>
-<pre><code># cat /opt/kubernetes/cfg/kube-controller-manager 
-KUBE_CONTROLLER_MANAGER_OPTS=&quot;--logtostderr=true \
---v=4 \
---master=127.0.0.1:8080 \
---leader-elect=true \
---address=127.0.0.1 \
---service-cluster-ip-range=10.0.0.0/24 \
---cluster-name=kubernetes \
---cluster-signing-cert-file=/opt/kubernetes/ssl/ca.pem \
---cluster-signing-key-file=/opt/kubernetes/ssl/ca-key.pem  \
---root-ca-file=/opt/kubernetes/ssl/ca.pem \
---service-account-private-key-file=/opt/kubernetes/ssl/ca-key.pem&quot;
-</code></pre>
-<p>systemd管理controller-manager组件：</p>
-<pre><code># cat /usr/lib/systemd/system/kube-controller-manager.service 
-[Unit]
-Description=Kubernetes Controller Manager
-Documentation=https://github.com/kubernetes/kubernetes
-
-[Service]
-EnvironmentFile=-/opt/kubernetes/cfg/kube-controller-manager
-ExecStart=/opt/kubernetes/bin/kube-controller-manager $KUBE_CONTROLLER_MANAGER_OPTS
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-</code></pre>
-<p>启动：</p>
-<pre><code># systemctl daemon-reload
-# systemctl enable kube-controller-manager
-# systemctl restart kube-controller-manager
-</code></pre>
-<p>所有组件都已经启动成功，通过kubectl工具查看当前集群组件状态：</p>
-<pre><code># /opt/kubernetes/bin/kubectl get cs
-NAME                 STATUS    MESSAGE             ERROR
-scheduler            Healthy   ok                  
-etcd-0               Healthy   {&quot;health&quot;:&quot;true&quot;}   
-etcd-2               Healthy   {&quot;health&quot;:&quot;true&quot;}   
-etcd-1               Healthy   {&quot;health&quot;:&quot;true&quot;}   
-controller-manager   Healthy   ok
-</code></pre>
-<h2 id="在node节点部署组件">在Node节点部署组件</h2>
-<p>Master apiserver启用TLS认证后，Node节点kubelet组件想要加入集群，必须使用CA签发的有效证书才能与apiserver通信，当Node节点很多时，签署证书是一件很繁琐的事情，因此有了TLS Bootstrapping机制，kubelet会以一个低权限用户自动向apiserver申请证书，kubelet的证书由apiserver动态签署。</p>
-<ol>
-<li>
-<h3 id="将kubelet-bootstrap用户绑定到系统集群角色">将kubelet-bootstrap用户绑定到系统集群角色</h3>
-</li>
-</ol>
-<pre><code>kubectl create clusterrolebinding kubelet-bootstrap \
-  --clusterrole=system:node-bootstrapper \
-  --user=kubelet-bootstrap
-</code></pre>
-<ol start="2">
-<li>
-<h3 id="创建kubeconfig文件">创建kubeconfig文件</h3>
-</li>
-</ol>
-<p>在生成kubernetes证书的目录下执行以下命令生成kubeconfig文件：</p>
-<pre><code># 创建kubelet bootstrapping kubeconfig 
-BOOTSTRAP_TOKEN=674c457d4dcf2eefe4920d7dbb6b0ddc
-KUBE_APISERVER=&quot;https://192.168.31.63:6443&quot;
-
-# 设置集群参数
-kubectl config set-cluster kubernetes \
-  --certificate-authority=./ca.pem \
-  --embed-certs=true \
-  --server=${KUBE_APISERVER} \
-  --kubeconfig=bootstrap.kubeconfig
-
-# 设置客户端认证参数
-kubectl config set-credentials kubelet-bootstrap \
-  --token=${BOOTSTRAP_TOKEN} \
-  --kubeconfig=bootstrap.kubeconfig
-
-# 设置上下文参数
-kubectl config set-context default \
-  --cluster=kubernetes \
-  --user=kubelet-bootstrap \
-  --kubeconfig=bootstrap.kubeconfig
-
-# 设置默认上下文
-kubectl config use-context default --kubeconfig=bootstrap.kubeconfig
-
-#----------------------
-
-# 创建kube-proxy kubeconfig文件
-
-kubectl config set-cluster kubernetes \
-  --certificate-authority=./ca.pem \
-  --embed-certs=true \
-  --server=${KUBE_APISERVER} \
-  --kubeconfig=kube-proxy.kubeconfig
-
-kubectl config set-credentials kube-proxy \
-  --client-certificate=./kube-proxy.pem \
-  --client-key=./kube-proxy-key.pem \
-  --embed-certs=true \
-  --kubeconfig=kube-proxy.kubeconfig
-
-kubectl config set-context default \
-  --cluster=kubernetes \
-  --user=kube-proxy \
-  --kubeconfig=kube-proxy.kubeconfig
-
-kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
-
-</code></pre>
-<p>将这两个文件拷贝到Node节点/opt/kubernetes/cfg目录下:</p>
-<pre><code># ls
-bootstrap.kubeconfig  kube-proxy.kubeconfig
-</code></pre>
-<ol start="3">
-<li>部署kubelet组件</li>
-</ol>
-<p>将前面下载的二进制包中的kubelet和kube-proxy拷贝到/opt/kubernetes/bin目录下。</p>
-<p>创建kubelet配置文件：</p>
-<pre><code># cat /opt/kubernetes/cfg/kubelet
-KUBELET_OPTS=&quot;--logtostderr=true \
---v=4 \
---hostname-override=192.168.31.65 \
---kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
---bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
---config=/opt/kubernetes/cfg/kubelet.config \
---cert-dir=/opt/kubernetes/ssl \
---pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google-containers/pause-amd64:3.0&quot;
-</code></pre>
-<p>其中/opt/kubernetes/cfg/kubelet.config配置文件如下：</p>
-<pre><code>kind: KubeletConfiguration
-apiVersion: kubelet.config.k8s.io/v1beta1
-address: 192.168.31.65
-port: 10250
-readOnlyPort: 10255
-cgroupDriver: cgroupfs
-clusterDNS: [&quot;10.0.0.2&quot;]
-clusterDomain: cluster.local.
-failSwapOn: false
-authentication:
-  anonymous:
-    enabled: true
-</code></pre>
-<p>systemd管理kubelet组件：</p>
-<pre><code># cat /usr/lib/systemd/system/kubelet.service 
-[Unit]
-Description=Kubernetes Kubelet
-After=docker.service
-Requires=docker.service
-
-[Service]
-EnvironmentFile=/opt/kubernetes/cfg/kubelet
-ExecStart=/opt/kubernetes/bin/kubelet $KUBELET_OPTS
-Restart=on-failure
-KillMode=process
-
-[Install]
-WantedBy=multi-user.target
-</code></pre>
-<p>启动：</p>
-<pre><code># systemctl daemon-reload
-# systemctl enable kubelet
-# systemctl restart kubelet
-</code></pre>
-<p>在Master审批Node加入集群：</p>
-<p>启动后还没加入到集群中，需要手动允许该节点才可以。</p>
-<p>在Master节点查看请求签名的Node：</p>
-<pre><code># kubectl get csr
-# kubectl certificate approve XXXX
-# kubectl get node
-</code></pre>
-<ol start="4">
-<li>部署kube-proxy组件</li>
-</ol>
-<p>创建kube-proxy配置文件：</p>
-<pre><code># cat /opt/kubernetes/cfg/kube-proxy
-KUBE_PROXY_OPTS=&quot;--logtostderr=true \
---v=4 \
---hostname-override=192.168.31.65 \
---cluster-cidr=10.0.0.0/24 \
---kubeconfig=/opt/kubernetes/cfg/kube-proxy.kubeconfig&quot;
-</code></pre>
-<p>systemd管理kube-proxy组件：</p>
-<pre><code># cat /usr/lib/systemd/system/kube-proxy.service 
-[Unit]
-Description=Kubernetes Proxy
-After=network.target
-
-[Service]
-EnvironmentFile=-/opt/kubernetes/cfg/kube-proxy
-ExecStart=/opt/kubernetes/bin/kube-proxy $KUBE_PROXY_OPTS
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-</code></pre>
-<p>启动：</p>
-<pre><code># systemctl daemon-reload
-# systemctl enable kube-proxy
-# systemctl restart kube-proxy
-</code></pre>
-<h2 id="查看集群状态">查看集群状态</h2>
-<pre><code># kubectl get node
-# kubectl run nginx --image=nginx --replicas=3
-# kubectl expose deployment nginx --port=88 --target-port=80 --type=NodePort
-# kubectl get pods,svc
 
 </code></pre>
 ]]></content>
